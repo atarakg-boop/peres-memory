@@ -18,7 +18,7 @@ body{background:#09090d;font-family:Georgia,serif;color:#d4c9b8;overflow:hidden;
 .scr.on *{pointer-events:auto}
 @keyframes fi{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
 @keyframes glw{0%,100%{opacity:0.35}50%{opacity:1}}
-@keyframes rng{0%,100%{transform:rotate(0)}20%{transform:rotate(-11deg)}40%{transform:rotate(11deg)}60%{transform:rotate(-7deg)}80%{transform:rotate(7deg)}}
+@keyframes rng{0%,100%{transform:rotate(0)}20%{transform:rotate(-14deg)}40%{transform:rotate(14deg)}60%{transform:rotate(-9deg)}80%{transform:rotate(9deg)}}
 @keyframes fl0{0%,100%{transform:translate(-50%,-50%)}50%{transform:translate(-50%,-58%)}}
 @keyframes fl1{0%,100%{transform:translate(-50%,-50%)}50%{transform:translate(-50%,-43%)}}
 @keyframes fl2{0%,100%{transform:translate(-50%,-50%)}50%{transform:translate(-50%,-57%)}}
@@ -79,11 +79,23 @@ textarea::placeholder{color:#2e2a26;font-style:italic}
 .pop .pd{display:inline-block;width:6px;height:6px;border-radius:50%;margin-right:5px;vertical-align:middle}
 .pop .px{position:absolute;top:10px;right:13px;font-size:16px;color:#5a5248;cursor:pointer;background:none;border:none}
 .pop .px:hover{color:#d4c9b8}
+@media(max-width:600px){
+  .cg{grid-template-columns:1fr}
+  .T-title{font-size:22px}
+  .bubble{padding:10px}
+  .bubble .b-title{font-size:11px}
+}
 </style>
 </head>
 <body>
 <div id="app">
   <div id="prog" style="width:0%"></div>
+
+  <!-- LANGUAGE TOGGLE -->
+  <div id="lang-bar" style="position:absolute;top:12px;right:16px;z-index:200;display:flex;gap:8px;pointer-events:all">
+    <button onclick="setLang('en')" id="btn-en" style="background:none;border:0.5px solid #7a7268;color:#d4c9b8;padding:5px 12px;cursor:pointer;font-family:sans-serif;font-size:11px;letter-spacing:0.12em;transition:all 0.2s">EN</button>
+    <button onclick="setLang('he')" id="btn-he" style="background:none;border:0.5px solid #3a3530;color:#5a5248;padding:5px 12px;cursor:pointer;font-family:sans-serif;font-size:11px;letter-spacing:0.06em;transition:all 0.2s">עב</button>
+  </div>
   <div id="roombg">
     <img src="https://res.cloudinary.com/dmr8zhfer/image/upload/f_auto,q_auto/peres_room_main_xpo9zv" alt="Peres Center office">
     <div class="ov"></div>
@@ -114,13 +126,16 @@ textarea::placeholder{color:#2e2a26;font-style:italic}
   <!-- S2 PHONE -->
   <div class="scr" id="s2">
     <div class="fi" style="display:flex;flex-direction:column;align-items:center;text-align:center;width:100%;max-width:540px">
-      <div class="T-label">You are the Minister of Defense</div>
-      <div class="T-note" style="margin-bottom:8px">The red phone is ringing</div>
-      <div style="font-size:44px;animation:rng 1.1s ease-in-out infinite;margin:10px 0 16px">☎</div>
-      <div class="T-label" style="margin-bottom:14px">Your military secretary reports:</div>
-      <div class="T-body" style="text-align:center;margin-bottom:8px">Terrorists have seized an Israeli passenger ship and are sailing it toward a hostile nation — <strong>4,000 km away.</strong><br><br>Approximately <strong>200 Israeli civilians</strong> are on board.</div>
-      <div class="T-note" style="margin-bottom:20px;opacity:0;animation:glw 3s infinite 2s">The decision cannot wait.</div>
-      <div class="T-question">What do you decide?</div>
+      <div class="T-label" style="color:#c87a9a;letter-spacing:0.3em;margin-bottom:6px">URGENT · CLASSIFIED</div>
+      <div class="T-label" style="margin-bottom:6px">You are the Minister of Defense</div>
+      <div class="T-note" style="margin-bottom:12px;font-size:13px;color:#8a8078">3:17 AM. The red phone is ringing.</div>
+      <div style="font-size:52px;animation:rng 0.8s ease-in-out infinite;margin:8px 0 20px;filter:drop-shadow(0 0 12px rgba(200,122,154,0.5))">☎</div>
+      <div class="T-label" style="margin-bottom:16px">Your military secretary reports:</div>
+      <div class="T-body" style="text-align:center;margin-bottom:8px;font-size:16px">
+        Terrorists have seized an Israeli passenger ship<br>and are sailing it toward a hostile nation —<br><strong>4,000 km away.</strong><br><br>Approximately <strong>200 Israeli civilians</strong> are on board.
+      </div>
+      <div class="T-note" style="margin-bottom:24px;animation:glw 2s infinite">The decision cannot wait.</div>
+      <div class="T-question" style="font-size:19px">What do you decide?</div>
       <div class="cg">
         <button class="cb" onclick="choose('rescue')"><span class="cl" style="color:#7ab8e8">Send in the forces</span>Authorize a secret military rescue operation. High risk. No guarantee of success.</button>
         <button class="cb" onclick="choose('negotiate')"><span class="cl" style="color:#c87a9a">Open negotiations</span>Begin talks with the hijackers. Prioritize bringing everyone home alive.</button>
@@ -188,7 +203,7 @@ textarea::placeholder{color:#2e2a26;font-style:italic}
 
   <!-- S7 SCULPTURE -->
   <div class="scr" id="s7">
-    <div class="arc-top" style="text-align:center;padding:22px 24px 16px;background:#03030a;border-color:#0a0a14">
+    <div class="arc-top" style="text-align:center;padding:22px 24px 16px;background:#03030a;border-color:#0a0a14;border-bottom:0.5px solid #0a0a14">
       <div id="peres-quote" style="font-size:20px;font-style:italic;color:rgba(212,201,184,0);font-family:Georgia,serif;line-height:1.65;max-width:580px;margin:0 auto 8px;transition:color 2.5s ease">"The future belongs not to those who wait for it — but to those who dare to imagine it."</div>
       <div class="T-note" style="color:#4a4540">— Shimon Peres</div>
     </div>
@@ -218,14 +233,141 @@ var arcReady=false,strReady=false,bubblesBuilt=false;
 var dots=[],af=0,ahov=null,totalR=68,totalN=32;
 var W=0,H=0,ac,actx;
 var sp=[],sf=0,shov=null,SW=0,SH=0,SC,SCTX;
+var currentLang='en';
+
+var STRINGS={
+  en:{
+    center:"Peres Center for Peace and Innovation",
+    title:"THE MEMORY<br>OF PERES",
+    sub:"1923 – 2016 · An interactive archive",
+    enter:"ENTER THE ROOM",
+    standing:"You are standing in his study",
+    five:"Five Decisions · One Life",
+    select:"Select a moment to enter",
+    urgent:"URGENT · CLASSIFIED",
+    minister:"You are the Minister of Defense",
+    ringing:"3:17 AM. The red phone is ringing.",
+    secretary:"Your military secretary reports:",
+    scenario:"Terrorists have seized an Israeli passenger ship and are sailing it toward a hostile nation — <strong>4,000 km away.</strong><br><br>Approximately <strong>200 Israeli civilians</strong> are on board.",
+    cannot:"The decision cannot wait.",
+    decide:"What do you decide?",
+    rescue_btn:"Send in the forces",
+    rescue_desc:"Authorize a secret military rescue operation. High risk. No guarantee of success.",
+    neg_btn:"Open negotiations",
+    neg_desc:"Begin talks with the hijackers. Prioritize bringing everyone home alive.",
+    not_hypo:"This was not hypothetical",
+    date:"June 27, 1976",
+    what_next:"WHAT HAPPENED NEXT",
+    op_label:"Operation Thunderbolt · July 4, 1976",
+    op_text:"100 Israeli commandos landed at Entebbe at midnight. In <strong>90 minutes</strong>, 102 of the 106 hostages were freed. Three hostages were killed in the crossfire. Commander <strong>Yonatan Netanyahu</strong> was killed — the only Israeli soldier to die. <strong>Dora Bloch</strong>, hospitalized before the raid, was murdered by Amin's forces afterward.<br><br>It was considered one of the most daring rescue operations in history.",
+    ask_q:"If you could ask Shimon Peres one question about how he made this decision — what would you ask him?",
+    q_placeholder:"Write your question here...",
+    q_note:"Your question joins the living archive — alongside questions from people in over 40 countries.",
+    add_archive:"ADD TO THE ARCHIVE",
+    skip:"Skip →",
+    archive_lbl:"The Living Archive",
+    archive_sub:"Questions people would ask Shimon Peres — from around the world.",
+    sent:"Sent in the forces",
+    negotiated:"Chose to negotiate",
+    click_pt:"↑ Click any point to read their question",
+    all_dec:"← All decisions",
+    start_over:"↩ Start over",
+    sculpture_btn:"◈ LIVING SCULPTURE →",
+    from_archive:"From the Archive",
+    chose_act:"Chose to act",
+    chose_dial:"Chose dialogue",
+    click_q:"↑ Click any point to read a question",
+    archive_nav:"← Archive",
+    chose_rescue:"YOU CHOSE: SEND IN THE FORCES — AS DID PERES",
+    chose_neg:"YOU CHOSE: NEGOTIATE — PERES CHOSE DIFFERENTLY",
+    chose_rescue_tag:"Sent in the forces",
+    chose_neg_tag:"Chose to negotiate",
+    back:"← Back"
+  },
+  he:{
+    center:"מרכז פרס לשלום וחדשנות",
+    title:"זיכרון פרס",
+    sub:"1923 – 2016 · ארכיון אינטראקטיבי",
+    enter:"כניסה לחדר",
+    standing:"אתה עומד בחדר העבודה שלו",
+    five:"חמש החלטות · חיים אחים",
+    select:"בחר רגע לכניסה",
+    urgent:"דחוף · סודי ביותר",
+    minister:"אתה שר הביטחון",
+    ringing:"3:17 לפנות בוקר. הטלפון האדום מצלצל.",
+    secretary:"המזכיר הצבאי שלך מדווח:",
+    scenario:"מחבלים השתלטו על ספינת נוסעים ישראלית ומשיטים אותה לעבר מדינת אויב — <strong>4,000 ק&quot;מ משם.</strong><br><br>על הסיפון נמצאים כ-<strong>200 אזרחים ישראלים</strong>.",
+    cannot:"ההחלטה לא יכולה לחכות.",
+    decide:"מה אתה מחליט?",
+    rescue_btn:"שלח את הכוחות",
+    rescue_desc:"אשר מבצע חילוץ צבאי סודי. סיכון גבוה. אין ערובה להצלחה.",
+    neg_btn:"פתח במשא ומתן",
+    neg_desc:"התחל שיחות עם החוטפים. העדף להחזיר את כולם הביתה בחיים.",
+    not_hypo:"זה לא היה תיאורטי",
+    date:"27 ביוני 1976",
+    what_next:"מה קרה אחר כך",
+    op_label:"מבצע יונתן · 4 ביולי 1976",
+    op_text:"100 לוחמים ישראלים נחתו באנטבה בחצות. תוך <strong>90 דקות</strong>, 102 מתוך 106 החטופים שוחררו. שלושה חטופים נהרגו בירי. המפקד <strong>יונתן נתניהו</strong> נהרג — החייל הישראלי היחיד שנפל. <strong>דורה בלוך</strong>, שאושפזה לפני המבצע, נרצחה על ידי כוחות אידי אמין לאחר מכן.<br><br>המבצע נחשב לאחת הפעולות האמיצות ביותר בתולדות ישראל.",
+    ask_q:"אם יכולת לשאול את שמעון פרס שאלה אחת על אופן קבלת ההחלטה — מה היית שואל?",
+    q_placeholder:"כתוב את שאלתך כאן...",
+    q_note:"שאלתך מצטרפת לארכיון החי — לצד שאלות מאנשים ביותר מ-40 מדינות.",
+    add_archive:"הוסף לארכיון",
+    skip:"דלג ←",
+    archive_lbl:"הארכיון החי",
+    archive_sub:"שאלות שאנשים היו שואלים את שמעון פרס — מרחבי העולם.",
+    sent:"שלח את הכוחות",
+    negotiated:"בחר במשא ומתן",
+    click_pt:"↑ לחץ על כל נקודה לקריאת השאלה",
+    all_dec:"← כל ההחלטות",
+    start_over:"↩ התחל מחדש",
+    sculpture_btn:"◈ הפסל החי →",
+    from_archive:"מהארכיון",
+    chose_act:"בחר לפעול",
+    chose_dial:"בחר בדיאלוג",
+    click_q:"↑ לחץ על נקודה לקריאת שאלה",
+    archive_nav:"← ארכיון",
+    chose_rescue:"בחרת: לשלוח את הכוחות — כמו פרס",
+    chose_neg:"בחרת: משא ומתן — פרס בחר אחרת",
+    chose_rescue_tag:"שלח את הכוחות",
+    chose_neg_tag:"בחר במשא ומתן",
+    back:"חזרה ←"
+  }
+};
+
+function setLang(lang){
+  currentLang=lang;
+  var s=STRINGS[lang];
+  var isHe=lang==='he';
+  document.body.dir=isHe?'rtl':'ltr';
+  document.getElementById('btn-en').style.borderColor=lang==='en'?'#7a7268':'#3a3530';
+  document.getElementById('btn-en').style.color=lang==='en'?'#d4c9b8':'#5a5248';
+  document.getElementById('btn-he').style.borderColor=lang==='he'?'#7a7268':'#3a3530';
+  document.getElementById('btn-he').style.color=lang==='he'?'#d4c9b8':'#5a5248';
+  // S0
+  document.querySelector('#s0 .T-label').textContent=s.center;
+  document.querySelector('#s0 .T-title').innerHTML=s.title;
+  document.querySelector('#s0 .T-sub').textContent=s.sub;
+  document.querySelector('#s0 .btn').textContent=s.enter;
+  document.querySelector('#s0 .T-note').textContent=s.standing;
+  // S1
+  document.querySelector('#hub-footer .T-label').textContent=s.five;
+  document.querySelector('#hub-footer .T-note').textContent=s.select;
+  // S2 — rebuild dynamically on next visit
+  // S6
+  document.querySelector('#s6 .T-label').textContent=s.archive_lbl;
+  if(document.getElementById('arc-title').textContent.indexOf('?')===-1||document.getElementById('arc-title').textContent===STRINGS[lang==='en'?'he':'en'].archive_sub)
+    document.getElementById('arc-title').textContent=s.archive_sub;
+  // S7
+  document.querySelector('#s7 .T-label').textContent='';
+  document.querySelector('#str-cnt').textContent=SQ.length+(isHe?' שאלות · 5 החלטות · חיים אחד':' questions · 5 decisions · one life');
+}
 
 function go(to){
   document.querySelectorAll('.scr').forEach(function(s){s.classList.remove('on');});
   document.getElementById(to).classList.add('on');
   document.getElementById('prog').style.width=(PROG[to]||0)+'%';
   var rb=document.getElementById('roombg');
-  if(to==='s0'||to==='s1'){rb.style.display='block';}
-  else{rb.style.display='none';}
+  rb.style.display=(to==='s0'||to==='s1')?'block':'none';
   if(to==='s1') buildBubbles();
   if(to==='s6') setTimeout(initArc,80);
   if(to==='s7') setTimeout(initStr,80);
@@ -275,7 +417,7 @@ function showPop(pid,d,mx,my,maxW,maxH){
 
 var DECISIONS=[
   {year:"1957",role:"Deputy Director General",title:"Build the nuclear reactor — in secret",col:"rgba(180,160,100,",sz:144,l:"22%",t:"40%",an:"fl0",dur:"6.2s",active:false},
-  {year:"1976",role:"Minister of Defense",title:"Entebbe — rescue or negotiate?",col:"rgba(122,184,232,",sz:170,l:"50%",t:"35%",an:"fl2",dur:"7s",active:true},
+  {year:"1976",role:"Minister of Defense",title:"Rescue or negotiate?",col:"rgba(122,184,232,",sz:170,l:"50%",t:"35%",an:"fl2",dur:"7s",active:true},
   {year:"1993",role:"Foreign Minister",title:"Sign the Oslo Accords",col:"rgba(140,200,150,",sz:148,l:"78%",t:"42%",an:"fl1",dur:"6.6s",active:false},
   {year:"1995",role:"Prime Minister",title:"The week before the assassination",col:"rgba(220,120,110,",sz:136,l:"30%",t:"66%",an:"fl3",dur:"5.8s",active:false},
   {year:"2012",role:"President",title:"A pardon no one expected",col:"rgba(180,140,220,",sz:140,l:"66%",t:"68%",an:"fl4",dur:"6.4s",active:false}
@@ -434,7 +576,7 @@ function initStr(){
         var angle=(ii/total)*Math.PI*2+Math.random()*0.4;
         var rad=60+Math.random()*160;
         var q=SQ[ii%SQ.length];
-        sp.push({x:CX+Math.cos(angle)*rad,y:CY+Math.sin(angle)*rad*0.7,ox:0,oy:0,col:col,q:q,baseSize:3+Math.random()*5,alpha:0,ph:Math.random()*Math.PI*2,orb:6+Math.random()*18,spd:0.0008+Math.random()*0.0012,id:Math.random()});
+        sp.push({x:CX+Math.cos(angle)*rad,y:CY+Math.sin(angle)*rad*0.7,ox:0,oy:0,col:col,q:q,alpha:0,ph:Math.random()*Math.PI*2,orb:6+Math.random()*18,spd:0.0008+Math.random()*0.0012,id:Math.random()});
       },ii*28);
     })(i);
   }
@@ -451,8 +593,7 @@ function initStr(){
     showPop('spop',{col:shov.col,q:shov.q},e.clientX-r.left,e.clientY-r.top,SW,SH);
   });
   setTimeout(function(){
-    var el=document.getElementById('peres-quote');
-    el.style.color='rgba(212,201,184,0.85)';
+    document.getElementById('peres-quote').style.color='rgba(212,201,184,0.85)';
   },800);
   drawStr();
 }
@@ -465,8 +606,6 @@ function drawStr(){
   var t=sf*0.003;
   var n=sp.length;
   var gSize=Math.max(4,22-(n*0.26));
-
-  // update positions — very slow organic movement
   sp.forEach(function(p){
     p.alpha=Math.min(1,p.alpha+0.012);
     if(!p.ox){p.ox=p.x;p.oy=p.y;}
@@ -474,9 +613,6 @@ function drawStr(){
     p.x=p.ox+Math.cos(p.ph+t*0.6)*p.orb*0.85+Math.sin(p.ph*1.2+t*0.35)*p.orb*0.28;
     p.y=p.oy+Math.sin(p.ph*0.85+t*0.5)*p.orb*0.78+Math.cos(p.ph*1.0+t*0.3)*p.orb*0.22;
   });
-
-  // ANADOL EFFECT — filled triangles between nearby points
-  // large translucent polygons = the "sculpture"
   for(var i=0;i<sp.length;i++){
     var p=sp[i];
     if(p.alpha<0.2) continue;
@@ -491,58 +627,36 @@ function drawStr(){
         var d2=Math.hypot(p.x-c.x,p.y-c.y);
         var d3=Math.hypot(b.x-c.x,b.y-c.y);
         if(d2>120||d3>120) continue;
-        // blend rgb of three points
         var mr=Math.round((p.col.r*2+b.col.r+c.col.r)/4);
         var mg=Math.round((p.col.g*2+b.col.g+c.col.g)/4);
         var mb=Math.round((p.col.b*2+b.col.b+c.col.b)/4);
-        var avgAlpha=Math.min(p.alpha,b.alpha,c.alpha);
-        var proximity=1-Math.max(d1,d2,d3)/120;
-        var al=avgAlpha*proximity*0.12;
+        var avgA=Math.min(p.alpha,b.alpha,c.alpha);
+        var prox=1-Math.max(d1,d2,d3)/120;
         SCTX.beginPath();
-        SCTX.moveTo(p.x,p.y);
-        SCTX.lineTo(b.x,b.y);
-        SCTX.lineTo(c.x,c.y);
+        SCTX.moveTo(p.x,p.y);SCTX.lineTo(b.x,b.y);SCTX.lineTo(c.x,c.y);
         SCTX.closePath();
-        SCTX.fillStyle='rgba('+mr+','+mg+','+mb+','+al+')';
+        SCTX.fillStyle='rgba('+mr+','+mg+','+mb+','+(avgA*prox*0.12)+')';
         SCTX.fill();
       }
     }
   }
-
-  // ambient glow cloud in center
   var CX=SW/2,CY=SH*0.47;
-  var gBlue=SCTX.createRadialGradient(CX-40,CY,0,CX-40,CY,220);
-  gBlue.addColorStop(0,'rgba(80,150,255,0.08)');
-  gBlue.addColorStop(1,'rgba(0,0,0,0)');
-  SCTX.fillStyle=gBlue;SCTX.fillRect(0,0,SW,SH);
-  var gPink=SCTX.createRadialGradient(CX+40,CY,0,CX+40,CY,200);
-  gPink.addColorStop(0,'rgba(225,95,165,0.07)');
-  gPink.addColorStop(1,'rgba(0,0,0,0)');
-  SCTX.fillStyle=gPink;SCTX.fillRect(0,0,SW,SH);
-
-  // draw glowing dots on top of mesh
+  var gB=SCTX.createRadialGradient(CX-40,CY,0,CX-40,CY,220);
+  gB.addColorStop(0,'rgba(80,150,255,0.07)');gB.addColorStop(1,'rgba(0,0,0,0)');
+  SCTX.fillStyle=gB;SCTX.fillRect(0,0,SW,SH);
+  var gP=SCTX.createRadialGradient(CX+40,CY,0,CX+40,CY,200);
+  gP.addColorStop(0,'rgba(225,95,165,0.06)');gP.addColorStop(1,'rgba(0,0,0,0)');
+  SCTX.fillStyle=gP;SCTX.fillRect(0,0,SW,SH);
   sp.forEach(function(p){
-    var a=p.alpha,isH=shov&&shov.id===p.id;
-    var s=gSize*(isH?2.2:1);
-    // outer soft glow
+    var a=p.alpha,isH=shov&&shov.id===p.id,s=gSize*(isH?2.2:1);
     SCTX.beginPath();SCTX.arc(p.x,p.y,s*5,0,Math.PI*2);
-    SCTX.fillStyle='rgba('+p.col.r+','+p.col.g+','+p.col.b+','+(a*0.05*(isH?3:1))+')';
-    SCTX.fill();
-    // mid glow
+    SCTX.fillStyle='rgba('+p.col.r+','+p.col.g+','+p.col.b+','+(a*0.05*(isH?3:1))+')';SCTX.fill();
     SCTX.beginPath();SCTX.arc(p.x,p.y,s*2,0,Math.PI*2);
-    SCTX.fillStyle='rgba('+p.col.r+','+p.col.g+','+p.col.b+','+(a*0.15*(isH?2:1))+')';
-    SCTX.fill();
-    // bright core
+    SCTX.fillStyle='rgba('+p.col.r+','+p.col.g+','+p.col.b+','+(a*0.15*(isH?2:1))+')';SCTX.fill();
     SCTX.beginPath();SCTX.arc(p.x,p.y,s,0,Math.PI*2);
-    SCTX.fillStyle='rgba('+p.col.r+','+p.col.g+','+p.col.b+','+(a*0.9)+')';
-    SCTX.fill();
-    if(isH){
-      SCTX.beginPath();SCTX.arc(p.x,p.y,s+7,0,Math.PI*2);
-      SCTX.strokeStyle='rgba('+p.col.r+','+p.col.g+','+p.col.b+',0.5)';
-      SCTX.lineWidth=0.5;SCTX.stroke();
-    }
+    SCTX.fillStyle='rgba('+p.col.r+','+p.col.g+','+p.col.b+','+(a*0.9)+')';SCTX.fill();
+    if(isH){SCTX.beginPath();SCTX.arc(p.x,p.y,s+7,0,Math.PI*2);SCTX.strokeStyle='rgba('+p.col.r+','+p.col.g+','+p.col.b+',0.5)';SCTX.lineWidth=0.5;SCTX.stroke();}
   });
-
   requestAnimationFrame(drawStr);
 }
 </script>
