@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The Memory of Peres</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#09090d;font-family:Georgia,serif;color:#d4c9b8;overflow:hidden;height:100vh}
+#app{width:100%;max-width:960px;height:100vh;margin:0 auto;position:relative;overflow:hidden}
+#prog{position:absolute;top:0;left:0;height:2px;background:linear-gradient(to right,#7ab8e8,#c87a9a);z-index:100;transition:width 0.5s;pointer-events:none}
+#roombg{position:absolute;inset:0;z-index:1;pointer-events:none;display:none}
+#roombg img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;filter:brightness(0.45) sepia(0.15);display:block}
+#roombg .ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(9,9,13,0.97) 0%,rgba(9,9,13,0.3) 50%,rgba(9,9,13,0.05) 100%)}
+.scr{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;padding:40px 32px;z-index:10;overflow-y:auto}
+.scr.on{display:flex}
+.scr.on *{pointer-events:auto}
+@keyframes fi{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@keyframes glw{0%,100%{opacity:0.35}50%{opacity:1}}
+@keyframes rng{0%,100%{transform:rotate(0)}20%{transform:rotate(-11deg)}40%{transform:rotate(11deg)}60%{transform:rotate(-7deg)}80%{transform:rotate(7deg)}}
+@keyframes fl0{0%,100%{transform:translate(-50%,-50%)}50%{transform:translate(-50%,-58%)}}
+@keyframes fl1{0%,100%{transform:translate(-50%,-50%)}50%{transform:translate(-50%,-43%)}}
+@keyframes fl2{0%,100%{transform:translate(-50%,-50%)}50%{transform:translate(-50%,-57%)}}
+@keyframes fl3{0%,100%{transform:translate(-50%,-50%)}50%{transform:translate(-50%,-44%)}}
+@keyframes fl4{0%,100%{transform:translate(-50%,-50%)}50%{transform:translate(-50%,-55%)}}
+.fi{animation:fi 0.9s ease forwards}
+.T-label{font-size:12px;letter-spacing:0.2em;color:#8a8078;font-family:sans-serif;text-transform:uppercase;margin-bottom:12px}
+.T-title{font-size:28px;font-weight:400;letter-spacing:0.08em;color:#e8dfd2;line-height:1.3;margin-bottom:10px}
+.T-sub{font-size:13px;letter-spacing:0.1em;color:#7a7268;font-family:sans-serif;margin-bottom:28px}
+.T-body{font-size:15px;line-height:1.95;color:#a89e90}
+.T-body strong{color:#d4c9b8;font-weight:400}
+.T-quote{font-size:15px;font-style:italic;color:#d4c9b8;line-height:1.75;padding:16px 18px;border:0.5px solid #2e2e36;margin-bottom:20px}
+.T-question{font-size:17px;color:#d4c9b8;line-height:1.8;margin-bottom:24px}
+.T-note{font-size:12px;color:#7a7268;font-family:sans-serif;letter-spacing:0.06em;line-height:1.65}
+.divider{width:36px;height:0.5px;background:#252320;margin:16px 0}
+.btn{background:transparent;border:0.5px solid #7a7268;color:#d4c9b8;padding:13px 40px;cursor:pointer;font-family:Georgia,serif;font-size:13px;letter-spacing:0.16em;transition:all 0.22s}
+.btn:hover{border-color:#e8dfd2;color:#e8dfd2;background:rgba(232,223,210,0.05)}
+.btn-back{background:none;border:none;font-size:12px;color:#7a7268;cursor:pointer;letter-spacing:0.14em;font-family:sans-serif;padding:8px 0;margin-top:10px;transition:color 0.2s}
+.btn-back:hover{color:#d4c9b8}
+.btn-skip{background:none;border:none;font-size:12px;color:#5a5248;cursor:pointer;letter-spacing:0.14em;font-family:sans-serif;padding:8px 0;transition:color 0.2s}
+.btn-skip:hover{color:#d4c9b8}
+.cg{display:grid;grid-template-columns:1fr 1fr;gap:12px;width:100%;max-width:540px;margin-bottom:14px}
+.cb{background:transparent;border:0.5px solid #252320;color:#907e70;padding:20px 16px;cursor:pointer;font-family:Georgia,serif;font-size:14px;line-height:1.75;text-align:left;transition:all 0.28s}
+.cb:hover{border-color:#b8ac9c;color:#d4c9b8;background:rgba(212,201,184,0.03)}
+.cb .cl{font-size:10px;letter-spacing:0.2em;display:block;margin-bottom:8px;font-family:sans-serif;text-transform:uppercase}
+.ali{display:inline-flex;align-items:center;gap:7px;font-size:12px;letter-spacing:0.1em;color:#7a7268;font-family:sans-serif;margin:0 10px}
+.ald{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+textarea{width:100%;background:rgba(255,255,255,0.02);border:0.5px solid #252320;color:#d4c9b8;padding:16px;font-family:Georgia,serif;font-size:14px;line-height:1.75;resize:none;margin-bottom:8px;min-height:100px}
+textarea:focus{outline:none;border-color:#5a5248}
+textarea::placeholder{color:#2e2a26;font-style:italic}
+#s1{padding:0}
+#hub-wrap{position:relative;width:100%;height:100%}
+.bubble{position:absolute;border-radius:50%;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;border:0.5px solid rgba(255,255,255,0.1);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);padding:16px;transition:box-shadow 0.3s}
+.bubble:hover{outline:2px solid rgba(255,255,255,0.22);outline-offset:3px;z-index:20}
+.bubble .b-year{font-size:10px;letter-spacing:0.2em;font-family:sans-serif;margin-bottom:4px;opacity:0.6}
+.bubble .b-role{font-size:10px;letter-spacing:0.12em;font-family:sans-serif;margin-bottom:6px;opacity:0.8;text-transform:uppercase}
+.bubble .b-title{font-size:13px;line-height:1.4;font-family:Georgia,serif}
+.bubble .b-cta{font-size:10px;letter-spacing:0.16em;font-family:sans-serif;margin-top:8px;opacity:0.5}
+.bubble.locked{cursor:default}
+#hub-footer{position:absolute;bottom:22px;left:0;right:0;text-align:center;pointer-events:none}
+#s6,#s7{padding:0;background:#07070b}
+#s6.on,#s7.on{display:flex;flex-direction:column}
+#s7{background:#03030a}
+.arc-top{width:100%;padding:18px 24px 12px;flex-shrink:0;border-bottom:0.5px solid #141418}
+#s6 .arc-top{background:#07070b}
+#s7 .arc-top{background:#03030a;border-color:#0a0a14;text-align:center}
+.arc-body{position:relative;flex:1;width:100%;min-height:0}
+.arc-body canvas{display:block;position:absolute;inset:0;width:100%;height:100%}
+.arc-bot{position:absolute;bottom:0;left:0;right:0;padding:10px 24px 16px;z-index:15;pointer-events:none;text-align:center}
+#s6 .arc-bot{background:linear-gradient(to top,rgba(7,7,11,1) 0%,rgba(7,7,11,0.7) 65%,transparent 100%)}
+#s7 .arc-bot{background:linear-gradient(to top,rgba(3,3,10,1) 0%,rgba(3,3,10,0.8) 55%,transparent 100%)}
+.anav{position:absolute;bottom:12px;background:none;border:none;font-size:12px;color:#7a7268;cursor:pointer;letter-spacing:0.12em;font-family:sans-serif;z-index:16;transition:color 0.2s;pointer-events:all}
+.anav:hover{color:#d4c9b8}
+.pop{position:absolute;z-index:30;background:rgba(6,6,10,0.99);border:0.5px solid #1e1e24;padding:18px 20px;width:272px;display:none;pointer-events:all}
+.pop .pl{font-size:10px;letter-spacing:0.2em;color:#5a5248;font-family:sans-serif;margin-bottom:10px;text-transform:uppercase}
+.pop .pq{font-size:13px;color:#d4c9b8;font-style:italic;line-height:1.7;margin-bottom:10px}
+.pop .pm{font-size:11px;color:#5a5248;font-family:sans-serif;display:flex;justify-content:space-between}
+.pop .pd{display:inline-block;width:6px;height:6px;border-radius:50%;margin-right:5px;vertical-align:middle}
+.pop .px{position:absolute;top:10px;right:13px;font-size:16px;color:#5a5248;cursor:pointer;background:none;border:none}
+.pop .px:hover{color:#d4c9b8}
+</style>
+</head>
+<body>
+<div id="app">
+  <div id="prog" style="width:0%"></div>
+  <div id="roombg">
+    <img src="https://res.cloudinary.com/dmr8zhfer/image/upload/f_auto,q_auto/peres_room_main_xpo9zv" alt="Peres Center office">
+    <div class="ov"></div>
+  </div>
+
+  <!-- S0 ENTRY -->
+  <div class="scr on" id="s0">
+    <div class="fi" style="text-align:center;max-width:500px">
+      <div class="T-label" style="margin-bottom:16px">Peres Center for Peace and Innovation</div>
+      <div class="T-title" style="font-size:32px;margin-bottom:8px">THE MEMORY<br>OF PERES</div>
+      <div class="T-sub">1923 – 2016 · An interactive archive</div>
+      <button class="btn" onclick="go('s1')">ENTER THE ROOM</button>
+      <div class="T-note" style="margin-top:22px;animation:glw 4s infinite">You are standing in his study</div>
+    </div>
+  </div>
+
+  <!-- S1 HUB -->
+  <div class="scr" id="s1">
+    <div id="hub-wrap">
+      <button class="btn-back" style="position:absolute;top:16px;left:16px;z-index:15" onclick="go('s0')">← Back</button>
+    </div>
+    <div id="hub-footer">
+      <div class="T-label" style="margin-bottom:4px">Five Decisions · One Life</div>
+      <div class="T-note">Select a moment to enter</div>
+    </div>
+  </div>
+
+  <!-- S2 PHONE -->
+  <div class="scr" id="s2">
+    <div class="fi" style="display:flex;flex-direction:column;align-items:center;text-align:center;width:100%;max-width:540px">
+      <div class="T-label">You are the Minister of Defense</div>
+      <div class="T-note" style="margin-bottom:8px">The red phone is ringing</div>
+      <div style="font-size:44px;animation:rng 1.1s ease-in-out infinite;margin:10px 0 16px">☎</div>
+      <div class="T-label" style="margin-bottom:14px">Your military secretary reports:</div>
+      <div class="T-body" style="text-align:center;margin-bottom:8px">Terrorists have seized an Israeli passenger ship and are sailing it toward a hostile nation — <strong>4,000 km away.</strong><br><br>Approximately <strong>200 Israeli civilians</strong> are on board.</div>
+      <div class="T-note" style="margin-bottom:20px">This scenario is based on real events.</div>
+      <div class="T-question">What do you decide?</div>
+      <div class="cg">
+        <button class="cb" onclick="choose('rescue')"><span class="cl" style="color:#7ab8e8">Send in the forces</span>Authorize a secret military rescue operation. High risk. No guarantee of success.</button>
+        <button class="cb" onclick="choose('negotiate')"><span class="cl" style="color:#c87a9a">Open negotiations</span>Begin talks with the hijackers. Prioritize bringing everyone home alive.</button>
+      </div>
+      <button class="btn-back" onclick="go('s1')">← Back</button>
+    </div>
+  </div>
+
+  <!-- S3 REVEAL -->
+  <div class="scr" id="s3">
+    <div class="fi" style="width:100%;max-width:580px">
+      <div class="T-label">This was not hypothetical</div>
+      <div class="T-note" style="margin-bottom:14px">June 27, 1976</div>
+      <div class="T-title">Entebbe, Uganda.</div>
+      <div class="divider"></div>
+      <div class="T-body" style="margin-bottom:18px">An Air France flight was hijacked and diverted to Entebbe. <strong>106 Jewish and Israeli hostages</strong> were separated and held 4,000 km from Israel, with Idi Amin's full cooperation.<br><br>The hijackers demanded the release of <strong>53 Palestinian prisoners.</strong> Deadline: 72 hours.<br><br>The Minister of Defense was <strong>Shimon Peres.</strong> He was 52 years old.</div>
+      <div class="T-quote">"We do not negotiate with terrorists — not because it is easy, but because the alternative destroys something we cannot rebuild."</div>
+      <div id="s3-result" style="font-size:12px;font-family:sans-serif;letter-spacing:0.14em;margin-bottom:20px"></div>
+      <button class="btn" onclick="go('s4')">WHAT HAPPENED NEXT</button>
+      <button class="btn-back" onclick="go('s2')">← Back</button>
+    </div>
+  </div>
+
+  <!-- S4 OPERATION -->
+  <div class="scr" id="s4">
+    <div class="fi" style="width:100%;max-width:560px">
+      <div class="T-label">Operation Thunderbolt · July 4, 1976</div>
+      <div class="T-body" style="margin-bottom:18px">100 Israeli commandos landed at Entebbe at midnight. In <strong>90 minutes</strong>, 102 of the 106 hostages were freed. Three hostages were killed in the crossfire. Commander <strong>Yonatan Netanyahu</strong> was killed — the only Israeli soldier to die. <strong>Dora Bloch</strong>, hospitalized before the raid, was murdered by Amin's forces afterward.<br><br>It was considered one of the most daring rescue operations in history.</div>
+      <div class="divider"></div>
+      <div class="T-question">If you could ask Shimon Peres one question about how he made this decision — what would you ask him?</div>
+      <textarea id="userQ" rows="3" placeholder="Write your question here..."></textarea>
+      <div class="T-note" style="margin-bottom:22px">Your question joins the living archive — alongside questions from people in over 40 countries.</div>
+      <button class="btn" onclick="submitQ()" style="margin-bottom:10px">ADD TO THE ARCHIVE</button>
+      <div style="display:flex;gap:24px">
+        <button class="btn-back" onclick="go('s3')">← Back</button>
+        <button class="btn-skip" onclick="go('s6')">Skip →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- S6 ARCHIVE -->
+  <div class="scr" id="s6">
+    <div class="arc-top">
+      <div class="T-label" style="margin-bottom:5px">The Living Archive</div>
+      <div class="T-body" id="arc-title" style="color:#d4c9b8;font-size:14px">Questions people would ask Shimon Peres — from around the world.</div>
+    </div>
+    <div class="arc-body">
+      <canvas id="ac"></canvas>
+      <div class="arc-bot">
+        <div><span class="ali"><span class="ald" style="background:#7ab8e8"></span>Sent in the forces</span><span class="ali"><span class="ald" style="background:#c87a9a"></span>Chose to negotiate</span></div>
+        <div id="arc-cnt" class="T-note" style="margin-top:4px"></div>
+        <div class="T-note" style="margin-top:3px;animation:glw 3s infinite">↑ Click any point to read their question</div>
+      </div>
+      <button class="anav" style="left:18px" onclick="go('s1')">← All decisions</button>
+      <button class="anav" style="right:18px" onclick="restart()">↩ Start over</button>
+      <button onclick="go('s7')" style="position:absolute;top:16px;right:16px;background:transparent;border:0.5px solid #7ab8e8;color:#7ab8e8;padding:10px 18px;cursor:pointer;font-family:sans-serif;font-size:11px;letter-spacing:0.14em;z-index:16;pointer-events:all;transition:all 0.2s">◈ LIVING SCULPTURE →</button>
+      <div class="pop" id="pop">
+        <button class="px" onclick="closePop('pop')">×</button>
+        <div class="pl">From the Archive</div>
+        <div class="pq" id="ppq"></div>
+        <div class="pm"><span><span class="pd" id="ppd"></span><span id="pps"></span></span><span id="ppl"></span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- S7 SCULPTURE -->
+  <div class="scr" id="s7">
+    <div class="arc-top" style="text-align:center;padding:22px 24px 16px;background:#03030a;border-color:#0a0a14">
+      <div id="peres-quote" style="font-size:20px;font-style:italic;color:rgba(212,201,184,0);font-family:Georgia,serif;line-height:1.65;max-width:580px;margin:0 auto 8px;transition:color 2.5s ease">"The future belongs not to those who wait for it — but to those who dare to imagine it."</div>
+      <div class="T-note" style="color:#4a4540">— Shimon Peres</div>
+    </div>
+    <div class="arc-body" style="background:#03030a">
+      <canvas id="sc"></canvas>
+      <div class="arc-bot" style="background:linear-gradient(to top,rgba(3,3,10,1) 0%,rgba(3,3,10,0.8) 55%,transparent 100%)">
+        <div><span class="ali"><span class="ald" style="background:rgba(80,150,255,0.9)"></span>Chose to act</span><span class="ali"><span class="ald" style="background:rgba(225,95,165,0.9)"></span>Chose dialogue</span></div>
+        <div id="str-cnt" class="T-note" style="margin-top:4px"></div>
+        <div class="T-note" style="margin-top:3px;animation:glw 3s infinite">↑ Click any point to read a question</div>
+      </div>
+      <button class="anav" style="left:18px" onclick="go('s6')">← Archive</button>
+      <button class="anav" style="right:18px" onclick="go('s0')">↩ Start over</button>
+      <div class="pop" id="spop">
+        <button class="px" onclick="closePop('spop')">×</button>
+        <div class="pl">From the Archive</div>
+        <div class="pq" id="spq"></div>
+        <div class="pm"><span><span class="pd" id="spd"></span><span id="sps"></span></span><span id="spl"></span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+var PROG={s0:0,s1:12,s2:30,s3:50,s4:70,s6:88,s7:100};
+var userSide=null,userQ_val=null;
+var arcReady=false,strReady=false,bubblesBuilt=false;
+var dots=[],af=0,ahov=null,totalR=68,totalN=32;
+var W=0,H=0,ac,actx;
+var sp=[],sf=0,shov=null,SW=0,SH=0,SC,SCTX;
+
+function go(to){
+  document.querySelectorAll('.scr').forEach(function(s){s.classList.remove('on');});
+  document.getElementById(to).classList.add('on');
+  document.getElementById('prog').style.width=(PROG[to]||0)+'%';
+  var rb=document.getElementById('roombg');
+  if(to==='s0'||to==='s1'){rb.style.display='block';}
+  else{rb.style.display='none';}
+  if(to==='s1') buildBubbles();
+  if(to==='s6') setTimeout(initArc,80);
+  if(to==='s7') setTimeout(initStr,80);
+}
+
+function choose(side){
+  userSide=side;
+  var el=document.getElementById('s3-result');
+  el.textContent=side==='rescue'?'YOU CHOSE: SEND IN THE FORCES — AS DID PERES':'YOU CHOSE: NEGOTIATE — PERES CHOSE DIFFERENTLY';
+  el.style.color=side==='rescue'?'rgba(122,184,232,0.9)':'rgba(200,122,154,0.9)';
+  go('s3');
+}
+
+function submitQ(){
+  var q=document.getElementById('userQ').value.trim();
+  if(q){userQ_val=q;document.getElementById('arc-title').textContent='"'+q+'" — your question, now part of the archive.';}
+  go('s6');
+}
+
+function restart(){
+  userSide=null;userQ_val=null;arcReady=false;strReady=false;
+  dots=[];af=0;ahov=null;totalR=68;totalN=32;
+  sp=[];sf=0;shov=null;
+  document.getElementById('userQ').value='';
+  document.getElementById('arc-title').textContent='Questions people would ask Shimon Peres — from around the world.';
+  document.getElementById('peres-quote').style.color='rgba(212,201,184,0)';
+  go('s0');
+}
+
+function closePop(id){document.getElementById(id).style.display='none';}
+
+function showPop(pid,d,mx,my,maxW,maxH){
+  if(!d||!d.q) return;
+  var ids={pop:{q:'ppq',d:'ppd',s:'pps',l:'ppl'},spop:{q:'spq',d:'spd',s:'sps',l:'spl'}};
+  var m=ids[pid];
+  document.getElementById(m.q).textContent='"'+d.q.q+'"';
+  document.getElementById(m.d).style.background='rgba('+d.col.r+','+d.col.g+','+d.col.b+',1)';
+  document.getElementById(m.s).textContent=d.q.side==='rescue'?'Sent in the forces':'Chose to negotiate';
+  document.getElementById(m.l).textContent=d.q.loc;
+  var p=document.getElementById(pid);
+  var px=mx+14,py=my-70;
+  if(px+272>maxW) px=mx-286;
+  if(py<0) py=8;
+  if(py+130>maxH) py=maxH-138;
+  p.style.left=px+'px';p.style.top=py+'px';p.style.display='block';
+}
+
+var DECISIONS=[
+  {year:"1957",role:"Deputy Director General",title:"Build the nuclear reactor — in secret",col:"rgba(180,160,100,",sz:144,l:"22%",t:"40%",an:"fl0",dur:"6.2s",active:false},
+  {year:"1976",role:"Minister of Defense",title:"Entebbe — rescue or negotiate?",col:"rgba(122,184,232,",sz:170,l:"50%",t:"35%",an:"fl2",dur:"7s",active:true},
+  {year:"1993",role:"Foreign Minister",title:"Sign the Oslo Accords",col:"rgba(140,200,150,",sz:148,l:"78%",t:"42%",an:"fl1",dur:"6.6s",active:false},
+  {year:"1995",role:"Prime Minister",title:"The week before the assassination",col:"rgba(220,120,110,",sz:136,l:"30%",t:"66%",an:"fl3",dur:"5.8s",active:false},
+  {year:"2012",role:"President",title:"A pardon no one expected",col:"rgba(180,140,220,",sz:140,l:"66%",t:"68%",an:"fl4",dur:"6.4s",active:false}
+];
+
+function buildBubbles(){
+  if(bubblesBuilt) return;
+  bubblesBuilt=true;
+  var wrap=document.getElementById('hub-wrap');
+  DECISIONS.forEach(function(d,i){
+    var btn=document.createElement('button');
+    btn.className='bubble'+(d.active?'':' locked');
+    btn.setAttribute('aria-label',d.year+': '+d.title);
+    btn.style.cssText='left:'+d.l+';top:'+d.t+';width:'+d.sz+'px;height:'+d.sz+'px;transform:translate(-50%,-50%);background:'+d.col+'0.13);box-shadow:0 0 50px '+d.col+'0.07),inset 0 0 25px '+d.col+'0.05);color:'+d.col+'0.9);animation:'+d.an+' '+d.dur+' ease-in-out infinite;animation-delay:'+(i*0.5)+'s;';
+    btn.innerHTML='<span class="b-year">'+d.year+'</span><span class="b-role">'+d.role+'</span><span class="b-title">'+d.title+'</span><span class="b-cta">'+(d.active?'ENTER →':'Coming soon')+'</span>';
+    if(d.active) btn.onclick=function(){go('s2');};
+    wrap.appendChild(btn);
+  });
+}
+
+var CR={r:122,g:184,b:232},CN={r:200,g:122,b:154},CU={r:255,g:220,b:150};
+function cs(c,a){return 'rgba('+c.r+','+c.g+','+c.b+','+a+')';}
+
+var AQ=[
+  {q:"Did you sleep the night before you gave the order?",loc:"New York",side:"rescue"},
+  {q:"How do you carry the weight of those who didn't come home?",loc:"London",side:"negotiate"},
+  {q:"At what point did doubt become certainty?",loc:"Tel Aviv",side:"rescue"},
+  {q:"What would you have said to Yonatan's family?",loc:"Berlin",side:"negotiate"},
+  {q:"Were you afraid — and did that fear help or hurt you?",loc:"Chicago",side:"rescue"},
+  {q:"How do you decide when every option costs something irreplaceable?",loc:"Paris",side:"negotiate"},
+  {q:"Was there a moment you almost changed your mind?",loc:"São Paulo",side:"rescue"},
+  {q:"What do you say to those who believe you gambled with lives?",loc:"Melbourne",side:"negotiate"},
+  {q:"Did you know — in that moment — that you were right?",loc:"Toronto",side:"rescue"},
+  {q:"What if it had failed?",loc:"Amsterdam",side:"negotiate"},
+  {q:"How do you live with a decision made on incomplete information?",loc:"Mumbai",side:"rescue"},
+  {q:"Is there a difference between courage and desperation?",loc:"Warsaw",side:"negotiate"},
+  {q:"Who did you speak to in those final hours?",loc:"Buenos Aires",side:"rescue"},
+  {q:"What did you learn about yourself in those 72 hours?",loc:"Stockholm",side:"negotiate"},
+  {q:"Does the outcome change the morality of the decision?",loc:"Nairobi",side:"rescue"},
+  {q:"What would you tell a young leader facing an impossible choice?",loc:"Seoul",side:"negotiate"},
+  {q:"Were you certain — or did you decide despite uncertainty?",loc:"San Francisco",side:"rescue"},
+  {q:"How do you separate what is right from what is necessary?",loc:"Vienna",side:"negotiate"},
+  {q:"Did Ben-Gurion teach you something that helped you in that room?",loc:"Jerusalem",side:"rescue"},
+  {q:"What is the cost of a precedent — and who pays it?",loc:"Cape Town",side:"negotiate"}
+];
+
+function initArc(){
+  if(arcReady) return;
+  arcReady=true;
+  ac=document.getElementById('ac');
+  actx=ac.getContext('2d');
+  var body=ac.parentElement;
+  W=ac.width=body.offsetWidth||800;
+  H=ac.height=body.offsetHeight||480;
+  for(var i=0;i<totalR;i++){(function(ii){setTimeout(function(){dots.push(mkDot('rescue'));},ii*20);})(i);}
+  for(var j=0;j<totalN;j++){(function(jj){setTimeout(function(){dots.push(mkDot('negotiate'));},jj*28+200);})(j);}
+  setTimeout(function(){
+    if(userSide==='rescue') totalR++; else if(userSide) totalN++;
+    var ud=mkDot(userSide||'rescue',true);
+    if(userQ_val) ud.q={q:userQ_val,loc:"You",side:userSide||'rescue'};
+    dots.push(ud);
+    updateCnt();
+  },totalR*20+900);
+  updateCnt();
+  ac.addEventListener('mousemove',function(e){
+    var r=ac.getBoundingClientRect(),mx=e.clientX-r.left,my=e.clientY-r.top;
+    var found=null,mn=28;
+    dots.forEach(function(d){if(!d.q)return;var dd=Math.hypot(d.x-mx,d.y-my);if(dd<mn){mn=dd;found=d;}});
+    ahov=found; ac.style.cursor=found?'pointer':'default';
+  });
+  ac.addEventListener('click',function(e){
+    if(!ahov) return;
+    var r=ac.getBoundingClientRect();
+    showPop('pop',ahov,e.clientX-r.left,e.clientY-r.top,W,H);
+  });
+  drawArc();
+}
+
+function mkDot(side,isUser){
+  var col=isUser?CU:(side==='rescue'?CR:CN);
+  var pool=AQ.filter(function(q){return q.side===side;});
+  var q=isUser?null:pool[Math.floor(Math.random()*pool.length)];
+  return{x:W*(0.06+Math.random()*0.88),y:H*(0.06+Math.random()*0.86),ox:0,oy:0,col:col,side:side,q:q,isUser:!!isUser,size:isUser?7:(3+Math.random()*3),alpha:0,ph:Math.random()*Math.PI*2,orb:14+Math.random()*26,spd:0.0018+Math.random()*0.002,id:Math.random()};
+}
+
+function updateCnt(){
+  var t=totalR+totalN;
+  document.getElementById('arc-cnt').textContent=Math.round(totalR/t*100)+'% sent in the forces · '+Math.round(totalN/t*100)+'% chose to negotiate · '+t+' voices';
+}
+
+function drawArc(){
+  af++;
+  actx.clearRect(0,0,W,H);actx.fillStyle='#07070b';actx.fillRect(0,0,W,H);
+  var t=af*0.006;
+  [[W*0.32,H*0.42,CR],[W*0.68,H*0.58,CN]].forEach(function(arr){
+    var g=actx.createRadialGradient(arr[0],arr[1],0,arr[0],arr[1],W*0.38);
+    g.addColorStop(0,cs(arr[2],0.05));g.addColorStop(1,'rgba(0,0,0,0)');
+    actx.fillStyle=g;actx.fillRect(0,0,W,H);
+  });
+  dots.forEach(function(d){
+    d.alpha=Math.min(1,d.alpha+0.02);
+    if(!d.ox){d.ox=d.x;d.oy=d.y;}
+    d.ph+=d.spd;
+    d.x=d.ox+Math.cos(d.ph+t)*d.orb*0.7+Math.sin(d.ph*0.7)*d.orb*0.3;
+    d.y=d.oy+Math.sin(d.ph*1.2+t*0.9)*d.orb*0.65+Math.cos(d.ph*0.5)*d.orb*0.28;
+    var a=d.alpha,isH=ahov&&ahov.id===d.id,s=d.size*(isH?2.1:1)*(d.isUser?(1+Math.sin(af*0.07)*0.18):1);
+    [[s*6,0.025],[s*3,0.08],[s*1.5,0.18]].forEach(function(arr){
+      actx.beginPath();actx.arc(d.x,d.y,arr[0],0,Math.PI*2);
+      actx.fillStyle=cs(d.col,a*arr[1]*(isH?2.5:1));actx.fill();
+    });
+    actx.beginPath();actx.arc(d.x,d.y,s,0,Math.PI*2);
+    actx.fillStyle=cs(d.col,a*(d.isUser?0.95:0.6+(isH?0.3:0)));actx.fill();
+    if(isH||d.isUser){actx.beginPath();actx.arc(d.x,d.y,s+5,0,Math.PI*2);actx.strokeStyle=cs(d.col,0.3);actx.lineWidth=0.5;actx.stroke();}
+    dots.forEach(function(b){
+      if(b.id===d.id||b.side!==d.side) return;
+      var dd=Math.hypot(d.x-b.x,d.y-b.y);
+      if(dd<60){actx.beginPath();actx.moveTo(d.x,d.y);actx.lineTo(b.x,b.y);actx.strokeStyle=cs(d.col,(1-dd/60)*0.05);actx.lineWidth=0.4;actx.stroke();}
+    });
+  });
+  if(af%90===0) updateCnt();
+  requestAnimationFrame(drawArc);
+}
+
+var SQ=[
+  {q:"Was a secret that big ever truly safe?",loc:"Jerusalem",side:"rescue"},
+  {q:"Did you sleep the night before you gave the order?",loc:"New York",side:"rescue"},
+  {q:"How do you carry the weight of those who didn't come home?",loc:"London",side:"negotiate"},
+  {q:"Did you believe Oslo would hold?",loc:"Oslo",side:"negotiate"},
+  {q:"Could the assassination have been prevented?",loc:"Tel Aviv",side:"negotiate"},
+  {q:"Who deserves a second chance — and who decides?",loc:"Haifa",side:"negotiate"},
+  {q:"At what point did doubt become certainty?",loc:"Berlin",side:"rescue"},
+  {q:"What if it had failed?",loc:"Amsterdam",side:"negotiate"},
+  {q:"What would you tell a young leader?",loc:"Seoul",side:"negotiate"},
+  {q:"Were you certain — or did you decide despite uncertainty?",loc:"San Francisco",side:"rescue"},
+  {q:"What is the cost of a precedent?",loc:"Cape Town",side:"negotiate"},
+  {q:"Does the outcome change the morality of the decision?",loc:"Nairobi",side:"rescue"},
+  {q:"What did you feel the moment you signed?",loc:"Washington",side:"negotiate"},
+  {q:"Did Ben-Gurion ever doubt it was right?",loc:"Sde Boker",side:"rescue"}
+];
+var SCOL_BLUE={r:80,g:150,b:255},SCOL_PINK={r:225,g:95,b:165};
+
+function initStr(){
+  if(strReady) return;
+  strReady=true;
+  SC=document.getElementById('sc');
+  SCTX=SC.getContext('2d');
+  var body=SC.parentElement;
+  SW=SC.width=body.offsetWidth||800;
+  SH=SC.height=body.offsetHeight||480;
+  var total=64,CX=SW/2,CY=SH*0.47;
+  for(var i=0;i<total;i++){
+    (function(ii){
+      setTimeout(function(){
+        var era=Math.floor(ii/total*5);
+        var col=(era<=1)?SCOL_BLUE:SCOL_PINK;
+        var angle=(ii/total)*Math.PI*2+Math.random()*0.4;
+        var rad=60+Math.random()*160;
+        var q=SQ[ii%SQ.length];
+        sp.push({x:CX+Math.cos(angle)*rad,y:CY+Math.sin(angle)*rad*0.7,ox:0,oy:0,col:col,q:q,baseSize:3+Math.random()*5,alpha:0,ph:Math.random()*Math.PI*2,orb:6+Math.random()*18,spd:0.0008+Math.random()*0.0012,id:Math.random()});
+      },ii*28);
+    })(i);
+  }
+  document.getElementById('str-cnt').textContent=SQ.length+' questions · 5 decisions · one life';
+  SC.addEventListener('mousemove',function(e){
+    var r=SC.getBoundingClientRect(),mx=e.clientX-r.left,my=e.clientY-r.top;
+    var found=null,mn=30;
+    sp.forEach(function(p){var dd=Math.hypot(p.x-mx,p.y-my);if(dd<mn){mn=dd;found=p;}});
+    shov=found; SC.style.cursor=found?'pointer':'default';
+  });
+  SC.addEventListener('click',function(e){
+    if(!shov||!shov.q) return;
+    var r=SC.getBoundingClientRect();
+    showPop('spop',{col:shov.col,q:shov.q},e.clientX-r.left,e.clientY-r.top,SW,SH);
+  });
+  setTimeout(function(){
+    var el=document.getElementById('peres-quote');
+    el.style.color='rgba(212,201,184,0.85)';
+  },800);
+  drawStr();
+}
+
+function drawStr(){
+  sf++;
+  SCTX.clearRect(0,0,SW,SH);
+  SCTX.fillStyle='#03030a';
+  SCTX.fillRect(0,0,SW,SH);
+  var t=sf*0.004;
+  var n=sp.length;
+  var gSize=Math.max(3,20-(n*0.24));
+  sp.forEach(function(p){
+    p.alpha=Math.min(1,p.alpha+0.015);
+    if(!p.ox){p.ox=p.x;p.oy=p.y;}
+    p.ph+=p.spd;
+    p.x=p.ox+Math.cos(p.ph+t*0.7)*p.orb*0.8+Math.sin(p.ph*1.3+t*0.4)*p.orb*0.3;
+    p.y=p.oy+Math.sin(p.ph*0.9+t*0.6)*p.orb*0.7+Math.cos(p.ph*1.1+t*0.35)*p.orb*0.25;
+  });
+  for(var i=0;i<sp.length;i++){
+    var p=sp[i];
+    if(p.alpha<0.3) continue;
+    for(var j=i+1;j<sp.length;j++){
+      var b=sp[j];
+      if(b.alpha<0.3) continue;
+      var d1=Math.hypot(p.x-b.x,p.y-b.y);
+      if(d1>100) continue;
+      for(var k=j+1;k<sp.length;k++){
+        var c=sp[k];
+        if(c.alpha<0.3) continue;
+        var d2=Math.hypot(p.x-c.x,p.y-c.y);
+        var d3=Math.hypot(b.x-c.x,b.y-c.y);
+        if(d2>100||d3>100) continue;
+        var al=Math.min(p.alpha,b.alpha,c.alpha)*(1-d1/100)*0.06;
+        var mr=Math.round((p.col.r+b.col.r+c.col.r)/3);
+        var mg=Math.round((p.col.g+b.col.g+c.col.g)/3);
+        var mb=Math.round((p.col.b+b.col.b+c.col.b)/3);
+        SCTX.beginPath();
+        SCTX.moveTo(p.x,p.y);SCTX.lineTo(b.x,b.y);SCTX.lineTo(c.x,c.y);
+        SCTX.closePath();
+        SCTX.fillStyle='rgba('+mr+','+mg+','+mb+','+al+')';
+        SCTX.fill();
+      }
+    }
+  }
+  sp.forEach(function(p){
+    var a=p.alpha,isH=shov&&shov.id===p.id,s=gSize*(isH?2:1);
+    SCTX.beginPath();SCTX.arc(p.x,p.y,s*4,0,Math.PI*2);
+    SCTX.fillStyle='rgba('+p.col.r+','+p.col.g+','+p.col.b+','+(a*0.04*(isH?3:1))+')';SCTX.fill();
+    SCTX.beginPath();SCTX.arc(p.x,p.y,s,0,Math.PI*2);
+    SCTX.fillStyle='rgba('+p.col.r+','+p.col.g+','+p.col.b+','+(a*0.8+(isH?0.15:0))+')';SCTX.fill();
+    if(isH){SCTX.beginPath();SCTX.arc(p.x,p.y,s+5,0,Math.PI*2);SCTX.strokeStyle='rgba('+p.col.r+','+p.col.g+','+p.col.b+',0.4)';SCTX.lineWidth=0.5;SCTX.stroke();}
+  });
+  requestAnimationFrame(drawStr);
+}
+</script>
+</body>
+</html>
