@@ -1,752 +1,662 @@
 <!DOCTYPE html>
-<html lang="he" dir="rtl">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>מכונת החלומות | מרכז פרס לשלום ולחדשנות</title>
+<title>The Memory of Peres</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@200;300;400;500;700&display=swap');
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-
-:root{
-  --bg:#030310;
-  --surface:rgba(8,8,24,0.95);
-  --gold:#d4a94f;
-  --gold-dim:rgba(212,169,79,0.12);
-  --cyan:#00c9a7;
-  --cyan-dim:rgba(0,201,167,0.1);
-  --purple:#9d7fff;
-  --cream:#f2eee4;
-  --dim:#8888a8;
-  --faint:#444460;
-}
-
-html,body{height:100%;background:var(--bg);font-family:'Heebo',sans-serif;color:var(--cream);overflow:hidden}
-
-/* Grid texture */
-body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(0,201,167,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(0,201,167,0.025) 1px,transparent 1px);background-size:64px 64px;pointer-events:none;z-index:0}
-/* Scanline */
-body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,rgba(0,0,0,0.04) 0,rgba(0,0,0,0.04) 1px,transparent 1px,transparent 3px);pointer-events:none;z-index:0}
-
-/* Accessibility */
-.skip-link{position:fixed;top:-100px;right:0;background:var(--gold);color:#000;padding:12px 20px;z-index:9999;font-size:14px;font-weight:500;text-decoration:none;transition:top .2s}
-.skip-link:focus{top:0}
-*:focus-visible{outline:2px solid var(--cyan);outline-offset:3px;border-radius:1px}
-*:focus:not(:focus-visible){outline:none}
-
-/* Progress */
-#prog{position:fixed;top:0;left:0;right:0;height:2px;background:linear-gradient(to right,var(--gold),var(--cyan));transform-origin:right;transform:scaleX(0);transition:transform .7s ease;z-index:200}
-
-/* Logo */
-#logo-bar{position:fixed;top:18px;right:24px;z-index:100;font-size:10px;letter-spacing:.22em;color:var(--faint);font-weight:300;opacity:0;transition:opacity .5s;pointer-events:none}
-#logo-bar.vis{opacity:1}
-
-/* Back button */
-#back-btn{position:fixed;bottom:24px;right:24px;z-index:100;display:none;background:rgba(3,3,16,.85);border:1px solid rgba(255,255,255,.08);color:var(--dim);padding:10px 22px;cursor:pointer;font-family:'Heebo',sans-serif;font-size:11px;letter-spacing:.18em;backdrop-filter:blur(8px);transition:all .2s}
-#back-btn:hover{color:var(--cream);border-color:rgba(255,255,255,.2)}
-#back-btn.show{display:block}
-
-/* SCREENS */
-.scr{position:fixed;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;z-index:10;overflow-y:auto}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#09090d;font-family:Georgia,serif;color:#d4c9b8;overflow:hidden;height:100vh}
+#app{width:100%;max-width:960px;height:100vh;margin:0 auto;position:relative;overflow:hidden}
+#prog{position:absolute;top:0;left:0;height:2px;background:linear-gradient(to right,#7ab8e8,#c87a9a);z-index:100;transition:width 0.5s;pointer-events:none}
+#roombg{position:absolute;inset:0;z-index:1;pointer-events:none;display:none}
+#roombg img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;filter:brightness(0.45) sepia(0.15);display:block}
+#roombg .ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(9,9,13,0.97) 0%,rgba(9,9,13,0.3) 50%,rgba(9,9,13,0.05) 100%)}
+.scr{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;padding:40px 32px;z-index:10;overflow-y:auto}
 .scr.on{display:flex}
-
-/* ANIMATIONS */
-@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
-@keyframes glowPulse{0%,100%{opacity:.4}50%{opacity:1}}
-@keyframes flicker{0%,100%{opacity:.5;filter:blur(2px)}50%{opacity:1;filter:blur(0)}}
-@keyframes slideIn{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:scale(1)}}
-@keyframes countDown{from{stroke-dashoffset:0}to{stroke-dashoffset:440}}
-.fu{animation:fadeUp .8s ease forwards}
-.d1{animation-delay:.1s;opacity:0}
-.d2{animation-delay:.3s;opacity:0}
-.d3{animation-delay:.5s;opacity:0}
-.d4{animation-delay:.7s;opacity:0}
-.d5{animation-delay:.9s;opacity:0}
-
-/* ══════════════════════
-   S0 — ENTRY
-══════════════════════ */
-#s0{padding:0}
-.entry-bg{position:absolute;inset:0}
-.entry-bg img{width:100%;height:100%;object-fit:cover;object-position:50% 35%;filter:brightness(.3) saturate(.6) sepia(.25)}
-.entry-vignette{position:absolute;inset:0;background:radial-gradient(ellipse at 55% 50%,rgba(3,3,16,.3) 0%,rgba(3,3,16,.92) 65%)}
-.entry-content{position:relative;z-index:2;text-align:center;max-width:560px;padding:0 24px}
-.entry-tag{font-size:10px;letter-spacing:.28em;color:var(--cyan);margin-bottom:22px;font-weight:400}
-.entry-title{font-size:76px;font-weight:200;line-height:1;letter-spacing:.04em;margin-bottom:32px}
-.entry-title .acc{color:var(--gold)}
-.entry-quote{font-size:15px;font-weight:300;color:rgba(242,238,228,.7);line-height:2;border-right:2px solid rgba(212,169,79,.35);padding-right:18px;margin:0 auto 36px;max-width:380px;text-align:right}
-.entry-quote cite{display:block;font-size:11px;letter-spacing:.18em;color:var(--gold);font-style:normal;margin-top:10px}
-.btn-enter{background:transparent;border:1px solid var(--cyan);color:var(--cyan);padding:16px 58px;font-family:'Heebo',sans-serif;font-size:13px;letter-spacing:.24em;cursor:pointer;transition:all .3s;font-weight:400}
-.btn-enter:hover{background:rgba(0,201,167,.07);box-shadow:0 0 32px rgba(0,201,167,.15)}
-
-/* ══════════════════════
-   S1 — MACHINE
-══════════════════════ */
-#s1{background:var(--bg);overflow:hidden}
-.machine-tag{font-size:10px;letter-spacing:.28em;color:var(--dim);margin-bottom:28px;text-align:center}
-.machine-layout{display:flex;align-items:flex-start;gap:32px}
-
-/* Reels */
-.reels-wrap{display:flex;align-items:center;gap:8px}
-.reel-col{display:flex;flex-direction:column;align-items:center;gap:10px}
-.reel-cat-label{font-size:9px;letter-spacing:.26em;color:var(--cyan);font-weight:400}
-.reel-window{
-  width:186px;height:82px;
-  border:1px solid rgba(0,201,167,.22);
-  border-top:2px solid rgba(0,201,167,.5);
-  border-bottom:2px solid rgba(0,201,167,.5);
-  background:rgba(0,201,167,.03);
-  display:flex;align-items:center;justify-content:center;
-  position:relative;overflow:hidden;
+.scr.on *{pointer-events:auto}
+@keyframes fi{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+@keyframes glw{0%,100%{opacity:0.35}50%{opacity:1}}
+@keyframes rng{0%,100%{transform:rotate(0)}20%{transform:rotate(-14deg)}40%{transform:rotate(14deg)}60%{transform:rotate(-9deg)}80%{transform:rotate(9deg)}}
+@keyframes fl0{0%,100%{transform:translate(-50%,-50%)}50%{transform:translate(-50%,-58%)}}
+@keyframes fl1{0%,100%{transform:translate(-50%,-50%)}50%{transform:translate(-50%,-43%)}}
+@keyframes fl2{0%,100%{transform:translate(-50%,-50%)}50%{transform:translate(-50%,-57%)}}
+@keyframes fl3{0%,100%{transform:translate(-50%,-50%)}50%{transform:translate(-50%,-44%)}}
+@keyframes fl4{0%,100%{transform:translate(-50%,-50%)}50%{transform:translate(-50%,-55%)}}
+.fi{animation:fi 0.9s ease forwards}
+.T-label{font-size:12px;letter-spacing:0.2em;color:#8a8078;font-family:sans-serif;text-transform:uppercase;margin-bottom:12px}
+.T-title{font-size:28px;font-weight:400;letter-spacing:0.08em;color:#e8dfd2;line-height:1.3;margin-bottom:10px}
+.T-sub{font-size:13px;letter-spacing:0.1em;color:#7a7268;font-family:sans-serif;margin-bottom:28px}
+.T-body{font-size:15px;line-height:1.95;color:#a89e90}
+.T-body strong{color:#d4c9b8;font-weight:400}
+.T-quote{font-size:15px;font-style:italic;color:#d4c9b8;line-height:1.75;padding:16px 18px;border:0.5px solid #2e2e36;margin-bottom:20px}
+.T-question{font-size:17px;color:#d4c9b8;line-height:1.8;margin-bottom:24px}
+.T-note{font-size:12px;color:#7a7268;font-family:sans-serif;letter-spacing:0.06em;line-height:1.65}
+.divider{width:36px;height:0.5px;background:#252320;margin:16px 0}
+.btn{background:transparent;border:0.5px solid #7a7268;color:#d4c9b8;padding:13px 40px;cursor:pointer;font-family:Georgia,serif;font-size:13px;letter-spacing:0.16em;transition:all 0.22s}
+.btn:hover{border-color:#e8dfd2;color:#e8dfd2;background:rgba(232,223,210,0.05)}
+.btn-back{background:none;border:none;font-size:12px;color:#7a7268;cursor:pointer;letter-spacing:0.14em;font-family:sans-serif;padding:8px 0;margin-top:10px;transition:color 0.2s}
+.btn-back:hover{color:#d4c9b8}
+.btn-skip{background:none;border:none;font-size:12px;color:#5a5248;cursor:pointer;letter-spacing:0.14em;font-family:sans-serif;padding:8px 0;transition:color 0.2s}
+.btn-skip:hover{color:#d4c9b8}
+.cg{display:grid;grid-template-columns:1fr 1fr;gap:12px;width:100%;max-width:540px;margin-bottom:14px}
+.cb{background:transparent;border:0.5px solid #252320;color:#907e70;padding:20px 16px;cursor:pointer;font-family:Georgia,serif;font-size:14px;line-height:1.75;text-align:left;transition:all 0.28s}
+.cb:hover{border-color:#b8ac9c;color:#d4c9b8;background:rgba(212,201,184,0.03)}
+.cb .cl{font-size:10px;letter-spacing:0.2em;display:block;margin-bottom:8px;font-family:sans-serif;text-transform:uppercase}
+.ali{display:inline-flex;align-items:center;gap:7px;font-size:12px;letter-spacing:0.1em;color:#7a7268;font-family:sans-serif;margin:0 10px}
+.ald{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+textarea{width:100%;background:rgba(255,255,255,0.02);border:0.5px solid #252320;color:#d4c9b8;padding:16px;font-family:Georgia,serif;font-size:14px;line-height:1.75;resize:none;margin-bottom:8px;min-height:100px}
+textarea:focus{outline:none;border-color:#5a5248}
+textarea::placeholder{color:#2e2a26;font-style:italic}
+#s1{padding:0}
+#hub-wrap{position:relative;width:100%;height:100%}
+.bubble{position:absolute;border-radius:50%;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;border:0.5px solid rgba(255,255,255,0.1);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);padding:16px;transition:box-shadow 0.3s}
+.bubble:hover{outline:2px solid rgba(255,255,255,0.22);outline-offset:3px;z-index:20}
+.bubble .b-year{font-size:10px;letter-spacing:0.2em;font-family:sans-serif;margin-bottom:4px;opacity:0.6}
+.bubble .b-role{font-size:10px;letter-spacing:0.12em;font-family:sans-serif;margin-bottom:6px;opacity:0.8;text-transform:uppercase}
+.bubble .b-title{font-size:13px;line-height:1.4;font-family:Georgia,serif}
+.bubble .b-cta{font-size:10px;letter-spacing:0.16em;font-family:sans-serif;margin-top:8px;opacity:0.5}
+.bubble.locked{cursor:default}
+#hub-footer{position:absolute;bottom:22px;left:0;right:0;text-align:center;pointer-events:none}
+#s6,#s7{padding:0;background:#07070b}
+#s6.on,#s7.on{display:flex;flex-direction:column}
+#s7{background:#03030a}
+.arc-top{width:100%;padding:18px 24px 12px;flex-shrink:0;border-bottom:0.5px solid #141418}
+#s6 .arc-top{background:#07070b}
+#s7 .arc-top{background:#03030a;border-color:#0a0a14;text-align:center}
+.arc-body{position:relative;flex:1;width:100%;min-height:0}
+.arc-body canvas{display:block;position:absolute;inset:0;width:100%;height:100%}
+.arc-bot{position:absolute;bottom:0;left:0;right:0;padding:10px 24px 16px;z-index:15;pointer-events:none;text-align:center}
+#s6 .arc-bot{background:linear-gradient(to top,rgba(7,7,11,1) 0%,rgba(7,7,11,0.7) 65%,transparent 100%)}
+#s7 .arc-bot{background:linear-gradient(to top,rgba(3,3,10,1) 0%,rgba(3,3,10,0.8) 55%,transparent 100%)}
+.anav{position:absolute;bottom:12px;background:none;border:none;font-size:12px;color:#7a7268;cursor:pointer;letter-spacing:0.12em;font-family:sans-serif;z-index:16;transition:color 0.2s;pointer-events:all}
+.anav:hover{color:#d4c9b8}
+.pop{position:absolute;z-index:30;background:rgba(6,6,10,0.99);border:0.5px solid #1e1e24;padding:18px 20px;width:272px;display:none;pointer-events:all}
+.pop .pl{font-size:10px;letter-spacing:0.2em;color:#5a5248;font-family:sans-serif;margin-bottom:10px;text-transform:uppercase}
+.pop .pq{font-size:13px;color:#d4c9b8;font-style:italic;line-height:1.7;margin-bottom:10px}
+.pop .pm{font-size:11px;color:#5a5248;font-family:sans-serif;display:flex;justify-content:space-between}
+.pop .pd{display:inline-block;width:6px;height:6px;border-radius:50%;margin-right:5px;vertical-align:middle}
+.pop .px{position:absolute;top:10px;right:13px;font-size:16px;color:#5a5248;cursor:pointer;background:none;border:none}
+.pop .px:hover{color:#d4c9b8}
+@media(max-width:600px){
+  .cg{grid-template-columns:1fr}
+  .T-title{font-size:22px}
+  .bubble{padding:10px}
+  .bubble .b-title{font-size:11px}
 }
-.reel-window::before,.reel-window::after{
-  content:'';position:absolute;left:0;right:0;height:22px;z-index:2;pointer-events:none
-}
-.reel-window::before{top:0;background:linear-gradient(to bottom,rgba(3,3,16,.85),transparent)}
-.reel-window::after{bottom:0;background:linear-gradient(to top,rgba(3,3,16,.85),transparent)}
-.reel-text{
-  font-size:17px;font-weight:300;color:var(--cream);
-  text-align:center;padding:0 12px;line-height:1.3;
-  transition:color .3s;
-}
-.reel-text.spinning{animation:flicker .09s linear infinite}
-.reel-text.landed{color:var(--gold);font-weight:400}
-.reel-plus{font-size:22px;color:var(--faint);margin-top:34px;padding:0 2px}
-
-/* Lever */
-.lever-col{display:flex;flex-direction:column;align-items:center;gap:8px;margin-top:34px}
-.lever-label{font-size:9px;letter-spacing:.22em;color:var(--dim);margin-bottom:4px}
-.lever-body{width:42px;height:110px;position:relative;display:flex;flex-direction:column;align-items:center;cursor:pointer;-webkit-user-select:none;user-select:none}
-.lever-ball{
-  width:30px;height:30px;border-radius:50%;
-  background:radial-gradient(circle at 35% 30%,#f0d080,#8a5a18);
-  border:1px solid rgba(212,169,79,.5);
-  box-shadow:0 0 14px rgba(212,169,79,.4);
-  flex-shrink:0;
-  transition:transform .25s cubic-bezier(.25,.1,.25,1.6),box-shadow .2s;
-}
-.lever-shaft{width:3px;background:linear-gradient(to bottom,#d4a94f,rgba(212,169,79,.25));flex:1;border-radius:2px}
-.lever-base{width:40px;height:9px;background:rgba(0,201,167,.15);border:1px solid rgba(0,201,167,.3);border-radius:3px}
-.lever-body.pulling .lever-ball{transform:translateY(52px);box-shadow:0 0 28px rgba(212,169,79,.7)}
-.lever-hint{font-size:10px;color:var(--dim);letter-spacing:.1em;animation:glowPulse 3s infinite}
-
-/* Challenge reveal */
-#challenge-reveal{display:none;text-align:center;margin-top:28px;animation:fadeUp .5s ease forwards}
-.ch-badges{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:22px}
-.ch-badge{padding:10px 22px;font-size:15px;font-weight:300;letter-spacing:.03em}
-.ch-badge.tech{border:1px solid rgba(0,201,167,.4);color:var(--cyan)}
-.ch-badge.prob{border:1px solid rgba(157,127,255,.4);color:var(--purple)}
-.ch-badge.con{border:1px solid rgba(212,169,79,.4);color:var(--gold)}
-.ch-sep{font-size:18px;color:var(--faint);display:flex;align-items:center}
-
-/* ══════════════════════
-   S2 — TIMER
-══════════════════════ */
-#s2{background:var(--bg)}
-#s2-inner{max-width:580px;width:100%;padding:0 24px;text-align:center}
-.timer-ring-wrap{position:relative;width:156px;height:156px;margin:0 auto 26px}
-.timer-svg{position:absolute;inset:0;transform:rotate(-90deg)}
-.t-bg{fill:none;stroke:rgba(0,201,167,.1);stroke-width:3}
-.t-ring{fill:none;stroke:var(--cyan);stroke-width:3;stroke-linecap:round;stroke-dasharray:440;stroke-dashoffset:0;transition:stroke-dashoffset 1s linear,stroke .4s}
-.timer-num{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:56px;font-weight:200;color:var(--cream);letter-spacing:-.02em}
-.timer-num.urgent{color:var(--gold);animation:glowPulse .5s infinite}
-.s2-recap{font-size:14px;color:var(--dim);margin-bottom:18px;line-height:1.9;letter-spacing:.03em}
-.s2-recap strong{color:var(--cyan);font-weight:400}
-.s2-textarea{width:100%;background:rgba(0,201,167,.025);border:none;border-bottom:1px solid rgba(0,201,167,.22);color:var(--cream);font-family:'Heebo',sans-serif;font-size:17px;font-weight:300;line-height:1.8;resize:none;outline:none;padding:14px 0;min-height:110px;text-align:right}
-.s2-textarea::placeholder{color:var(--faint)}
-.s2-textarea:focus{border-bottom-color:var(--cyan)}
-.s2-char{font-size:11px;color:var(--faint);text-align:left;margin-top:5px;margin-bottom:18px}
-.s2-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
-
-/* ══════════════════════
-   S3 — FUTURE CARD
-══════════════════════ */
-#s3{background:rgba(3,3,16,.98)}
-.future-card{
-  max-width:490px;width:90%;
-  background:linear-gradient(135deg,rgba(16,10,38,.98),rgba(6,4,20,.98));
-  border:1px solid rgba(157,127,255,.4);
-  box-shadow:0 0 70px rgba(157,127,255,.1),inset 0 0 50px rgba(157,127,255,.03);
-  padding:42px 38px;text-align:center;
-  animation:slideIn .6s ease forwards;
-}
-.fc-tag{font-size:9px;letter-spacing:.3em;color:var(--purple);margin-bottom:20px}
-.fc-icon{font-size:44px;margin-bottom:16px;display:block}
-.fc-name{font-size:34px;font-weight:200;color:var(--cream);margin-bottom:16px;letter-spacing:.04em}
-.fc-desc{font-size:15px;color:rgba(242,238,228,.72);line-height:1.9;font-weight:300;margin-bottom:26px}
-.fc-q{font-size:14px;color:var(--purple);border-top:1px solid rgba(157,127,255,.2);padding-top:20px;line-height:1.75;letter-spacing:.02em}
-
-/* ══════════════════════
-   S4 — DREAM CARD
-══════════════════════ */
-#s4{background:var(--bg)}
-#s4-inner{max-width:540px;width:100%;padding:60px 24px}
-.dream-card{border:1px solid rgba(212,169,79,.28);background:rgba(10,8,22,.85);padding:36px 30px;margin-bottom:24px;animation:slideIn .5s ease forwards}
-.dc-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:22px;padding-bottom:18px;border-bottom:1px solid rgba(255,255,255,.05)}
-.dc-label{font-size:9px;letter-spacing:.28em;color:var(--gold)}
-.dc-date{font-size:10px;color:var(--faint);letter-spacing:.1em}
-.dc-challenge{font-size:11px;color:var(--cyan);letter-spacing:.08em;margin-bottom:14px}
-.dc-idea{font-size:17px;font-weight:300;color:var(--cream);line-height:1.9;margin-bottom:24px;border-right:2px solid rgba(212,169,79,.3);padding-right:16px}
-.dc-scores{display:flex;gap:0;margin-bottom:22px;border:1px solid rgba(255,255,255,.06)}
-.dc-score{flex:1;text-align:center;padding:14px 8px;border-left:1px solid rgba(255,255,255,.06)}
-.dc-score:last-child{border-left:none}
-.dc-s-label{font-size:9px;letter-spacing:.18em;color:var(--dim);margin-bottom:6px}
-.dc-s-num{font-size:34px;font-weight:200;color:var(--gold);line-height:1}
-.dc-steps-hd{font-size:9px;letter-spacing:.22em;color:var(--dim);margin-bottom:12px}
-.dc-steps{list-style:none}
-.dc-steps li{font-size:13px;color:rgba(242,238,228,.72);line-height:1.75;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.04);font-weight:300}
-.dc-steps li::before{content:'→ ';color:var(--cyan)}
-
-/* ══════════════════════
-   S5 — ARCHIVE
-══════════════════════ */
-#s5{background:var(--bg);justify-content:flex-start;overflow-y:auto}
-.arch-header{padding:48px 32px 28px;text-align:center;position:sticky;top:0;background:linear-gradient(to bottom,rgba(3,3,16,1) 60%,transparent);z-index:10}
-.arch-title{font-size:34px;font-weight:200;color:var(--cream);margin-bottom:6px}
-.arch-sub{font-size:12px;color:var(--dim);letter-spacing:.06em;margin-bottom:20px}
-.arch-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
-.arch-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:14px;padding:0 32px 60px;max-width:1200px;margin:0 auto;width:100%}
-.arch-card{border:1px solid rgba(255,255,255,.06);background:rgba(8,8,22,.6);padding:22px 20px;transition:border-color .25s}
-.arch-card:hover{border-color:rgba(0,201,167,.22)}
-.arch-card.user-card{border-color:rgba(212,169,79,.3);background:rgba(15,11,4,.6)}
-.arch-ch{font-size:10px;letter-spacing:.12em;color:var(--cyan);margin-bottom:10px}
-.arch-card.user-card .arch-ch{color:var(--gold)}
-.arch-idea{font-size:13px;color:var(--cream);line-height:1.75;font-weight:300;margin-bottom:14px}
-.arch-meta{display:flex;justify-content:space-between;font-size:10px;color:var(--faint);letter-spacing:.08em}
-.arch-score{color:var(--gold)}
-
-/* ══════════════════════
-   S6 — ASK PERES
-══════════════════════ */
-#s6{background:var(--bg)}
-#s6-inner{max-width:580px;width:100%;padding:0 24px;text-align:center}
-.sq-wrap{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:24px}
-.sq-btn{background:rgba(0,201,167,.035);border:1px solid rgba(0,201,167,.22);color:var(--cream);padding:9px 16px;cursor:pointer;font-family:'Heebo',sans-serif;font-size:13px;letter-spacing:.03em;transition:all .22s}
-.sq-btn:hover{border-color:rgba(0,201,167,.5);background:rgba(0,201,167,.07)}
-#s6-input{width:100%;background:rgba(0,201,167,.025);border:none;border-bottom:1px solid rgba(0,201,167,.22);color:var(--cream);font-family:'Heebo',sans-serif;font-size:17px;font-weight:300;line-height:1.75;resize:none;outline:none;padding:14px 0;text-align:right}
-#s6-input:focus{border-bottom-color:var(--cyan)}
-#s6-input::placeholder{color:var(--faint)}
-#s6-response{display:none;margin-top:28px;border-top:1px solid rgba(255,255,255,.06);padding-top:24px;text-align:right}
-.s6-res-label{font-size:10px;letter-spacing:.28em;color:var(--gold);margin-bottom:14px;display:flex;align-items:center;gap:10px}
-.s6-res-label::after{content:'';flex:1;height:1px;background:linear-gradient(to left,transparent,rgba(212,169,79,.2))}
-#s6-res-text{font-size:17px;line-height:1.95;color:var(--cream);font-weight:300;font-style:italic}
-#s6-res-src{font-size:12px;color:var(--dim);margin-top:12px;letter-spacing:.05em}
-
-/* ══════════════════════
-   BUTTONS
-══════════════════════ */
-.btn-gold{background:transparent;border:1px solid var(--gold);color:var(--gold);padding:14px 44px;font-family:'Heebo',sans-serif;font-size:13px;letter-spacing:.2em;cursor:pointer;transition:all .28s;font-weight:400}
-.btn-gold:hover{background:rgba(212,169,79,.07);box-shadow:0 0 28px rgba(212,169,79,.12)}
-.btn-cyan{background:transparent;border:1px solid var(--cyan);color:var(--cyan);padding:14px 44px;font-family:'Heebo',sans-serif;font-size:13px;letter-spacing:.2em;cursor:pointer;transition:all .28s;font-weight:400}
-.btn-cyan:hover{background:rgba(0,201,167,.07)}
-.btn-ghost{background:none;border:none;color:var(--dim);font-family:'Heebo',sans-serif;font-size:12px;letter-spacing:.16em;cursor:pointer;padding:10px 0;transition:color .2s}
-.btn-ghost:hover{color:var(--cream)}
-
-/* utility */
-.lbl{font-size:10px;letter-spacing:.28em;color:var(--dim);margin-bottom:8px}
-.title{font-size:32px;font-weight:200;color:var(--cream);margin-bottom:6px}
-.divider{width:44px;height:1px;background:linear-gradient(to left,transparent,var(--gold),transparent);margin:20px auto}
 </style>
 </head>
 <body>
+<div id="app">
+  <div id="prog" style="width:0%"></div>
 
-<a href="#s0" class="skip-link">דלג לתוכן הראשי</a>
-<div id="prog"></div>
-<div id="logo-bar">מרכז פרס לשלום ולחדשנות</div>
-<button id="back-btn" onclick="goBack()">← חזרה</button>
-
-<!-- ══ S0 — ENTRY ══ -->
-<section class="scr on" id="s0" role="region" aria-label="מסך כניסה">
-  <div class="entry-bg">
-    <img src="https://res.cloudinary.com/dmr8zhfer/image/upload/f_auto,q_auto/peres_room_main_xpo9zv" alt="מרכז פרס לשלום ולחדשנות">
-    <div class="entry-vignette"></div>
+  <!-- LANGUAGE TOGGLE -->
+  <div id="lang-bar" style="position:absolute;top:12px;right:16px;z-index:200;display:flex;gap:8px;pointer-events:all">
+    <button onclick="setLang('en')" id="btn-en" style="background:none;border:0.5px solid #7a7268;color:#d4c9b8;padding:5px 12px;cursor:pointer;font-family:sans-serif;font-size:11px;letter-spacing:0.12em;transition:all 0.2s">EN</button>
+    <button onclick="setLang('he')" id="btn-he" style="background:none;border:0.5px solid #3a3530;color:#5a5248;padding:5px 12px;cursor:pointer;font-family:sans-serif;font-size:11px;letter-spacing:0.06em;transition:all 0.2s">עב</button>
   </div>
-  <div class="entry-content">
-    <div class="entry-tag fu d1">מרכז פרס לשלום ולחדשנות</div>
-    <h1 class="entry-title fu d2">מכונת<br><span class="acc">החלומות</span></h1>
-    <blockquote class="entry-quote fu d3">
-      "הדמיון הוא משאב הטבע היחיד שאין לו גבול."
-      <cite>שמעון פרס</cite>
-    </blockquote>
-    <button class="btn-enter fu d4" onclick="go('s1')" aria-label="כנסו למכונת החלומות">כנסו לחלום ↓</button>
+  <div id="roombg">
+    <img src="https://res.cloudinary.com/dmr8zhfer/image/upload/f_auto,q_auto/peres_room_main_xpo9zv" alt="Peres Center office">
+    <div class="ov"></div>
   </div>
-</section>
 
-<!-- ══ S1 — MACHINE ══ -->
-<section class="scr" id="s1" role="region" aria-label="מכונת החלומות — גרגלים">
-  <div class="machine-tag fu d1">המציאו את הרעיון הבא שישנה את העולם</div>
-  <div class="machine-layout fu d2">
-    <!-- Reels -->
-    <div class="reels-wrap">
-      <div class="reel-col">
-        <div class="reel-cat-label">טכנולוגיה</div>
-        <div class="reel-window" id="reel0"><div class="reel-text" id="rt0">?</div></div>
+  <!-- S0 ENTRY -->
+  <div class="scr on" id="s0">
+    <div class="fi" style="text-align:center;max-width:500px">
+      <div class="T-label" style="margin-bottom:16px">Peres Center for Peace and Innovation</div>
+      <div class="T-title" style="font-size:32px;margin-bottom:8px">THE MEMORY<br>OF PERES</div>
+      <div class="T-sub">1923 – 2016 · An interactive archive</div>
+      <button class="btn" onclick="go('s1')">ENTER THE ROOM</button>
+      <div class="T-note" style="margin-top:22px;animation:glw 4s infinite">You are standing in his study</div>
+    </div>
+  </div>
+
+  <!-- S1 HUB -->
+  <div class="scr" id="s1">
+    <div id="hub-wrap">
+      <button class="btn-back" style="position:absolute;top:16px;left:16px;z-index:15" onclick="go('s0')">← Back</button>
+    </div>
+    <div id="hub-footer">
+      <div class="T-label" style="margin-bottom:4px">Five Decisions · One Life</div>
+      <div class="T-note">Select a moment to enter</div>
+    </div>
+  </div>
+
+  <!-- S2 PHONE -->
+  <div class="scr" id="s2">
+    <div class="fi" style="display:flex;flex-direction:column;align-items:center;text-align:center;width:100%;max-width:540px">
+      <div class="T-label" style="color:#c87a9a;letter-spacing:0.3em;margin-bottom:6px">URGENT · CLASSIFIED</div>
+      <div class="T-label" style="margin-bottom:6px">You are the Minister of Defense</div>
+      <div class="T-note" style="margin-bottom:12px;font-size:13px;color:#8a8078">3:17 AM. The red phone is ringing.</div>
+      <div style="font-size:52px;animation:rng 0.8s ease-in-out infinite;margin:8px 0 20px;filter:drop-shadow(0 0 12px rgba(200,122,154,0.5))">☎</div>
+      <div class="T-label" style="margin-bottom:16px">Your military secretary reports:</div>
+      <div class="T-body" style="text-align:center;margin-bottom:8px;font-size:16px">
+        Terrorists have seized an Israeli passenger ship<br>and are sailing it toward a hostile nation —<br><strong>4,000 km away.</strong><br><br>Approximately <strong>200 Israeli civilians</strong> are on board.
       </div>
-      <div class="reel-plus">+</div>
-      <div class="reel-col">
-        <div class="reel-cat-label">בעיה</div>
-        <div class="reel-window" id="reel1"><div class="reel-text" id="rt1">?</div></div>
+      <div class="T-note" style="margin-bottom:24px;animation:glw 2s infinite">The decision cannot wait.</div>
+      <div class="T-question" style="font-size:19px">What do you decide?</div>
+      <div class="cg">
+        <button class="cb" onclick="choose('rescue')"><span class="cl" style="color:#7ab8e8">Send in the forces</span>Authorize a secret military rescue operation. High risk. No guarantee of success.</button>
+        <button class="cb" onclick="choose('negotiate')"><span class="cl" style="color:#c87a9a">Open negotiations</span>Begin talks with the hijackers. Prioritize bringing everyone home alive.</button>
       </div>
-      <div class="reel-plus">+</div>
-      <div class="reel-col">
-        <div class="reel-cat-label">אילוץ</div>
-        <div class="reel-window" id="reel2"><div class="reel-text" id="rt2">?</div></div>
+      <button class="btn-back" onclick="go('s1')">← Back</button>
+    </div>
+  </div>
+
+  <!-- S3 REVEAL -->
+  <div class="scr" id="s3">
+    <div class="fi" style="width:100%;max-width:580px">
+      <div class="T-label">This was not hypothetical</div>
+      <div class="T-note" style="margin-bottom:14px">June 27, 1976</div>
+      <div class="T-title">Entebbe, Uganda.</div>
+      <div class="divider"></div>
+      <div class="T-body" style="margin-bottom:18px">An Air France flight was hijacked and diverted to Entebbe. <strong>106 Jewish and Israeli hostages</strong> were separated and held 4,000 km from Israel, with Idi Amin's full cooperation.<br><br>The hijackers demanded the release of <strong>53 Palestinian prisoners.</strong> Deadline: 72 hours.<br><br>The Minister of Defense was <strong>Shimon Peres.</strong> He was 52 years old.</div>
+      <div class="T-quote">"We do not negotiate with terrorists — not because it is easy, but because the alternative destroys something we cannot rebuild."</div>
+      <div id="s3-result" style="font-size:12px;font-family:sans-serif;letter-spacing:0.14em;margin-bottom:20px"></div>
+      <button class="btn" onclick="go('s4')">WHAT HAPPENED NEXT</button>
+      <button class="btn-back" onclick="go('s2')">← Back</button>
+    </div>
+  </div>
+
+  <!-- S4 OPERATION -->
+  <div class="scr" id="s4">
+    <div class="fi" style="width:100%;max-width:560px">
+      <div class="T-label">Operation Thunderbolt · July 4, 1976</div>
+      <div class="T-body" style="margin-bottom:18px">100 Israeli commandos landed at Entebbe at midnight. In <strong>90 minutes</strong>, 102 of the 106 hostages were freed. Three hostages were killed in the crossfire. Commander <strong>Yonatan Netanyahu</strong> was killed — the only Israeli soldier to die. <strong>Dora Bloch</strong>, hospitalized before the raid, was murdered by Amin's forces afterward.<br><br>It was considered one of the most daring rescue operations in history.</div>
+      <div class="divider"></div>
+      <div class="T-question">If you could ask Shimon Peres one question about how he made this decision — what would you ask him?</div>
+      <textarea id="userQ" rows="3" placeholder="Write your question here..."></textarea>
+      <div class="T-note" style="margin-bottom:22px">Your question joins the living archive — alongside questions from people in over 40 countries.</div>
+      <button class="btn" onclick="submitQ()" style="margin-bottom:10px">ADD TO THE ARCHIVE</button>
+      <div style="display:flex;gap:24px">
+        <button class="btn-back" onclick="go('s3')">← Back</button>
+        <button class="btn-skip" onclick="go('s6')">Skip →</button>
       </div>
     </div>
-    <!-- Lever -->
-    <div class="lever-col">
-      <div class="lever-label">משכו את הידית</div>
-      <div class="lever-body" id="lever-body" onclick="pullLever()" role="button" tabindex="0" aria-label="משכו את ידית המכונה להפעלה" onkeydown="if(event.key==='Enter'||event.key===' ')pullLever()">
-        <div class="lever-ball"></div>
-        <div class="lever-shaft"></div>
+  </div>
+
+  <!-- S6 ARCHIVE -->
+  <div class="scr" id="s6">
+    <div class="arc-top">
+      <div class="T-label" style="margin-bottom:5px">The Living Archive</div>
+      <div class="T-body" id="arc-title" style="color:#d4c9b8;font-size:14px">Questions people would ask Shimon Peres — from around the world.</div>
+    </div>
+    <div class="arc-body">
+      <canvas id="ac"></canvas>
+      <div class="arc-bot">
+        <div><span class="ali"><span class="ald" style="background:#7ab8e8"></span>Sent in the forces</span><span class="ali"><span class="ald" style="background:#c87a9a"></span>Chose to negotiate</span></div>
+        <div id="arc-cnt" class="T-note" style="margin-top:4px"></div>
+        <div class="T-note" style="margin-top:3px;animation:glw 3s infinite">↑ Click any point to read their question</div>
       </div>
-      <div class="lever-base"></div>
-      <div class="lever-hint fu d3">↓ ↓ ↓</div>
-    </div>
-  </div>
-  <!-- Challenge reveal -->
-  <div id="challenge-reveal">
-    <div class="ch-badges" id="ch-badges"></div>
-    <button class="btn-cyan" onclick="go('s2')">קבלו את האתגר — יאללה נחשוב ←</button>
-  </div>
-</section>
-
-<!-- ══ S2 — TIMER ══ -->
-<section class="scr" id="s2" role="region" aria-label="זמן לחלום — דקה אחת">
-  <div id="s2-inner">
-    <div class="lbl fu d1">יש לכם דקה · הרעיון שלכם</div>
-    <div class="timer-ring-wrap fu d1" aria-live="polite" aria-label="שעון ספירה לאחור">
-      <svg class="timer-svg" viewBox="0 0 156 156" aria-hidden="true">
-        <circle class="t-bg" cx="78" cy="78" r="70"/>
-        <circle class="t-ring" id="t-ring" cx="78" cy="78" r="70"/>
-      </svg>
-      <div class="timer-num" id="t-num">60</div>
-    </div>
-    <div class="s2-recap fu d2" id="s2-recap"></div>
-    <label class="lbl" for="s2-area" style="text-align:right;display:block;margin-bottom:8px">כתבו את הרעיון שלכם</label>
-    <textarea class="s2-textarea fu d3" id="s2-area" rows="4" placeholder="תארו איך הטכנולוגיה פותרת את הבעיה בתנאי האילוץ..." oninput="s2Char(this)" maxlength="400" aria-describedby="s2-char" aria-label="כתבו את הרעיון שלכם לפתרון האתגר"></textarea>
-    <div class="s2-char" id="s2-char">0 / 400</div>
-    <div class="s2-actions fu d4">
-      <button class="btn-gold" onclick="submitIdea()">הגישו את הרעיון ←</button>
-      <button class="btn-ghost" id="extend-btn" onclick="extendTime()" aria-label="הוסיפו 30 שניות">+ 30 שניות</button>
-    </div>
-  </div>
-</section>
-
-<!-- ══ S3 — FUTURE CARD ══ -->
-<section class="scr" id="s3" role="region" aria-label="קלף עתיד — תרחיש חדש">
-  <div class="future-card">
-    <div class="fc-tag">קלף עתיד · FUTURE CARD</div>
-    <div class="fc-icon" id="fc-icon"></div>
-    <div class="fc-name" id="fc-name"></div>
-    <div class="fc-desc" id="fc-desc"></div>
-    <div class="fc-q" id="fc-q"></div>
-    <div style="margin-top:30px">
-      <button class="btn-gold" onclick="go('s4')">התמודדתי — ראו את כרטיס החלום ←</button>
-    </div>
-  </div>
-</section>
-
-<!-- ══ S4 — DREAM CARD ══ -->
-<section class="scr" id="s4" role="region" aria-label="כרטיס החלום שלכם">
-  <div id="s4-inner">
-    <div class="dream-card">
-      <div class="dc-top">
-        <div class="dc-label">כרטיס חלום · DREAM CARD</div>
-        <div class="dc-date" id="dc-date"></div>
+      <button class="anav" style="left:18px" onclick="go('s1')">← All decisions</button>
+      <button class="anav" style="right:18px" onclick="restart()">↩ Start over</button>
+      <button onclick="go('s7')" style="position:absolute;top:16px;right:16px;background:transparent;border:0.5px solid #7ab8e8;color:#7ab8e8;padding:10px 18px;cursor:pointer;font-family:sans-serif;font-size:11px;letter-spacing:0.14em;z-index:16;pointer-events:all;transition:all 0.2s">◈ LIVING SCULPTURE →</button>
+      <div class="pop" id="pop">
+        <button class="px" onclick="closePop('pop')">×</button>
+        <div class="pl">From the Archive</div>
+        <div class="pq" id="ppq"></div>
+        <div class="pm"><span><span class="pd" id="ppd"></span><span id="pps"></span></span><span id="ppl"></span></div>
       </div>
-      <div class="dc-challenge" id="dc-ch"></div>
-      <div class="dc-idea" id="dc-idea"></div>
-      <div class="dc-scores">
-        <div class="dc-score">
-          <div class="dc-s-label">חדשנות</div>
-          <div class="dc-s-num" id="sc-inn">—</div>
-        </div>
-        <div class="dc-score">
-          <div class="dc-s-label">ישימות</div>
-          <div class="dc-s-num" id="sc-feas">—</div>
-        </div>
-        <div class="dc-score">
-          <div class="dc-s-label">השפעה</div>
-          <div class="dc-s-num" id="sc-imp">—</div>
-        </div>
+    </div>
+  </div>
+
+  <!-- S7 SCULPTURE -->
+  <div class="scr" id="s7">
+    <div class="arc-top" style="text-align:center;padding:22px 24px 16px;background:#03030a;border-color:#0a0a14;border-bottom:0.5px solid #0a0a14">
+      <div id="peres-quote" style="font-size:20px;font-style:italic;color:rgba(212,201,184,0);font-family:Georgia,serif;line-height:1.65;max-width:580px;margin:0 auto 8px;transition:color 2.5s ease">"The future belongs not to those who wait for it — but to those who dare to imagine it."</div>
+      <div class="T-note" style="color:#4a4540">— Shimon Peres</div>
+    </div>
+    <div class="arc-body" style="background:#03030a">
+      <canvas id="sc"></canvas>
+      <div class="arc-bot" style="background:linear-gradient(to top,rgba(3,3,10,1) 0%,rgba(3,3,10,0.8) 55%,transparent 100%)">
+        <div><span class="ali"><span class="ald" style="background:rgba(80,150,255,0.9)"></span>Chose to act</span><span class="ali"><span class="ald" style="background:rgba(225,95,165,0.9)"></span>Chose dialogue</span></div>
+        <div id="str-cnt" class="T-note" style="margin-top:4px"></div>
+        <div class="T-note" style="margin-top:3px;animation:glw 3s infinite">↑ Click any point to read a question</div>
       </div>
-      <div class="dc-steps-hd">צעדים ראשונים למימוש</div>
-      <ul class="dc-steps" id="dc-steps"></ul>
-    </div>
-    <div style="text-align:center;display:flex;gap:14px;justify-content:center;flex-wrap:wrap">
-      <button class="btn-cyan" onclick="go('s5')">ראו את מאגר החלומות ←</button>
-      <button class="btn-ghost" onclick="restart()">↩ חלמו שוב</button>
-    </div>
-  </div>
-</section>
-
-<!-- ══ S5 — ARCHIVE ══ -->
-<section class="scr" id="s5" role="region" aria-label="מאגר החלומות">
-  <div class="arch-header">
-    <div class="lbl">מאגר החלומות · DREAM ARCHIVE</div>
-    <div class="arch-title">כל החלומות</div>
-    <div class="arch-sub" id="arch-sub">רעיונות של מבקרים</div>
-    <div class="arch-actions">
-      <button class="btn-cyan" onclick="restart()">חלמו שוב ←</button>
-      <button class="btn-ghost" onclick="go('s6')">שאלו את פרס על העתיד</button>
+      <button class="anav" style="left:18px" onclick="go('s6')">← Archive</button>
+      <button class="anav" style="right:18px" onclick="go('s0')">↩ Start over</button>
+      <div class="pop" id="spop">
+        <button class="px" onclick="closePop('spop')">×</button>
+        <div class="pl">From the Archive</div>
+        <div class="pq" id="spq"></div>
+        <div class="pm"><span><span class="pd" id="spd"></span><span id="sps"></span></span><span id="spl"></span></div>
+      </div>
     </div>
   </div>
-  <div class="arch-grid" id="arch-grid"></div>
-</section>
-
-<!-- ══ S6 — ASK PERES ══ -->
-<section class="scr" id="s6" role="region" aria-label="שאלו את שמעון פרס על העתיד">
-  <div id="s6-inner">
-    <div class="lbl fu d1">שאלו את שמעון פרס</div>
-    <div class="title fu d2">מה תאמר על העתיד?</div>
-    <div class="divider"></div>
-    <div class="sq-wrap fu d3" id="s6-sq"></div>
-    <div class="fu d3">
-      <label class="lbl" for="s6-input" style="text-align:right;display:block;margin-bottom:8px">שאלתכם</label>
-      <textarea id="s6-input" rows="2" placeholder="שאלו על חדשנות, עתיד, שלום, תקווה..." oninput="s6Input(this)" maxlength="200" aria-label="שאלה לשמעון פרס"></textarea>
-      <button class="btn-gold" id="s6-btn" onclick="askPeres()" style="margin-top:20px;width:100%;opacity:.35" disabled>שאלו את פרס</button>
-    </div>
-    <div id="s6-response">
-      <div class="s6-res-label">שמעון פרס, מדבריו</div>
-      <div id="s6-res-text"></div>
-      <div id="s6-res-src"></div>
-    </div>
-    <div style="margin-top:24px">
-      <button class="btn-ghost" onclick="go('s5')">← חזרו למאגר</button>
-    </div>
-  </div>
-</section>
+</div>
 
 <script>
-/* ══════════════════════════════════
-   DATA
-══════════════════════════════════ */
-var TECHS = [
-  'בינה מלאכותית','מציאות מדומה','ביוטכנולוגיה','אנרגיה סולארית',
-  'הדפסה תלת-מימדית','רובוטיקה','ננוטכנולוגיה','חישוב קוונטי',
-  'אינטרנט הדברים','ביג דאטה','CRISPR','מחשוב ענן','בלוקצ\'יין','ממשקי מוח-מחשב'
-];
-var PROBLEMS = [
-  'בדידות','מים נקיים','חינוך','בריאות נפשית','פסולת פלסטיק',
-  'אבטלה','שינוי אקלים','מחסור במזון','נגישות לרפואה','הגירה',
-  'אי-שוויון','אלזהיימר','עוני עירוני','ניתוק בין-דורי'
-];
-var CONSTRAINTS = [
-  'ללא אינטרנט','תקציב אפס','בכפר מרוחק','תוך 24 שעות',
-  'לקהל מבוגר','בלי חשמל','עם 10 אנשים בלבד','קוד פתוח',
-  'ידידותי לסביבה','בחינם לכולם','ללא תמיכה ממשלתית','בתנאי חירום'
-];
-var FUTURE_CARDS = [
-  { name:'מיתון עולמי', icon:'📉',
-    desc:'הכלכלה העולמית קורסת. ממשלות קוצצות תקציבים. משקיעים נסוגים. הכסף נעלם.',
-    q:'כיצד הרעיון שלכם שורד ואפילו פורח בתנאי מחסור קשה?' },
-  { name:'בצורת קשה', icon:'🏜️',
-    desc:'40% מאוכלוסיית העולם חסרי גישה למים נקיים. המאבק על משאבים מתחיל.',
-    q:'האם הרעיון שלכם עמיד במציאות של מאבק על הישרדות?' },
-  { name:'מהפכת AI', icon:'🤖',
-    desc:'בינה מלאכותית עצמאית פתרה 60% ממשרות הלבן. מה נשאר לאדם?',
-    q:'מה הערך האנושי הייחודי שהרעיון שלכם מחזק ולא AI יכולה להחליף?' },
-  { name:'מגפה חדשה', icon:'🦠',
-    desc:'וירוס עם תקופת דגירה של חודש מחייב בידוד מוחלט. העולם עוצר שוב.',
-    q:'האם הרעיון שלכם שורד כשאנשים לא יכולים להיפגש פיזית?' },
-  { name:'פריצת דרך ביו', icon:'🧬',
-    desc:'גוף האדם ניתן לתיקון. אנשים יחיו עד 150. מה זה אומר לחברה, לכלכלה, לזהות?',
-    q:'כיצד הרעיון שלכם מתאים לעולם שבו זקנה הופכת אופציונלית?' },
-  { name:'מהפכת אנרגיה', icon:'⚡',
-    desc:'פיוז\'ן גרעיני הופך אנרגיה לחינמית ואינסופית לכל אדם על פני כדור הארץ.',
-    q:'מה קורה לרעיון שלכם כשמחסום האנרגיה נעלם לחלוטין?' },
-  { name:'גילוי חוץ-כדורארצי', icon:'🌌',
-    desc:'מצאנו אינטליגנציה מחוץ לכדור הארץ. הפרספקטיבה האנושית השתנתה לעד.',
-    q:'כיצד הרעיון שלכם משנה כשהאנושות פתאום מאוחדת מול "אחר"?' },
-  { name:'משבר דמוקרטיה', icon:'🗳️',
-    desc:'אמון במוסדות קורס. אנשים מאמינים רק בקהילות קטנות שהם חלק מהן.',
-    q:'מה קורה לרעיון שלכם בעולם ללא אמון בממשל ובמדיה?' }
-];
-var STEPS_BANK = [
-  ['הגדירו את קהל היעד המדויק — שלושה אנשים שיש להם את הבעיה','בנו פרוטוטיפ נייר תוך שבועיים — בדקו עם משתמש אמיתי','מצאו שותף משלים — טכנולוגי, מוסדי, או מומחה תחום'],
-  ['כתבו מסמך של עמוד אחד: הבעיה, הפתרון, ומי משלם','הגישו לתוכנית האצה או מענק שמתאים לנושא תוך חודש','מצאו ממשלה אחת, עיר אחת, או ארגון אחד לניסוי ראשון'],
-  ['הצטרפו לקהילה הקיימת שעובדת על הנושא — אל תמציאו גלגל','פרסמו את הרעיון ברשת, קבלו פידבק, שפרו — חוזרים לשלב א\'','צרו קשר עם גוף אחד שיכול להיות לקוח ראשון — אפילו בחינם'],
-  ['הגדירו מדד הצלחה אחד ופשוט שניתן למדוד תוך שישה חודשים','בנו גרסה מינימלית שעובדת — גם בלי הכל — תוך חודש אחד','מצאו מנטור שעשה משהו קרוב — שאלו שלוש שאלות ולא יותר']
-];
-var ARCHIVE_SEEDS = [
-  { ch:'AI + בדידות · לקהל מבוגר', idea:'אפליקציה שמזהה מתי קשיש לא דיבר 24 שעות ומחברת אותו אוטומטית לשכן קרוב דרך שיחת וידאו של שלוש דקות. לא מסכים — בני אדם.', inn:87, feas:72, imp:91 },
-  { ch:'ביוטכנולוגיה + מחסור במזון · קוד פתוח', idea:'בנק DNA של 10,000 זנים ירקות עמידים שניתן לגדל בכל אקלים. הקוד חינמי. קהילות מכל העולם מגדלות ומשפרות. לא מוצר — תנועה.', inn:94, feas:58, imp:88 },
-  { ch:'חישוב קוונטי + אי-שוויון · ידידותי לסביבה', idea:'מערכת חיזוי גשמים מדויקת לכפר — לא לארץ — ומאפשרת לחקלאים קטנים להתכונן. לא תחזית מזג אוויר. ביטוח גידולים בחינם.', inn:91, feas:64, imp:89 },
-  { ch:'רובוטיקה + חינוך · בלי חשמל', idea:'רובוט שמלמד קרוא וכתוב בשפה מקומית, מותאם אישית לקצב הלמידה. אריזה של מזוודה, בטריה לשבוע, ללא אינטרנט. 140 שפות.', inn:85, feas:70, imp:93 },
-  { ch:'אינטרנט הדברים + בריאות נפשית · בחינם לכולם', idea:'שעון שמזהה תבניות שינה ומצב רוח ומשתף עם רופא משפחה דוח שבועי של שתי שורות. לא פסיכיאטר — גילוי מוקדם לכולם.', inn:80, feas:78, imp:86 },
-  { ch:'CRISPR + הגירה · בתנאי חירום', idea:'ערכת זיהוי חיסוני ניידת שמאפשרת לפליטים לשמור רשומה רפואית מוצפנת שלא ניתן לאבד. גם אם הם מאבדים הכל — הנתונים שלהם שרדו.', inn:89, feas:61, imp:94 }
-];
-var QA6 = [
-  { keys:['עתיד','עולם','יהיה','נראה'], q:'מה העולם יראה בעוד 50 שנה?',
-    a:'העולם יהיה שונה לגמרי — לא בגלל הטכנולוגיה, אלא בגלל שטכנולוגיה תאפשר לאנשים לבחור מי הם. העתיד שייך לא לאלה שממתינים לו — אלא לאלה שמעיזים לדמיין אותו.',
-    src:'בהשראת נאומי פרס בדבוס, 2013-2015' },
-  { keys:['חדשנות','המצאה','יצירה','סטארטאפ','טכנולוגיה'], q:'מה סוד החדשנות?',
-    a:'חדשנות היא לסרב לקבל את העולם כפי שהוא. ישראל הוכיחה שמדינה ללא משאבי טבע יכולה להיות עשירה — כי העשירות האמיתית היא במוח, בדמיון, בנכונות לנסות מה שלא ניסו. כשיש צורך — נולד פתרון. תמיד.',
-    src:'נאום בפורום דבוס, 2013' },
-  { keys:['שלום','מלחמה','קונפליקט','אויב'], q:'האם השלום אפשרי?',
-    a:'אנחנו לא עושים שלום עם חברים. חברים לא צריכים שלום. שלום עושים עם אויבים — גם כשזה קשה, גם כשזה מפחיד, גם כשנראה שזה בלתי אפשרי. השאלה היא לא אם יהיה שלום — השאלה היא מי יחליט לעשות אותו.',
-    src:'מסגנונו בנאומי נובל, 1994' },
-  { keys:['תקווה','ייאוש','פסימיסט','אופטימיסט'], q:'איך שומרים על תקווה?',
-    a:'פסימיסטים ואופטימיסטים מתים באותה דרך. ההבדל הוא איך הם חיים. כשאנשים שאלו אותי מאיפה אני שואב כוח — עניתי: מהעתיד. לא מהעבר. העבר כבר קרה. העתיד עוד ניתן לעיצוב.',
-    src:'מתוך ראיון, 2014' },
-  { keys:['צעיר','דור','ילד','עתיד שלכם'], q:'מה תאמר לדור הצעיר?',
-    a:'אל תסתכלו אחורה יותר מדי. ההיסטוריה חשובה, אבל היא לא המצפן שלכם. הדמיון הוא המצפן. השאלה שאני שואל: מה אתם רוצים שיהיה — לא מה יש. כי מה שיהיה תלוי בכם.',
-    src:'מסיום מרכז פרס, 2015' },
-  { keys:['כישלון','טעות','ניסיון','הפסד'], q:'מה עושים עם כישלון?',
-    a:'כישלון הוא חלק מהמחיר של הניסיון. מי שלא מוכן לשלם — לא ינסה. ומי שלא ינסה — ידע בדיוק מה הוא פספס. אני מעדיף להסתכל קדימה עם צלקות מאשר ללא ניסיון.',
-    src:'בהשראת שיחות וראיונות' }
-];
+var PROG={s0:0,s1:12,s2:30,s3:50,s4:70,s6:88,s7:100};
+var userSide=null,userQ_val=null;
+var arcReady=false,strReady=false,bubblesBuilt=false;
+var dots=[],af=0,ahov=null,totalR=68,totalN=32;
+var W=0,H=0,ac,actx;
+var sp=[],sf=0,shov=null,SW=0,SH=0,SC,SCTX;
+var currentLang='en';
 
-/* ══════════════════════════════════
-   STATE
-══════════════════════════════════ */
-var ST = { tech:'', prob:'', con:'', idea:'', fc:null, sc:{} };
-var timerInt = null, timeLeft = 60, leverReady = true;
-var PROG = { s0:0, s1:.2, s2:.45, s3:.65, s4:.82, s5:1, s6:.92 };
-var BACK = { s1:'s0', s2:'s1', s3:'s2', s4:'s3', s6:'s5' };
+var STRINGS={
+  en:{
+    center:"Peres Center for Peace and Innovation",
+    title:"THE MEMORY<br>OF PERES",
+    sub:"1923 – 2016 · An interactive archive",
+    enter:"ENTER THE ROOM",
+    standing:"You are standing in his study",
+    five:"Five Decisions · One Life",
+    select:"Select a moment to enter",
+    urgent:"URGENT · CLASSIFIED",
+    minister:"You are the Minister of Defense",
+    ringing:"3:17 AM. The red phone is ringing.",
+    secretary:"Your military secretary reports:",
+    scenario:"Terrorists have seized an Israeli passenger ship and are sailing it toward a hostile nation — <strong>4,000 km away.</strong><br><br>Approximately <strong>200 Israeli civilians</strong> are on board.",
+    cannot:"The decision cannot wait.",
+    decide:"What do you decide?",
+    rescue_btn:"Send in the forces",
+    rescue_desc:"Authorize a secret military rescue operation. High risk. No guarantee of success.",
+    neg_btn:"Open negotiations",
+    neg_desc:"Begin talks with the hijackers. Prioritize bringing everyone home alive.",
+    not_hypo:"This was not hypothetical",
+    date:"June 27, 1976",
+    what_next:"WHAT HAPPENED NEXT",
+    op_label:"Operation Thunderbolt · July 4, 1976",
+    op_text:"100 Israeli commandos landed at Entebbe at midnight. In <strong>90 minutes</strong>, 102 of the 106 hostages were freed. Three hostages were killed in the crossfire. Commander <strong>Yonatan Netanyahu</strong> was killed — the only Israeli soldier to die. <strong>Dora Bloch</strong>, hospitalized before the raid, was murdered by Amin's forces afterward.<br><br>It was considered one of the most daring rescue operations in history.",
+    ask_q:"If you could ask Shimon Peres one question about how he made this decision — what would you ask him?",
+    q_placeholder:"Write your question here...",
+    q_note:"Your question joins the living archive — alongside questions from people in over 40 countries.",
+    add_archive:"ADD TO THE ARCHIVE",
+    skip:"Skip →",
+    archive_lbl:"The Living Archive",
+    archive_sub:"Questions people would ask Shimon Peres — from around the world.",
+    sent:"Sent in the forces",
+    negotiated:"Chose to negotiate",
+    click_pt:"↑ Click any point to read their question",
+    all_dec:"← All decisions",
+    start_over:"↩ Start over",
+    sculpture_btn:"◈ LIVING SCULPTURE →",
+    from_archive:"From the Archive",
+    chose_act:"Chose to act",
+    chose_dial:"Chose dialogue",
+    click_q:"↑ Click any point to read a question",
+    archive_nav:"← Archive",
+    chose_rescue:"YOU CHOSE: SEND IN THE FORCES — AS DID PERES",
+    chose_neg:"YOU CHOSE: NEGOTIATE — PERES CHOSE DIFFERENTLY",
+    chose_rescue_tag:"Sent in the forces",
+    chose_neg_tag:"Chose to negotiate",
+    back:"← Back"
+  },
+  he:{
+    center:"מרכז פרס לשלום וחדשנות",
+    title:"זיכרון פרס",
+    sub:"1923 – 2016 · ארכיון אינטראקטיבי",
+    enter:"כניסה לחדר",
+    standing:"אתה עומד בחדר העבודה שלו",
+    five:"חמש החלטות · חיים אחים",
+    select:"בחר רגע לכניסה",
+    urgent:"דחוף · סודי ביותר",
+    minister:"אתה שר הביטחון",
+    ringing:"3:17 לפנות בוקר. הטלפון האדום מצלצל.",
+    secretary:"המזכיר הצבאי שלך מדווח:",
+    scenario:"מחבלים השתלטו על ספינת נוסעים ישראלית ומשיטים אותה לעבר מדינת אויב — <strong>4,000 ק&quot;מ משם.</strong><br><br>על הסיפון נמצאים כ-<strong>200 אזרחים ישראלים</strong>.",
+    cannot:"ההחלטה לא יכולה לחכות.",
+    decide:"מה אתה מחליט?",
+    rescue_btn:"שלח את הכוחות",
+    rescue_desc:"אשר מבצע חילוץ צבאי סודי. סיכון גבוה. אין ערובה להצלחה.",
+    neg_btn:"פתח במשא ומתן",
+    neg_desc:"התחל שיחות עם החוטפים. העדף להחזיר את כולם הביתה בחיים.",
+    not_hypo:"זה לא היה תיאורטי",
+    date:"27 ביוני 1976",
+    what_next:"מה קרה אחר כך",
+    op_label:"מבצע יונתן · 4 ביולי 1976",
+    op_text:"100 לוחמים ישראלים נחתו באנטבה בחצות. תוך <strong>90 דקות</strong>, 102 מתוך 106 החטופים שוחררו. שלושה חטופים נהרגו בירי. המפקד <strong>יונתן נתניהו</strong> נהרג — החייל הישראלי היחיד שנפל. <strong>דורה בלוך</strong>, שאושפזה לפני המבצע, נרצחה על ידי כוחות אידי אמין לאחר מכן.<br><br>המבצע נחשב לאחת הפעולות האמיצות ביותר בתולדות ישראל.",
+    ask_q:"אם יכולת לשאול את שמעון פרס שאלה אחת על אופן קבלת ההחלטה — מה היית שואל?",
+    q_placeholder:"כתוב את שאלתך כאן...",
+    q_note:"שאלתך מצטרפת לארכיון החי — לצד שאלות מאנשים ביותר מ-40 מדינות.",
+    add_archive:"הוסף לארכיון",
+    skip:"דלג ←",
+    archive_lbl:"הארכיון החי",
+    archive_sub:"שאלות שאנשים היו שואלים את שמעון פרס — מרחבי העולם.",
+    sent:"שלח את הכוחות",
+    negotiated:"בחר במשא ומתן",
+    click_pt:"↑ לחץ על כל נקודה לקריאת השאלה",
+    all_dec:"← כל ההחלטות",
+    start_over:"↩ התחל מחדש",
+    sculpture_btn:"◈ הפסל החי →",
+    from_archive:"מהארכיון",
+    chose_act:"בחר לפעול",
+    chose_dial:"בחר בדיאלוג",
+    click_q:"↑ לחץ על נקודה לקריאת שאלה",
+    archive_nav:"← ארכיון",
+    chose_rescue:"בחרת: לשלוח את הכוחות — כמו פרס",
+    chose_neg:"בחרת: משא ומתן — פרס בחר אחרת",
+    chose_rescue_tag:"שלח את הכוחות",
+    chose_neg_tag:"בחר במשא ומתן",
+    back:"חזרה ←"
+  }
+};
 
-/* ══════════════════════════════════
-   NAVIGATION
-══════════════════════════════════ */
-function go(id){
-  document.querySelectorAll('.scr').forEach(function(s){ s.classList.remove('on'); });
-  document.getElementById(id).classList.add('on');
-  document.getElementById('prog').style.transform = 'scaleX('+(PROG[id]||0)+')';
-  document.getElementById('logo-bar').classList.toggle('vis', id!=='s0');
-  var bb = document.getElementById('back-btn');
-  bb.classList.toggle('show', !!(BACK[id]));
-  if(id==='s1') initReels();
-  if(id==='s2') initTimer();
-  if(id==='s3') showFC();
-  if(id==='s4') buildCard();
-  if(id==='s5') buildArchive();
-  if(id==='s6') initAsk();
-}
-function goBack(){
-  var cur = document.querySelector('.scr.on');
-  if(cur && BACK[cur.id]) go(BACK[cur.id]);
-}
-
-/* ══════════════════════════════════
-   S1 — SLOT MACHINE
-══════════════════════════════════ */
-function initReels(){
-  ['rt0','rt1','rt2'].forEach(function(id,i){
-    var el = document.getElementById(id);
-    el.textContent = '?';
-    el.className = 'reel-text';
-  });
-  document.getElementById('challenge-reveal').style.display = 'none';
-}
-
-function pullLever(){
-  if(!leverReady) return;
-  leverReady = false;
-  var lb = document.getElementById('lever-body');
-  lb.classList.add('pulling');
-  // Spin
-  var chosen = [
-    Math.floor(Math.random()*TECHS.length),
-    Math.floor(Math.random()*PROBLEMS.length),
-    Math.floor(Math.random()*CONSTRAINTS.length)
-  ];
-  var banks = [TECHS, PROBLEMS, CONSTRAINTS];
-  var ints = [0,1,2].map(function(i){
-    var el = document.getElementById('rt'+i);
-    el.className = 'reel-text spinning';
-    return setInterval(function(){
-      el.textContent = banks[i][Math.floor(Math.random()*banks[i].length)];
-    }, 85);
-  });
-  // Stop reels sequentially
-  setTimeout(function(){ stopReel(0, ints[0], chosen[0], TECHS); }, 1600);
-  setTimeout(function(){ stopReel(1, ints[1], chosen[1], PROBLEMS); }, 2000);
-  setTimeout(function(){
-    stopReel(2, ints[2], chosen[2], CONSTRAINTS);
-    lb.classList.remove('pulling');
-    leverReady = true;
-    ST.tech = TECHS[chosen[0]];
-    ST.prob = PROBLEMS[chosen[1]];
-    ST.con  = CONSTRAINTS[chosen[2]];
-    setTimeout(showChallenge, 500);
-  }, 2400);
+function setLang(lang){
+  currentLang=lang;
+  var s=STRINGS[lang];
+  var isHe=lang==='he';
+  document.body.dir=isHe?'rtl':'ltr';
+  document.getElementById('btn-en').style.borderColor=lang==='en'?'#7a7268':'#3a3530';
+  document.getElementById('btn-en').style.color=lang==='en'?'#d4c9b8':'#5a5248';
+  document.getElementById('btn-he').style.borderColor=lang==='he'?'#7a7268':'#3a3530';
+  document.getElementById('btn-he').style.color=lang==='he'?'#d4c9b8':'#5a5248';
+  // S0
+  document.querySelector('#s0 .T-label').textContent=s.center;
+  document.querySelector('#s0 .T-title').innerHTML=s.title;
+  document.querySelector('#s0 .T-sub').textContent=s.sub;
+  document.querySelector('#s0 .btn').textContent=s.enter;
+  document.querySelector('#s0 .T-note').textContent=s.standing;
+  // S1
+  document.querySelector('#hub-footer .T-label').textContent=s.five;
+  document.querySelector('#hub-footer .T-note').textContent=s.select;
+  // S2 — rebuild dynamically on next visit
+  // S6
+  document.querySelector('#s6 .T-label').textContent=s.archive_lbl;
+  if(document.getElementById('arc-title').textContent.indexOf('?')===-1||document.getElementById('arc-title').textContent===STRINGS[lang==='en'?'he':'en'].archive_sub)
+    document.getElementById('arc-title').textContent=s.archive_sub;
+  // S7
+  document.querySelector('#s7 .T-label').textContent='';
+  document.querySelector('#str-cnt').textContent=SQ.length+(isHe?' שאלות · 5 החלטות · חיים אחד':' questions · 5 decisions · one life');
 }
 
-function stopReel(i, interval, idx, bank){
-  clearInterval(interval);
-  var el = document.getElementById('rt'+i);
-  el.className = 'reel-text landed';
-  el.textContent = bank[idx];
+function go(to){
+  document.querySelectorAll('.scr').forEach(function(s){s.classList.remove('on');});
+  document.getElementById(to).classList.add('on');
+  document.getElementById('prog').style.width=(PROG[to]||0)+'%';
+  var rb=document.getElementById('roombg');
+  rb.style.display=(to==='s0'||to==='s1')?'block':'none';
+  if(to==='s1') buildBubbles();
+  if(to==='s6') setTimeout(initArc,80);
+  if(to==='s7') setTimeout(initStr,80);
 }
 
-function showChallenge(){
-  var badges = document.getElementById('ch-badges');
-  badges.innerHTML =
-    '<div class="ch-badge tech">'+ST.tech+'</div>' +
-    '<div class="ch-sep">+</div>' +
-    '<div class="ch-badge prob">'+ST.prob+'</div>' +
-    '<div class="ch-sep">+</div>' +
-    '<div class="ch-badge con">'+ST.con+'</div>';
-  var rev = document.getElementById('challenge-reveal');
-  rev.style.display = 'block';
-  rev.style.animation = 'fadeUp .5s ease forwards';
-}
-
-/* ══════════════════════════════════
-   S2 — TIMER
-══════════════════════════════════ */
-function initTimer(){
-  document.getElementById('s2-recap').innerHTML =
-    'האתגר: <strong>'+ST.tech+'</strong> + <strong>'+ST.prob+'</strong> · אילוץ: <strong>'+ST.con+'</strong>';
-  document.getElementById('s2-area').value = '';
-  document.getElementById('s2-char').textContent = '0 / 400';
-  document.getElementById('extend-btn').disabled = false;
-  document.getElementById('extend-btn').style.opacity = '1';
-  if(timerInt) clearInterval(timerInt);
-  timeLeft = 60;
-  updateTimerUI(60, 60);
-  timerInt = setInterval(function(){
-    timeLeft--;
-    updateTimerUI(timeLeft, 60);
-    if(timeLeft <= 0){ clearInterval(timerInt); submitIdea(); }
-  }, 1000);
-}
-
-function updateTimerUI(t, total){
-  document.getElementById('t-num').textContent = t;
-  document.getElementById('t-num').classList.toggle('urgent', t <= 10);
-  var ring = document.getElementById('t-ring');
-  var pct = t / total;
-  ring.style.strokeDashoffset = 440 * (1 - pct);
-  ring.style.stroke = t <= 10 ? 'var(--gold)' : 'var(--cyan)';
-}
-
-function extendTime(){
-  timeLeft += 30;
-  var btn = document.getElementById('extend-btn');
-  btn.disabled = true; btn.style.opacity = '.35';
-}
-
-function s2Char(el){
-  document.getElementById('s2-char').textContent = el.value.length + ' / 400';
-}
-
-function submitIdea(){
-  if(timerInt){ clearInterval(timerInt); timerInt = null; }
-  ST.idea = document.getElementById('s2-area').value.trim() || 'רעיון בפיתוח...';
-  ST.fc = FUTURE_CARDS[Math.floor(Math.random()*FUTURE_CARDS.length)];
-  ST.sc.inn  = 68 + Math.floor(Math.random()*28);
-  ST.sc.feas = 52 + Math.floor(Math.random()*32);
-  ST.sc.imp  = 70 + Math.floor(Math.random()*25);
+function choose(side){
+  userSide=side;
+  var el=document.getElementById('s3-result');
+  el.textContent=side==='rescue'?'YOU CHOSE: SEND IN THE FORCES — AS DID PERES':'YOU CHOSE: NEGOTIATE — PERES CHOSE DIFFERENTLY';
+  el.style.color=side==='rescue'?'rgba(122,184,232,0.9)':'rgba(200,122,154,0.9)';
   go('s3');
 }
 
-/* ══════════════════════════════════
-   S3 — FUTURE CARD
-══════════════════════════════════ */
-function showFC(){
-  document.getElementById('fc-icon').textContent = ST.fc.icon;
-  document.getElementById('fc-name').textContent = ST.fc.name;
-  document.getElementById('fc-desc').textContent = ST.fc.desc;
-  document.getElementById('fc-q').textContent   = ST.fc.q;
+function submitQ(){
+  var q=document.getElementById('userQ').value.trim();
+  if(q){userQ_val=q;document.getElementById('arc-title').textContent='"'+q+'" — your question, now part of the archive.';}
+  go('s6');
 }
 
-/* ══════════════════════════════════
-   S4 — DREAM CARD
-══════════════════════════════════ */
-function buildCard(){
-  var now = new Date();
-  document.getElementById('dc-date').textContent = now.getDate()+'.'+(now.getMonth()+1)+'.'+now.getFullYear();
-  document.getElementById('dc-ch').textContent   = ST.tech + ' + ' + ST.prob + ' · ' + ST.con;
-  document.getElementById('dc-idea').textContent = ST.idea;
-  countUp('sc-inn',  ST.sc.inn);
-  countUp('sc-feas', ST.sc.feas);
-  countUp('sc-imp',  ST.sc.imp);
-  var steps = STEPS_BANK[Math.floor(Math.random()*STEPS_BANK.length)];
-  document.getElementById('dc-steps').innerHTML = steps.map(function(s){ return '<li>'+s+'</li>'; }).join('');
-  saveToArchive({ ch:ST.tech+' + '+ST.prob+' · '+ST.con, idea:ST.idea, inn:ST.sc.inn, feas:ST.sc.feas, imp:ST.sc.imp, user:true });
-}
-
-function countUp(id, target){
-  var el = document.getElementById(id), cur = 0, step = target/30;
-  var iv = setInterval(function(){
-    cur = Math.min(target, cur+step);
-    el.textContent = Math.round(cur);
-    if(cur >= target) clearInterval(iv);
-  }, 35);
-}
-
-/* ══════════════════════════════════
-   S5 — ARCHIVE
-══════════════════════════════════ */
-function loadArchive(){
-  try{ var s = localStorage.getItem('pdc'); return s ? JSON.parse(s) : null; }catch(e){ return null; }
-}
-function saveToArchive(entry){
-  var arc = loadArchive() || ARCHIVE_SEEDS.slice();
-  var dup = arc.some(function(d){ return d.user && d.idea===entry.idea; });
-  if(!dup) arc.unshift(entry);
-  try{ localStorage.setItem('pdc', JSON.stringify(arc)); }catch(e){}
-}
-function buildArchive(){
-  var arc = loadArchive() || ARCHIVE_SEEDS.slice();
-  document.getElementById('arch-sub').textContent = arc.length + ' רעיונות נשמרו במאגר';
-  document.getElementById('arch-grid').innerHTML = arc.map(function(d){
-    var avg = Math.round((d.inn + d.feas + d.imp) / 3);
-    return '<div class="arch-card'+(d.user?' user-card':'')+'">'+
-      '<div class="arch-ch">'+(d.user?'★ ':'')+d.ch+'</div>'+
-      '<div class="arch-idea">'+d.idea+'</div>'+
-      '<div class="arch-meta">'+
-        '<span>השפעה: <span class="arch-score">'+d.imp+'</span></span>'+
-        '<span>ציון כולל: <span class="arch-score">'+avg+'</span></span>'+
-      '</div></div>';
-  }).join('');
-}
-
-/* ══════════════════════════════════
-   S6 — ASK PERES
-══════════════════════════════════ */
-function initAsk(){
-  document.getElementById('s6-sq').innerHTML = QA6.map(function(q){
-    return '<button class="sq-btn" onclick="selQ(this)">'+q.q+'</button>';
-  }).join('');
-  document.getElementById('s6-input').value = '';
-  document.getElementById('s6-response').style.display = 'none';
-  var btn = document.getElementById('s6-btn');
-  btn.disabled = true; btn.style.opacity = '.35';
-}
-function selQ(el){
-  document.getElementById('s6-input').value = el.textContent;
-  s6Input(document.getElementById('s6-input'));
-}
-function s6Input(el){
-  var btn = document.getElementById('s6-btn');
-  var ok = el.value.trim().length >= 3;
-  btn.disabled = !ok; btn.style.opacity = ok?'1':'.35';
-}
-function askPeres(){
-  var q = document.getElementById('s6-input').value.trim();
-  if(!q) return;
-  var qL = q.toLowerCase(), best = null, bestS = 0;
-  QA6.forEach(function(p){
-    var s = 0; p.keys.forEach(function(k){ if(qL.includes(k)) s++; });
-    if(s > bestS){ bestS = s; best = p; }
-  });
-  if(!best) best = QA6[Math.floor(Math.random()*QA6.length)];
-  document.getElementById('s6-res-text').textContent = best.a;
-  document.getElementById('s6-res-src').textContent  = '📎 ' + best.src;
-  document.getElementById('s6-response').style.display = 'block';
-}
-
-/* ══════════════════════════════════
-   RESTART
-══════════════════════════════════ */
 function restart(){
-  if(timerInt){ clearInterval(timerInt); timerInt = null; }
-  ST = { tech:'', prob:'', con:'', idea:'', fc:null, sc:{} };
-  leverReady = true;
-  go('s1');
+  userSide=null;userQ_val=null;arcReady=false;strReady=false;
+  dots=[];af=0;ahov=null;totalR=68;totalN=32;
+  sp=[];sf=0;shov=null;
+  document.getElementById('userQ').value='';
+  document.getElementById('arc-title').textContent='Questions people would ask Shimon Peres — from around the world.';
+  document.getElementById('peres-quote').style.color='rgba(212,201,184,0)';
+  go('s0');
+}
+
+function closePop(id){document.getElementById(id).style.display='none';}
+
+function showPop(pid,d,mx,my,maxW,maxH){
+  if(!d||!d.q) return;
+  var ids={pop:{q:'ppq',d:'ppd',s:'pps',l:'ppl'},spop:{q:'spq',d:'spd',s:'sps',l:'spl'}};
+  var m=ids[pid];
+  document.getElementById(m.q).textContent='"'+d.q.q+'"';
+  document.getElementById(m.d).style.background='rgba('+d.col.r+','+d.col.g+','+d.col.b+',1)';
+  document.getElementById(m.s).textContent=d.q.side==='rescue'?'Sent in the forces':'Chose to negotiate';
+  document.getElementById(m.l).textContent=d.q.loc;
+  var p=document.getElementById(pid);
+  var px=mx+14,py=my-70;
+  if(px+272>maxW) px=mx-286;
+  if(py<0) py=8;
+  if(py+130>maxH) py=maxH-138;
+  p.style.left=px+'px';p.style.top=py+'px';p.style.display='block';
+}
+
+var DECISIONS=[
+  {year:"1957",role:"Deputy Director General",title:"Build the nuclear reactor — in secret",col:"rgba(180,160,100,",sz:144,l:"22%",t:"40%",an:"fl0",dur:"6.2s",active:false},
+  {year:"1976",role:"Minister of Defense",title:"Rescue or negotiate?",col:"rgba(122,184,232,",sz:170,l:"50%",t:"35%",an:"fl2",dur:"7s",active:true},
+  {year:"1993",role:"Foreign Minister",title:"Sign the Oslo Accords",col:"rgba(140,200,150,",sz:148,l:"78%",t:"42%",an:"fl1",dur:"6.6s",active:false},
+  {year:"1995",role:"Prime Minister",title:"The week before the assassination",col:"rgba(220,120,110,",sz:136,l:"30%",t:"66%",an:"fl3",dur:"5.8s",active:false},
+  {year:"2012",role:"President",title:"A pardon no one expected",col:"rgba(180,140,220,",sz:140,l:"66%",t:"68%",an:"fl4",dur:"6.4s",active:false}
+];
+
+function buildBubbles(){
+  if(bubblesBuilt) return;
+  bubblesBuilt=true;
+  var wrap=document.getElementById('hub-wrap');
+  DECISIONS.forEach(function(d,i){
+    var btn=document.createElement('button');
+    btn.className='bubble'+(d.active?'':' locked');
+    btn.setAttribute('aria-label',d.year+': '+d.title);
+    btn.style.cssText='left:'+d.l+';top:'+d.t+';width:'+d.sz+'px;height:'+d.sz+'px;transform:translate(-50%,-50%);background:'+d.col+'0.13);box-shadow:0 0 50px '+d.col+'0.07),inset 0 0 25px '+d.col+'0.05);color:'+d.col+'0.9);animation:'+d.an+' '+d.dur+' ease-in-out infinite;animation-delay:'+(i*0.5)+'s;';
+    btn.innerHTML='<span class="b-year">'+d.year+'</span><span class="b-role">'+d.role+'</span><span class="b-title">'+d.title+'</span><span class="b-cta">'+(d.active?'ENTER →':'Coming soon')+'</span>';
+    if(d.active) btn.onclick=function(){go('s2');};
+    wrap.appendChild(btn);
+  });
+}
+
+var CR={r:122,g:184,b:232},CN={r:200,g:122,b:154},CU={r:255,g:220,b:150};
+function cs(c,a){return 'rgba('+c.r+','+c.g+','+c.b+','+a+')';}
+
+var AQ=[
+  {q:"Did you sleep the night before you gave the order?",loc:"New York",side:"rescue"},
+  {q:"How do you carry the weight of those who didn't come home?",loc:"London",side:"negotiate"},
+  {q:"At what point did doubt become certainty?",loc:"Tel Aviv",side:"rescue"},
+  {q:"What would you have said to Yonatan's family?",loc:"Berlin",side:"negotiate"},
+  {q:"Were you afraid — and did that fear help or hurt you?",loc:"Chicago",side:"rescue"},
+  {q:"How do you decide when every option costs something irreplaceable?",loc:"Paris",side:"negotiate"},
+  {q:"Was there a moment you almost changed your mind?",loc:"São Paulo",side:"rescue"},
+  {q:"What do you say to those who believe you gambled with lives?",loc:"Melbourne",side:"negotiate"},
+  {q:"Did you know — in that moment — that you were right?",loc:"Toronto",side:"rescue"},
+  {q:"What if it had failed?",loc:"Amsterdam",side:"negotiate"},
+  {q:"How do you live with a decision made on incomplete information?",loc:"Mumbai",side:"rescue"},
+  {q:"Is there a difference between courage and desperation?",loc:"Warsaw",side:"negotiate"},
+  {q:"Who did you speak to in those final hours?",loc:"Buenos Aires",side:"rescue"},
+  {q:"What did you learn about yourself in those 72 hours?",loc:"Stockholm",side:"negotiate"},
+  {q:"Does the outcome change the morality of the decision?",loc:"Nairobi",side:"rescue"},
+  {q:"What would you tell a young leader facing an impossible choice?",loc:"Seoul",side:"negotiate"},
+  {q:"Were you certain — or did you decide despite uncertainty?",loc:"San Francisco",side:"rescue"},
+  {q:"How do you separate what is right from what is necessary?",loc:"Vienna",side:"negotiate"},
+  {q:"Did Ben-Gurion teach you something that helped you in that room?",loc:"Jerusalem",side:"rescue"},
+  {q:"What is the cost of a precedent — and who pays it?",loc:"Cape Town",side:"negotiate"}
+];
+
+function initArc(){
+  if(arcReady) return;
+  arcReady=true;
+  ac=document.getElementById('ac');
+  actx=ac.getContext('2d');
+  var body=ac.parentElement;
+  W=ac.width=body.offsetWidth||800;
+  H=ac.height=body.offsetHeight||480;
+  for(var i=0;i<totalR;i++){(function(ii){setTimeout(function(){dots.push(mkDot('rescue'));},ii*20);})(i);}
+  for(var j=0;j<totalN;j++){(function(jj){setTimeout(function(){dots.push(mkDot('negotiate'));},jj*28+200);})(j);}
+  setTimeout(function(){
+    if(userSide==='rescue') totalR++; else if(userSide) totalN++;
+    var ud=mkDot(userSide||'rescue',true);
+    if(userQ_val) ud.q={q:userQ_val,loc:"You",side:userSide||'rescue'};
+    dots.push(ud);
+    updateCnt();
+  },totalR*20+900);
+  updateCnt();
+  ac.addEventListener('mousemove',function(e){
+    var r=ac.getBoundingClientRect(),mx=e.clientX-r.left,my=e.clientY-r.top;
+    var found=null,mn=28;
+    dots.forEach(function(d){if(!d.q)return;var dd=Math.hypot(d.x-mx,d.y-my);if(dd<mn){mn=dd;found=d;}});
+    ahov=found; ac.style.cursor=found?'pointer':'default';
+  });
+  ac.addEventListener('click',function(e){
+    if(!ahov) return;
+    var r=ac.getBoundingClientRect();
+    showPop('pop',ahov,e.clientX-r.left,e.clientY-r.top,W,H);
+  });
+  drawArc();
+}
+
+function mkDot(side,isUser){
+  var col=isUser?CU:(side==='rescue'?CR:CN);
+  var pool=AQ.filter(function(q){return q.side===side;});
+  var q=isUser?null:pool[Math.floor(Math.random()*pool.length)];
+  return{x:W*(0.06+Math.random()*0.88),y:H*(0.06+Math.random()*0.86),ox:0,oy:0,col:col,side:side,q:q,isUser:!!isUser,size:isUser?7:(3+Math.random()*3),alpha:0,ph:Math.random()*Math.PI*2,orb:14+Math.random()*26,spd:0.0018+Math.random()*0.002,id:Math.random()};
+}
+
+function updateCnt(){
+  var t=totalR+totalN;
+  document.getElementById('arc-cnt').textContent=Math.round(totalR/t*100)+'% sent in the forces · '+Math.round(totalN/t*100)+'% chose to negotiate · '+t+' voices';
+}
+
+function drawArc(){
+  af++;
+  actx.clearRect(0,0,W,H);actx.fillStyle='#07070b';actx.fillRect(0,0,W,H);
+  var t=af*0.006;
+  [[W*0.32,H*0.42,CR],[W*0.68,H*0.58,CN]].forEach(function(arr){
+    var g=actx.createRadialGradient(arr[0],arr[1],0,arr[0],arr[1],W*0.38);
+    g.addColorStop(0,cs(arr[2],0.05));g.addColorStop(1,'rgba(0,0,0,0)');
+    actx.fillStyle=g;actx.fillRect(0,0,W,H);
+  });
+  dots.forEach(function(d){
+    d.alpha=Math.min(1,d.alpha+0.02);
+    if(!d.ox){d.ox=d.x;d.oy=d.y;}
+    d.ph+=d.spd;
+    d.x=d.ox+Math.cos(d.ph+t)*d.orb*0.7+Math.sin(d.ph*0.7)*d.orb*0.3;
+    d.y=d.oy+Math.sin(d.ph*1.2+t*0.9)*d.orb*0.65+Math.cos(d.ph*0.5)*d.orb*0.28;
+    var a=d.alpha,isH=ahov&&ahov.id===d.id,s=d.size*(isH?2.1:1)*(d.isUser?(1+Math.sin(af*0.07)*0.18):1);
+    [[s*6,0.025],[s*3,0.08],[s*1.5,0.18]].forEach(function(arr){
+      actx.beginPath();actx.arc(d.x,d.y,arr[0],0,Math.PI*2);
+      actx.fillStyle=cs(d.col,a*arr[1]*(isH?2.5:1));actx.fill();
+    });
+    actx.beginPath();actx.arc(d.x,d.y,s,0,Math.PI*2);
+    actx.fillStyle=cs(d.col,a*(d.isUser?0.95:0.6+(isH?0.3:0)));actx.fill();
+    if(isH||d.isUser){actx.beginPath();actx.arc(d.x,d.y,s+5,0,Math.PI*2);actx.strokeStyle=cs(d.col,0.3);actx.lineWidth=0.5;actx.stroke();}
+    dots.forEach(function(b){
+      if(b.id===d.id||b.side!==d.side) return;
+      var dd=Math.hypot(d.x-b.x,d.y-b.y);
+      if(dd<60){actx.beginPath();actx.moveTo(d.x,d.y);actx.lineTo(b.x,b.y);actx.strokeStyle=cs(d.col,(1-dd/60)*0.05);actx.lineWidth=0.4;actx.stroke();}
+    });
+  });
+  if(af%90===0) updateCnt();
+  requestAnimationFrame(drawArc);
+}
+
+var SQ=[
+  {q:"Was a secret that big ever truly safe?",loc:"Jerusalem",side:"rescue"},
+  {q:"Did you sleep the night before you gave the order?",loc:"New York",side:"rescue"},
+  {q:"How do you carry the weight of those who didn't come home?",loc:"London",side:"negotiate"},
+  {q:"Did you believe Oslo would hold?",loc:"Oslo",side:"negotiate"},
+  {q:"Could the assassination have been prevented?",loc:"Tel Aviv",side:"negotiate"},
+  {q:"Who deserves a second chance — and who decides?",loc:"Haifa",side:"negotiate"},
+  {q:"At what point did doubt become certainty?",loc:"Berlin",side:"rescue"},
+  {q:"What if it had failed?",loc:"Amsterdam",side:"negotiate"},
+  {q:"What would you tell a young leader?",loc:"Seoul",side:"negotiate"},
+  {q:"Were you certain — or did you decide despite uncertainty?",loc:"San Francisco",side:"rescue"},
+  {q:"What is the cost of a precedent?",loc:"Cape Town",side:"negotiate"},
+  {q:"Does the outcome change the morality of the decision?",loc:"Nairobi",side:"rescue"},
+  {q:"What did you feel the moment you signed?",loc:"Washington",side:"negotiate"},
+  {q:"Did Ben-Gurion ever doubt it was right?",loc:"Sde Boker",side:"rescue"}
+];
+var SCOL_BLUE={r:80,g:150,b:255},SCOL_PINK={r:225,g:95,b:165};
+
+function initStr(){
+  if(strReady) return;
+  strReady=true;
+  SC=document.getElementById('sc');
+  SCTX=SC.getContext('2d');
+  var body=SC.parentElement;
+  SW=SC.width=body.offsetWidth||800;
+  SH=SC.height=body.offsetHeight||480;
+  var total=64,CX=SW/2,CY=SH*0.47;
+  for(var i=0;i<total;i++){
+    (function(ii){
+      setTimeout(function(){
+        var era=Math.floor(ii/total*5);
+        var col=(era<=1)?SCOL_BLUE:SCOL_PINK;
+        var angle=(ii/total)*Math.PI*2+Math.random()*0.4;
+        var rad=60+Math.random()*160;
+        var q=SQ[ii%SQ.length];
+        sp.push({x:CX+Math.cos(angle)*rad,y:CY+Math.sin(angle)*rad*0.7,ox:0,oy:0,col:col,q:q,alpha:0,ph:Math.random()*Math.PI*2,orb:6+Math.random()*18,spd:0.0008+Math.random()*0.0012,id:Math.random()});
+      },ii*28);
+    })(i);
+  }
+  document.getElementById('str-cnt').textContent=SQ.length+' questions · 5 decisions · one life';
+  SC.addEventListener('mousemove',function(e){
+    var r=SC.getBoundingClientRect(),mx=e.clientX-r.left,my=e.clientY-r.top;
+    var found=null,mn=30;
+    sp.forEach(function(p){var dd=Math.hypot(p.x-mx,p.y-my);if(dd<mn){mn=dd;found=p;}});
+    shov=found; SC.style.cursor=found?'pointer':'default';
+  });
+  SC.addEventListener('click',function(e){
+    if(!shov||!shov.q) return;
+    var r=SC.getBoundingClientRect();
+    showPop('spop',{col:shov.col,q:shov.q},e.clientX-r.left,e.clientY-r.top,SW,SH);
+  });
+  setTimeout(function(){
+    document.getElementById('peres-quote').style.color='rgba(212,201,184,0.85)';
+  },800);
+  drawStr();
+}
+
+function drawStr(){
+  sf++;
+  SCTX.clearRect(0,0,SW,SH);
+  SCTX.fillStyle='#03030a';
+  SCTX.fillRect(0,0,SW,SH);
+  var t=sf*0.003;
+  var n=sp.length;
+  var gSize=Math.max(4,22-(n*0.26));
+  sp.forEach(function(p){
+    p.alpha=Math.min(1,p.alpha+0.012);
+    if(!p.ox){p.ox=p.x;p.oy=p.y;}
+    p.ph+=p.spd;
+    p.x=p.ox+Math.cos(p.ph+t*0.6)*p.orb*0.85+Math.sin(p.ph*1.2+t*0.35)*p.orb*0.28;
+    p.y=p.oy+Math.sin(p.ph*0.85+t*0.5)*p.orb*0.78+Math.cos(p.ph*1.0+t*0.3)*p.orb*0.22;
+  });
+  for(var i=0;i<sp.length;i++){
+    var p=sp[i];
+    if(p.alpha<0.2) continue;
+    for(var j=i+1;j<sp.length;j++){
+      var b=sp[j];
+      if(b.alpha<0.2) continue;
+      var d1=Math.hypot(p.x-b.x,p.y-b.y);
+      if(d1>120) continue;
+      for(var k=j+1;k<sp.length;k++){
+        var c=sp[k];
+        if(c.alpha<0.2) continue;
+        var d2=Math.hypot(p.x-c.x,p.y-c.y);
+        var d3=Math.hypot(b.x-c.x,b.y-c.y);
+        if(d2>120||d3>120) continue;
+        var mr=Math.round((p.col.r*2+b.col.r+c.col.r)/4);
+        var mg=Math.round((p.col.g*2+b.col.g+c.col.g)/4);
+        var mb=Math.round((p.col.b*2+b.col.b+c.col.b)/4);
+        var avgA=Math.min(p.alpha,b.alpha,c.alpha);
+        var prox=1-Math.max(d1,d2,d3)/120;
+        SCTX.beginPath();
+        SCTX.moveTo(p.x,p.y);SCTX.lineTo(b.x,b.y);SCTX.lineTo(c.x,c.y);
+        SCTX.closePath();
+        SCTX.fillStyle='rgba('+mr+','+mg+','+mb+','+(avgA*prox*0.12)+')';
+        SCTX.fill();
+      }
+    }
+  }
+  var CX=SW/2,CY=SH*0.47;
+  var gB=SCTX.createRadialGradient(CX-40,CY,0,CX-40,CY,220);
+  gB.addColorStop(0,'rgba(80,150,255,0.07)');gB.addColorStop(1,'rgba(0,0,0,0)');
+  SCTX.fillStyle=gB;SCTX.fillRect(0,0,SW,SH);
+  var gP=SCTX.createRadialGradient(CX+40,CY,0,CX+40,CY,200);
+  gP.addColorStop(0,'rgba(225,95,165,0.06)');gP.addColorStop(1,'rgba(0,0,0,0)');
+  SCTX.fillStyle=gP;SCTX.fillRect(0,0,SW,SH);
+  sp.forEach(function(p){
+    var a=p.alpha,isH=shov&&shov.id===p.id,s=gSize*(isH?2.2:1);
+    SCTX.beginPath();SCTX.arc(p.x,p.y,s*5,0,Math.PI*2);
+    SCTX.fillStyle='rgba('+p.col.r+','+p.col.g+','+p.col.b+','+(a*0.05*(isH?3:1))+')';SCTX.fill();
+    SCTX.beginPath();SCTX.arc(p.x,p.y,s*2,0,Math.PI*2);
+    SCTX.fillStyle='rgba('+p.col.r+','+p.col.g+','+p.col.b+','+(a*0.15*(isH?2:1))+')';SCTX.fill();
+    SCTX.beginPath();SCTX.arc(p.x,p.y,s,0,Math.PI*2);
+    SCTX.fillStyle='rgba('+p.col.r+','+p.col.g+','+p.col.b+','+(a*0.9)+')';SCTX.fill();
+    if(isH){SCTX.beginPath();SCTX.arc(p.x,p.y,s+7,0,Math.PI*2);SCTX.strokeStyle='rgba('+p.col.r+','+p.col.g+','+p.col.b+',0.5)';SCTX.lineWidth=0.5;SCTX.stroke();}
+  });
+  requestAnimationFrame(drawStr);
 }
 </script>
 </body>
