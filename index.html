@@ -1,663 +1,1137 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="he" dir="rtl">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>The Memory of Peres</title>
+<title>שמעון פרס | ארכיון חי</title>
 <style>
+@import url('https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700&display=swap');
+
 *{box-sizing:border-box;margin:0;padding:0}
-body{background:#09090d;font-family:Georgia,serif;color:#d4c9b8;overflow:hidden;height:100vh}
-#app{width:100%;max-width:960px;height:100vh;margin:0 auto;position:relative;overflow:hidden}
-#prog{position:absolute;top:0;left:0;height:2px;background:linear-gradient(to right,#7ab8e8,#c87a9a);z-index:100;transition:width 0.5s;pointer-events:none}
-#roombg{position:absolute;inset:0;z-index:1;pointer-events:none;display:none}
-#roombg img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;filter:brightness(0.45) sepia(0.15);display:block}
-#roombg .ov{position:absolute;inset:0;background:linear-gradient(to top,rgba(9,9,13,0.97) 0%,rgba(9,9,13,0.3) 50%,rgba(9,9,13,0.05) 100%)}
-.scr{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;padding:40px 32px;z-index:10;overflow-y:auto}
-.scr.on{display:flex}
-.scr.on *{pointer-events:auto}
-@keyframes fi{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-@keyframes glw{0%,100%{opacity:0.35}50%{opacity:1}}
-@keyframes rng{0%,100%{transform:rotate(0)}20%{transform:rotate(-14deg)}40%{transform:rotate(14deg)}60%{transform:rotate(-9deg)}80%{transform:rotate(9deg)}}
-@keyframes fl0{0%,100%{transform:translate(-50%,-50%)}50%{transform:translate(-50%,-58%)}}
-@keyframes fl1{0%,100%{transform:translate(-50%,-50%)}50%{transform:translate(-50%,-43%)}}
-@keyframes fl2{0%,100%{transform:translate(-50%,-50%)}50%{transform:translate(-50%,-57%)}}
-@keyframes fl3{0%,100%{transform:translate(-50%,-50%)}50%{transform:translate(-50%,-44%)}}
-@keyframes fl4{0%,100%{transform:translate(-50%,-50%)}50%{transform:translate(-50%,-55%)}}
-.fi{animation:fi 0.9s ease forwards}
-.T-label{font-size:12px;letter-spacing:0.2em;color:#8a8078;font-family:sans-serif;text-transform:uppercase;margin-bottom:12px}
-.T-title{font-size:28px;font-weight:400;letter-spacing:0.08em;color:#e8dfd2;line-height:1.3;margin-bottom:10px}
-.T-sub{font-size:13px;letter-spacing:0.1em;color:#7a7268;font-family:sans-serif;margin-bottom:28px}
-.T-body{font-size:15px;line-height:1.95;color:#a89e90}
-.T-body strong{color:#d4c9b8;font-weight:400}
-.T-quote{font-size:15px;font-style:italic;color:#d4c9b8;line-height:1.75;padding:16px 18px;border:0.5px solid #2e2e36;margin-bottom:20px}
-.T-question{font-size:17px;color:#d4c9b8;line-height:1.8;margin-bottom:24px}
-.T-note{font-size:12px;color:#7a7268;font-family:sans-serif;letter-spacing:0.06em;line-height:1.65}
-.divider{width:36px;height:0.5px;background:#252320;margin:16px 0}
-.btn{background:transparent;border:0.5px solid #7a7268;color:#d4c9b8;padding:13px 40px;cursor:pointer;font-family:Georgia,serif;font-size:13px;letter-spacing:0.16em;transition:all 0.22s}
-.btn:hover{border-color:#e8dfd2;color:#e8dfd2;background:rgba(232,223,210,0.05)}
-.btn-back{background:none;border:none;font-size:12px;color:#7a7268;cursor:pointer;letter-spacing:0.14em;font-family:sans-serif;padding:8px 0;margin-top:10px;transition:color 0.2s}
-.btn-back:hover{color:#d4c9b8}
-.btn-skip{background:none;border:none;font-size:12px;color:#5a5248;cursor:pointer;letter-spacing:0.14em;font-family:sans-serif;padding:8px 0;transition:color 0.2s}
-.btn-skip:hover{color:#d4c9b8}
-.cg{display:grid;grid-template-columns:1fr 1fr;gap:12px;width:100%;max-width:540px;margin-bottom:14px}
-.cb{background:transparent;border:0.5px solid #252320;color:#907e70;padding:20px 16px;cursor:pointer;font-family:Georgia,serif;font-size:14px;line-height:1.75;text-align:left;transition:all 0.28s}
-.cb:hover{border-color:#b8ac9c;color:#d4c9b8;background:rgba(212,201,184,0.03)}
-.cb .cl{font-size:10px;letter-spacing:0.2em;display:block;margin-bottom:8px;font-family:sans-serif;text-transform:uppercase}
-.ali{display:inline-flex;align-items:center;gap:7px;font-size:12px;letter-spacing:0.1em;color:#7a7268;font-family:sans-serif;margin:0 10px}
-.ald{width:7px;height:7px;border-radius:50%;flex-shrink:0}
-textarea{width:100%;background:rgba(255,255,255,0.02);border:0.5px solid #252320;color:#d4c9b8;padding:16px;font-family:Georgia,serif;font-size:14px;line-height:1.75;resize:none;margin-bottom:8px;min-height:100px}
-textarea:focus{outline:none;border-color:#5a5248}
-textarea::placeholder{color:#2e2a26;font-style:italic}
-#s1{padding:0}
-#hub-wrap{position:relative;width:100%;height:100%}
-.bubble{position:absolute;border-radius:50%;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;border:0.5px solid rgba(255,255,255,0.1);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);padding:16px;transition:box-shadow 0.3s}
-.bubble:hover{outline:2px solid rgba(255,255,255,0.22);outline-offset:3px;z-index:20}
-.bubble .b-year{font-size:10px;letter-spacing:0.2em;font-family:sans-serif;margin-bottom:4px;opacity:0.6}
-.bubble .b-role{font-size:10px;letter-spacing:0.12em;font-family:sans-serif;margin-bottom:6px;opacity:0.8;text-transform:uppercase}
-.bubble .b-title{font-size:13px;line-height:1.4;font-family:Georgia,serif}
-.bubble .b-cta{font-size:10px;letter-spacing:0.16em;font-family:sans-serif;margin-top:8px;opacity:0.5}
-.bubble.locked{cursor:default}
-#hub-footer{position:absolute;bottom:22px;left:0;right:0;text-align:center;pointer-events:none}
-#s6,#s7{padding:0;background:#07070b}
-#s6.on,#s7.on{display:flex;flex-direction:column}
-#s7{background:#03030a}
-.arc-top{width:100%;padding:18px 24px 12px;flex-shrink:0;border-bottom:0.5px solid #141418}
-#s6 .arc-top{background:#07070b}
-#s7 .arc-top{background:#03030a;border-color:#0a0a14;text-align:center}
-.arc-body{position:relative;flex:1;width:100%;min-height:0}
-.arc-body canvas{display:block;position:absolute;inset:0;width:100%;height:100%}
-.arc-bot{position:absolute;bottom:0;left:0;right:0;padding:10px 24px 16px;z-index:15;pointer-events:none;text-align:center}
-#s6 .arc-bot{background:linear-gradient(to top,rgba(7,7,11,1) 0%,rgba(7,7,11,0.7) 65%,transparent 100%)}
-#s7 .arc-bot{background:linear-gradient(to top,rgba(3,3,10,1) 0%,rgba(3,3,10,0.8) 55%,transparent 100%)}
-.anav{position:absolute;bottom:12px;background:none;border:none;font-size:12px;color:#7a7268;cursor:pointer;letter-spacing:0.12em;font-family:sans-serif;z-index:16;transition:color 0.2s;pointer-events:all}
-.anav:hover{color:#d4c9b8}
-.pop{position:absolute;z-index:30;background:rgba(6,6,10,0.99);border:0.5px solid #1e1e24;padding:18px 20px;width:272px;display:none;pointer-events:all}
-.pop .pl{font-size:10px;letter-spacing:0.2em;color:#5a5248;font-family:sans-serif;margin-bottom:10px;text-transform:uppercase}
-.pop .pq{font-size:13px;color:#d4c9b8;font-style:italic;line-height:1.7;margin-bottom:10px}
-.pop .pm{font-size:11px;color:#5a5248;font-family:sans-serif;display:flex;justify-content:space-between}
-.pop .pd{display:inline-block;width:6px;height:6px;border-radius:50%;margin-right:5px;vertical-align:middle}
-.pop .px{position:absolute;top:10px;right:13px;font-size:16px;color:#5a5248;cursor:pointer;background:none;border:none}
-.pop .px:hover{color:#d4c9b8}
-@media(max-width:600px){
-  .cg{grid-template-columns:1fr}
-  .T-title{font-size:22px}
-  .bubble{padding:10px}
-  .bubble .b-title{font-size:11px}
+
+/* ── ACCESSIBILITY — תקן ישראלי 5568 / WCAG 2.1 AA ── */
+/* Skip link */
+.skip-link{position:fixed;top:-100px;right:0;background:var(--gold);color:#000;padding:12px 20px;z-index:9999;font-family:'Heebo',sans-serif;font-size:14px;font-weight:500;text-decoration:none;transition:top 0.2s}
+.skip-link:focus{top:0}
+/* Focus indicator — גלוי בכל אלמנט אינטראקטיבי */
+*:focus-visible{outline:2px solid var(--gold);outline-offset:3px;border-radius:1px}
+/* High-contrast button focus */
+button:focus-visible,a:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+/* Remove outline for mouse users */
+*:focus:not(:focus-visible){outline:none}
+:root{
+  --gold:#c8a24a;
+  --gold-dim:rgba(200,162,74,0.18);
+  --cream:#e8dfc8;
+  --dim:#9e8e78;     /* 5.8:1 on --bg — עומד בתקן AA */
+  --faint:#7a6a58;   /* 3.5:1 — טקסט גדול בלבד */
+  --bg:#060d1f;
+  --blue:#1a6fa8;
 }
+html,body{height:100%;overflow:hidden;background:var(--bg);font-family:'Heebo',sans-serif;color:var(--cream);font-size:17px}
+
+/* ── SCANLINE texture ── */
+body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,rgba(0,0,0,0.03) 0,rgba(0,0,0,0.03) 1px,transparent 1px,transparent 4px);pointer-events:none;z-index:1000}
+
+/* ── ROOM BG ── */
+#roombg{position:fixed;inset:0;z-index:0;display:none}
+#roombg img{width:100%;height:100%;object-fit:cover;object-position:50% 18%;filter:brightness(0.55) sepia(0.12) saturate(0.9)}
+#roombg .ov{position:absolute;inset:0;background:
+  linear-gradient(to bottom, rgba(2,4,14,0.35) 0%, rgba(2,4,14,0.15) 30%, rgba(2,4,14,0.72) 75%, rgba(2,4,14,0.97) 100%),
+  linear-gradient(to left, rgba(2,4,14,0.5) 0%, transparent 40%, transparent 60%, rgba(2,4,14,0.5) 100%)}
+
+/* ── APP SHELL ── */
+#app{position:relative;width:100%;height:100vh;z-index:2;overflow:hidden}
+
+/* ── SCREENS ── */
+.scr{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;padding:40px 24px;overflow-y:auto}
+.scr.on{display:flex}
+
+/* ── BACK BUTTON ── */
+#back-btn{position:fixed;bottom:28px;right:28px;z-index:450;display:none;align-items:center;gap:8px;background:rgba(6,13,31,0.85);border:1px solid rgba(255,255,255,0.1);color:var(--dim);padding:11px 22px;cursor:pointer;font-family:'Heebo',sans-serif;font-size:12px;letter-spacing:0.16em;backdrop-filter:blur(10px);transition:all 0.22s}
+#back-btn:hover{color:var(--cream);border-color:rgba(255,255,255,0.28)}
+
+/* ── PROGRESS ── */
+#prog{position:fixed;top:0;left:0;right:0;height:1.5px;background:linear-gradient(to right,var(--gold),var(--blue));z-index:500;transition:transform 0.6s ease;transform-origin:right;transform:scaleX(0)}
+
+/* ── LOGO ── */
+#logo-bar{position:fixed;top:18px;right:24px;z-index:400;display:flex;align-items:center;gap:10px;opacity:0;transition:opacity 0.5s}
+#logo-bar.vis{opacity:1}
+#logo-bar .lname{font-size:11px;letter-spacing:0.18em;color:var(--dim);font-weight:300}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+@keyframes glow{0%,100%{opacity:0.35}50%{opacity:1}}
+@keyframes breathe{0%,100%{transform:scale(1);opacity:0.5}50%{transform:scale(1.08);opacity:0.8}}
+@keyframes spin{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+@keyframes typewriter{from{width:0}to{width:100%}}
+.fadeUp{animation:fadeUp 0.9s ease forwards}
+.d1{animation-delay:0.1s;opacity:0}
+.d2{animation-delay:0.35s;opacity:0}
+.d3{animation-delay:0.6s;opacity:0}
+.d4{animation-delay:0.85s;opacity:0}
+.d5{animation-delay:1.1s;opacity:0}
+
+/* ── TYPOGRAPHY ── */
+.label{font-size:12px;letter-spacing:0.24em;color:var(--dim);font-weight:400;text-transform:uppercase;margin-bottom:10px}
+.headline{font-size:56px;font-weight:300;line-height:1.1;color:var(--cream);letter-spacing:0.04em;margin-bottom:6px}
+.sub{font-size:14px;color:var(--dim);letter-spacing:0.1em;font-weight:300}
+.body-text{font-size:17px;line-height:2;color:rgba(232,223,200,0.75);font-weight:300}
+.body-text strong{color:var(--cream);font-weight:400}
+.quote-text{font-size:19px;font-style:italic;color:var(--cream);line-height:1.75;border-right:2px solid rgba(200,162,74,0.45);padding-right:20px;margin:18px 0}
+
+/* ── DIVIDER ── */
+.div-gold{width:48px;height:1px;background:linear-gradient(to left,transparent,var(--gold),transparent);margin:20px 0;animation:glow 5s infinite}
+
+/* ── BUTTONS ── */
+.btn-primary{
+  background:transparent;border:1px solid rgba(200,162,74,0.45);
+  color:var(--cream);padding:14px 48px;cursor:pointer;
+  font-family:'Heebo',sans-serif;font-size:13px;letter-spacing:0.2em;font-weight:400;
+  transition:all 0.28s ease;
+}
+.btn-primary:hover{border-color:var(--gold);background:rgba(200,162,74,0.08);box-shadow:0 0 24px rgba(200,162,74,0.12)}
+.btn-ghost{background:none;border:none;color:var(--dim);font-size:12px;letter-spacing:0.16em;font-family:'Heebo',sans-serif;cursor:pointer;padding:10px 0;transition:color 0.2s;font-weight:300}
+.btn-ghost:hover{color:var(--cream)}
+.btn-secondary{
+  background:transparent;border:1px solid rgba(255,255,255,0.12);
+  color:rgba(232,223,200,0.7);padding:12px 32px;cursor:pointer;
+  font-family:'Heebo',sans-serif;font-size:13px;letter-spacing:0.14em;font-weight:300;
+  transition:all 0.25s ease;
+}
+.btn-secondary:hover{border-color:rgba(255,255,255,0.3);color:var(--cream)}
+
+/* ══════════════════════════════════════
+   S0 — ENTRY
+══════════════════════════════════════ */
+#s0{background:var(--bg)}
+#s0-canvas{position:absolute;inset:0;z-index:0;pointer-events:none}
+#s0-content{position:relative;z-index:2;text-align:center;max-width:560px}
+#s0-headline{font-size:64px;font-weight:200;letter-spacing:0.08em;line-height:1;margin-bottom:4px;
+  background:linear-gradient(135deg,#e8dfc8 0%,#c8a24a 50%,#e8dfc8 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+#s0-name{font-size:22px;font-weight:300;letter-spacing:0.35em;color:var(--gold);margin-bottom:6px}
+#s0-years{font-size:12px;letter-spacing:0.3em;color:var(--dim);margin-bottom:32px}
+#s0-standing{font-size:12px;color:var(--dim);letter-spacing:0.08em;margin-top:24px;animation:glow 5s infinite;font-weight:300}
+/* Ambient glow */
+.amb{position:absolute;border-radius:50%;pointer-events:none;animation:breathe 8s ease-in-out infinite}
+
+/* ══════════════════════════════════════
+   S1 — ONBOARDING (גיל + מדינה)
+══════════════════════════════════════ */
+#s1{background:var(--bg)}
+#s1-inner{max-width:480px;width:100%;text-align:center}
+.onboard-q{font-size:26px;font-weight:300;color:var(--cream);margin-bottom:28px;line-height:1.4}
+.input-wrap{position:relative;margin-bottom:24px}
+.input-wrap input, .input-wrap select{
+  width:100%;background:rgba(200,162,74,0.04);
+  border:none;border-bottom:1px solid rgba(200,162,74,0.3);
+  color:var(--cream);padding:16px 0;
+  font-family:'Heebo',sans-serif;font-size:22px;font-weight:300;
+  letter-spacing:0.06em;text-align:center;
+  transition:border-color 0.25s;outline:none;
+  -webkit-appearance:none;appearance:none;
+}
+.input-wrap input:focus,.input-wrap select:focus{border-bottom-color:var(--gold)}
+.input-wrap input::placeholder{color:var(--faint)}
+.input-wrap select option{background:#0a0e1a;color:var(--cream)}
+.input-label{font-size:10px;letter-spacing:0.28em;color:var(--dim);margin-bottom:10px;text-transform:uppercase;display:block}
+#s1-dot-preview{width:14px;height:14px;border-radius:50%;margin:20px auto;background:var(--gold);opacity:0;transition:all 0.5s;box-shadow:0 0 20px rgba(200,162,74,0.5)}
+#s1-dot-preview.vis{opacity:1}
+
+/* ══════════════════════════════════════
+   S2 — HUB (ביוגרפיה / שאלות)
+══════════════════════════════════════ */
+#s2{background:linear-gradient(180deg,rgba(2,4,14,0) 0%,var(--bg) 100%)}
+#s2-inner{max-width:600px;width:100%;text-align:center}
+.hub-greeting{font-size:18px;font-weight:300;color:var(--cream);margin-bottom:8px}
+.hub-name{font-size:14px;color:var(--gold);letter-spacing:0.12em;margin-bottom:36px}
+.hub-cards{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px}
+.hub-card{
+  padding:28px 20px;border:1px solid rgba(255,255,255,0.08);
+  background:rgba(200,162,74,0.03);cursor:pointer;text-align:right;
+  transition:all 0.3s ease;position:relative;overflow:hidden;
+}
+.hub-card::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(200,162,74,0.06),transparent);opacity:0;transition:opacity 0.3s}
+.hub-card:hover{border-color:rgba(200,162,74,0.35);transform:translateY(-2px)}
+.hub-card:hover::after{opacity:1}
+.hub-card .hc-icon{font-size:28px;margin-bottom:12px;display:block}
+.hub-card .hc-title{font-size:17px;font-weight:400;color:var(--cream);margin-bottom:6px}
+.hub-card .hc-desc{font-size:14px;color:var(--dim);line-height:1.6;font-weight:300}
+.hub-card .hc-badge{position:absolute;top:12px;left:12px;font-size:10px;letter-spacing:0.18em;color:var(--gold);border:1px solid rgba(200,162,74,0.3);padding:3px 8px}
+
+/* ══════════════════════════════════════
+   S3 — BIOGRAPHY
+══════════════════════════════════════ */
+#s3{background:var(--bg);padding:0;align-items:stretch;justify-content:flex-start}
+#bio-scroll{width:100%;height:100%;overflow-y:auto;padding:60px 0}
+#bio-scroll::-webkit-scrollbar{width:2px}
+#bio-scroll::-webkit-scrollbar-track{background:transparent}
+#bio-scroll::-webkit-scrollbar-thumb{background:var(--faint)}
+.bio-hero{text-align:center;padding:40px 40px 60px;position:relative}
+.bio-hero-img{width:100%;max-height:55vh;object-fit:cover;object-position:50% 20%;filter:brightness(0.65) sepia(0.1);display:block}
+.bio-hero-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,transparent 30%,var(--bg) 100%)}
+.bio-hero-text{position:absolute;bottom:60px;right:0;left:0;text-align:center;padding:0 40px}
+.bio-timeline{max-width:640px;margin:0 auto;padding:0 40px 80px;position:relative}
+.bio-timeline::before{content:'';position:absolute;right:59px;top:0;bottom:0;width:1px;background:linear-gradient(to bottom,var(--gold),transparent);opacity:0.2}
+.bio-entry{display:flex;gap:20px;margin-bottom:40px;align-items:flex-start;opacity:0;transform:translateY(20px);transition:all 0.6s ease}
+.bio-entry.visible{opacity:1;transform:translateY(0)}
+.bio-year{font-size:11px;letter-spacing:0.2em;color:var(--gold);font-weight:400;min-width:52px;text-align:center;padding-top:4px;position:relative}
+.bio-year::after{content:'';position:absolute;left:50%;top:8px;width:6px;height:6px;border-radius:50%;background:var(--gold);transform:translateX(-50%);box-shadow:0 0 10px rgba(200,162,74,0.5)}
+.bio-dot{width:1px;background:transparent}
+.bio-text .bio-age{font-size:11px;color:rgba(200,162,74,0.5);margin-bottom:4px;letter-spacing:0.1em}
+.bio-text .bio-event{font-size:18px;font-weight:400;color:var(--cream);margin-bottom:6px;line-height:1.4}
+.bio-text .bio-detail{font-size:15px;color:var(--dim);line-height:1.7;font-weight:300}
+.bio-quote-block{background:rgba(200,162,74,0.04);border-right:2px solid rgba(200,162,74,0.35);padding:20px 24px;margin:32px 0}
+.bio-quote-block p{font-size:17px;font-style:italic;color:var(--cream);line-height:1.8}
+#bio-skip{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:50;backdrop-filter:blur(8px);background:rgba(2,4,14,0.7);border:1px solid rgba(255,255,255,0.1);color:var(--dim);padding:12px 28px;cursor:pointer;font-family:'Heebo',sans-serif;font-size:12px;letter-spacing:0.18em;transition:all 0.25s}
+#bio-skip:hover{color:var(--cream);border-color:rgba(255,255,255,0.25)}
+#bio-continue{position:sticky;bottom:0;width:100%;background:linear-gradient(to top,var(--bg) 70%,transparent);padding:24px;text-align:center}
+
+/* scroll hint — מחוץ לגלילה, מיוצב יחסית ל-s3 */
+#bio-scroll-hint{position:absolute;bottom:180px;left:50%;transform:translateX(-50%);text-align:center;pointer-events:none;z-index:20;transition:opacity 0.5s}
+#bio-scroll-hint span{display:block;font-size:12px;letter-spacing:0.2em;color:var(--dim);margin-bottom:10px}
+#bio-scroll-hint .sh-arrow{width:24px;height:24px;border-left:1px solid var(--gold);border-bottom:1px solid var(--gold);transform:rotate(-45deg);margin:0 auto;animation:scrollBounce 1.8s ease-in-out infinite}
+@keyframes scrollBounce{0%,100%{transform:rotate(-45deg) translateY(0)}50%{transform:rotate(-45deg) translateY(7px)}}
+
+/* ══════════════════════════════════════
+   S4 — שאל את פרס
+══════════════════════════════════════ */
+#s4{background:var(--bg)}
+#s4-inner{max-width:640px;width:100%;padding:0 8px}
+.s4-q-label{font-size:13px;letter-spacing:0.2em;color:var(--gold);margin-bottom:16px;text-align:center;font-weight:300}
+.s4-q-meta{font-size:14px;color:rgba(232,223,200,0.55);text-align:center;margin-bottom:28px;line-height:1.6}
+#s4-portrait{width:90px;height:90px;border-radius:50%;border:1px solid rgba(200,162,74,0.35);overflow:hidden;display:flex;align-items:center;justify-content:center;margin:0 auto 24px;font-size:32px;position:relative;background:#0a0e1a}
+#s4-portrait::after{content:'';position:absolute;inset:-6px;border-radius:50%;border:1px solid rgba(200,162,74,0.12);animation:breathe 4s ease-in-out infinite}
+#s4-q-area{position:relative;margin-bottom:8px}
+#s4-input{
+  width:100%;background:transparent;border:none;border-bottom:1px solid rgba(255,255,255,0.12);
+  color:var(--cream);padding:16px 0;font-family:'Heebo',sans-serif;
+  font-size:18px;font-weight:300;resize:none;outline:none;
+  transition:border-color 0.25s;line-height:1.6;
+}
+#s4-input:focus{border-bottom-color:rgba(200,162,74,0.5)}
+#s4-input::placeholder{color:var(--faint)}
+#s4-char{font-size:11px;color:var(--faint);text-align:left;margin-bottom:20px}
+.suggested-qs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px;justify-content:center}
+.sq{background:rgba(10,18,40,0.7);border:1px solid rgba(200,162,74,0.28);color:var(--cream);padding:10px 17px;cursor:pointer;font-family:'Heebo',sans-serif;font-size:13px;letter-spacing:0.04em;transition:all 0.22s;line-height:1.4}
+.sq:hover,.sq:focus-visible{border-color:var(--gold);background:rgba(200,162,74,0.12);outline:none;box-shadow:0 0 0 2px var(--gold)}
+/* Response area */
+#s4-response{display:none;margin-top:32px;padding-top:32px;border-top:1px solid rgba(255,255,255,0.06)}
+#s4-res-label{font-size:10px;letter-spacing:0.28em;color:var(--gold);margin-bottom:16px;display:flex;align-items:center;gap:10px}
+#s4-res-label::after{content:'';flex:1;height:1px;background:linear-gradient(to left,transparent,rgba(200,162,74,0.2))}
+#s4-res-text{font-size:18px;line-height:1.9;color:var(--cream);font-weight:300;font-style:italic}
+#s4-source{font-size:13px;color:var(--dim);margin-top:14px;letter-spacing:0.06em}
+#s4-loader{display:none;text-align:center;padding:24px 0}
+.loader-dots{display:flex;justify-content:center;gap:6px}
+.loader-dots span{width:5px;height:5px;border-radius:50%;background:var(--gold);animation:glow 1.2s infinite}
+.loader-dots span:nth-child(2){animation-delay:0.2s}
+.loader-dots span:nth-child(3){animation-delay:0.4s}
+
+/* ══════════════════════════════════════
+   VIDEO MODAL
+══════════════════════════════════════ */
+#video-modal{display:none;position:fixed;inset:0;background:rgba(1,2,10,0.96);z-index:8000;align-items:center;justify-content:center;flex-direction:column;padding:24px}
+#video-modal.open{display:flex}
+#video-wrap{position:relative;width:90%;max-width:820px}
+#video-close{position:absolute;top:-44px;left:0;background:none;border:1px solid rgba(255,255,255,0.15);color:var(--dim);padding:8px 18px;cursor:pointer;font-family:'Heebo',sans-serif;font-size:12px;letter-spacing:0.16em;transition:all 0.2s}
+#video-close:hover{color:var(--cream);border-color:rgba(255,255,255,0.35)}
+#video-ratio{position:relative;padding-bottom:56.25%;height:0;background:#000}
+#video-frame{position:absolute;inset:0;width:100%;height:100%;border:none}
+.bio-video-btn{
+  display:flex;align-items:center;justify-content:center;gap:14px;
+  width:100%;padding:18px 24px;margin-bottom:32px;
+  background:rgba(200,162,74,0.04);border:1px solid rgba(200,162,74,0.2);
+  color:var(--cream);cursor:pointer;font-family:'Heebo',sans-serif;
+  font-size:14px;letter-spacing:0.1em;font-weight:300;
+  transition:all 0.28s ease;text-align:center;
+}
+.bio-video-btn:hover{background:rgba(200,162,74,0.09);border-color:rgba(200,162,74,0.45);box-shadow:0 0 28px rgba(200,162,74,0.08)}
+.bio-video-btn .play-icon{width:38px;height:38px;border-radius:50%;border:1px solid rgba(200,162,74,0.4);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+
+/* ══════════════════════════════════════
+   S5 — ANADOL SCULPTURE
+══════════════════════════════════════ */
+#s5{padding:0;background:#060d1f}
+#s5-canvas{position:absolute;inset:0;display:block}
+#s5-ui{position:absolute;inset:0;pointer-events:none;z-index:10}
+#s5-top{position:absolute;top:0;left:0;right:0;padding:20px 32px;background:linear-gradient(to bottom,rgba(6,13,31,0.92),transparent);pointer-events:all;display:flex;align-items:baseline;gap:16px;flex-wrap:wrap}
+#s5-title{font-size:11px;letter-spacing:0.14em;color:var(--dim);font-weight:300;flex-shrink:0}
+#s5-count{font-size:36px;font-weight:200;color:var(--cream);line-height:1;flex-shrink:0}
+#s5-sub{font-size:11px;color:var(--faint);letter-spacing:0.06em;padding-bottom:2px}
+#s5-bottom{position:absolute;bottom:0;left:0;right:0;padding:20px 32px 28px;background:linear-gradient(to top,rgba(1,2,10,0.95),transparent);display:flex;justify-content:space-between;align-items:flex-end;pointer-events:all}
+#s5-legend{display:flex;flex-direction:column;gap:6px}
+.leg-item{display:flex;align-items:center;gap:8px;font-size:11px;color:var(--dim);letter-spacing:0.08em}
+.leg-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+#s5-restart{background:none;border:1px solid rgba(255,255,255,0.08);color:var(--dim);padding:10px 20px;cursor:pointer;font-family:'Heebo',sans-serif;font-size:11px;letter-spacing:0.16em;transition:all 0.22s}
+#s5-restart:hover{border-color:rgba(200,162,74,0.35);color:var(--cream)}
+/* Popup on hover */
+#s5-pop{position:absolute;z-index:20;background:rgba(1,2,10,0.96);border:1px solid rgba(200,162,74,0.2);padding:18px 20px;max-width:260px;display:none;pointer-events:none}
+#s5-pop .pop-q{font-size:13px;color:var(--cream);font-style:italic;line-height:1.6;margin-bottom:10px}
+#s5-pop .pop-meta{font-size:11px;color:var(--dim);display:flex;justify-content:space-between}
 </style>
 </head>
 <body>
-<div id="app">
-  <div id="prog" style="width:0%"></div>
 
-  <!-- LANGUAGE TOGGLE -->
-  <div id="lang-bar" style="position:absolute;top:12px;right:16px;z-index:200;display:flex;gap:8px;pointer-events:all">
-    <button onclick="setLang('en')" id="btn-en" style="background:none;border:0.5px solid #7a7268;color:#d4c9b8;padding:5px 12px;cursor:pointer;font-family:sans-serif;font-size:11px;letter-spacing:0.12em;transition:all 0.2s">EN</button>
-    <button onclick="setLang('he')" id="btn-he" style="background:none;border:0.5px solid #3a3530;color:#5a5248;padding:5px 12px;cursor:pointer;font-family:sans-serif;font-size:11px;letter-spacing:0.06em;transition:all 0.2s">עב</button>
-  </div>
-  <div id="roombg">
-    <img src="https://res.cloudinary.com/dmr8zhfer/image/upload/f_auto,q_auto/peres_room_main_xpo9zv" alt="Peres Center office">
-    <div class="ov"></div>
-  </div>
+<a href="#s0" class="skip-link">דלג לתוכן הראשי</a>
 
-  <!-- S0 ENTRY -->
-  <div class="scr on" id="s0">
-    <div class="fi" style="text-align:center;max-width:500px">
-      <div class="T-label" style="margin-bottom:16px">Peres Center for Peace and Innovation</div>
-      <div class="T-title" style="font-size:32px;margin-bottom:8px">THE MEMORY<br>OF PERES</div>
-      <div class="T-sub">1923 – 2016 · An interactive archive</div>
-      <button class="btn" onclick="go('s1')">ENTER THE ROOM</button>
-      <div class="T-note" style="margin-top:22px;animation:glw 4s infinite">You are standing in his study</div>
+<!-- ROOM BACKGROUND -->
+<div id="roombg">
+  <img src="https://res.cloudinary.com/dmr8zhfer/image/upload/f_auto,q_auto/peres_room_main_xpo9zv" alt="חדר העבודה של פרס">
+  <div class="ov"></div>
+</div>
+
+<div id="prog"></div>
+<button id="back-btn" onclick="goBack()">← חזרה</button>
+
+<!-- LOGO -->
+<div id="logo-bar">
+  <span class="lname">מרכז פרס לשלום ולחדשנות</span>
+</div>
+
+<div id="app" role="main" aria-label="ארכיון חי — שמעון פרס">
+
+<!-- ══ S0 — ENTRY ══ -->
+<section class="scr on" id="s0" role="region" aria-label="מסך כניסה">
+  <canvas id="s0-canvas"></canvas>
+  <!-- ambient glows -->
+  <div class="amb" style="left:30%;top:35%;width:400px;height:400px;background:radial-gradient(ellipse,rgba(200,162,74,0.07) 0%,transparent 70%);animation-delay:0s"></div>
+  <div class="amb" style="left:55%;top:55%;width:300px;height:300px;background:radial-gradient(ellipse,rgba(26,111,168,0.06) 0%,transparent 70%);animation-delay:3s"></div>
+
+  <div id="s0-content">
+    <div class="label fadeUp d1">מרכז פרס לשלום ולחדשנות</div>
+    <div id="s0-headline" class="fadeUp d2">זיכרון<br>חי</div>
+    <div id="s0-name" class="fadeUp d3">שמעון פרס</div>
+    <div id="s0-years" class="fadeUp d3">1923 · 2016</div>
+    <button class="btn-primary fadeUp d4" onclick="go('s1')" aria-label="כנסו לארכיון החי של שמעון פרס">כנסו לארכיון</button>
+    <div id="s0-standing" class="fadeUp d5">ארכיון אינטרקטיבי · שאלות מ-40 מדינות</div>
+  </div>
+</section>
+
+<!-- ══ S1 — ONBOARDING ══ -->
+<section class="scr" id="s1">
+  <div id="s1-inner">
+    <div class="label fadeUp d1">לפני שנכנסים</div>
+    <div class="onboard-q fadeUp d2">מאיפה אתם?</div>
+    <div class="input-wrap fadeUp d2">
+      <label class="input-label" for="s1-country">מדינה</label>
+      <select id="s1-country" onchange="updateDot()" aria-required="true">
+        <option value="">בחרו מדינה</option>
+        <option value="israel" data-color="#0038b8">ישראל</option>
+        <option value="usa" data-color="#b22234">ארצות הברית</option>
+        <option value="germany" data-color="#d4a300">גרמניה</option>
+        <option value="france" data-color="#002395">צרפת</option>
+        <option value="uk" data-color="#c8102e">בריטניה</option>
+        <option value="brazil" data-color="#009c3b">ברזיל</option>
+        <option value="india" data-color="#ff9933">הודו</option>
+        <option value="china" data-color="#de2910">סין</option>
+        <option value="russia" data-color="#0039a6">רוסיה</option>
+        <option value="japan" data-color="#bc002d">יפן</option>
+        <option value="south-korea" data-color="#003478">דרום קוריאה</option>
+        <option value="australia" data-color="#00008b">אוסטרליה</option>
+        <option value="canada" data-color="#ff0000">קנדה</option>
+        <option value="mexico" data-color="#006847">מקסיקו</option>
+        <option value="argentina" data-color="#74acdf">ארגנטינה</option>
+        <option value="south-africa" data-color="#007a4d">דרום אפריקה</option>
+        <option value="egypt" data-color="#c8102e">מצרים</option>
+        <option value="jordan" data-color="#007a3d">ירדן</option>
+        <option value="other" data-color="#8a7a62">אחר</option>
+      </select>
     </div>
-  </div>
-
-  <!-- S1 HUB -->
-  <div class="scr" id="s1">
-    <div id="hub-wrap">
-      <button class="btn-back" style="position:absolute;top:16px;left:16px;z-index:15" onclick="go('s0')">← Back</button>
+    <div class="onboard-q fadeUp d3" style="margin-top:8px">בני כמה אתם?</div>
+    <div class="input-wrap fadeUp d3">
+      <label class="input-label" for="s1-age">גיל</label>
+      <input id="s1-age" type="number" min="10" max="99" placeholder="הגיל שלכם" oninput="updateDot()" aria-required="true" aria-describedby="s1-dot-msg">
     </div>
-    <div id="hub-footer">
-      <div class="T-label" style="margin-bottom:4px">Five Decisions · One Life</div>
-      <div class="T-note">Select a moment to enter</div>
-    </div>
+    <div id="s1-dot-preview"></div>
+    <div style="font-size:12px;color:var(--dim);margin-bottom:24px;font-weight:300" id="s1-dot-msg" style="opacity:0"></div>
+    <button class="btn-primary fadeUp d4" id="s1-btn" onclick="submitOnboard()" disabled style="opacity:0.35">המשיכו</button>
   </div>
+</section>
 
-  <!-- S2 PHONE -->
-  <div class="scr" id="s2">
-    <div class="fi" style="display:flex;flex-direction:column;align-items:center;text-align:center;width:100%;max-width:540px">
-      <div class="T-label" style="color:#c87a9a;letter-spacing:0.3em;margin-bottom:6px">URGENT · CLASSIFIED</div>
-      <div class="T-label" style="margin-bottom:6px">You are the Minister of Defense</div>
-      <div class="T-note" style="margin-bottom:12px;font-size:13px;color:#8a8078">3:17 AM. The red phone is ringing.</div>
-      <div style="font-size:52px;animation:rng 0.8s ease-in-out infinite;margin:8px 0 20px;filter:drop-shadow(0 0 12px rgba(200,122,154,0.5))">☎</div>
-      <div class="T-label" style="margin-bottom:16px">Your military secretary reports:</div>
-      <div class="T-body" style="text-align:center;margin-bottom:8px;font-size:16px">
-        Terrorists have seized an Israeli passenger ship<br>and are sailing it toward a hostile nation —<br><strong>4,000 km away.</strong><br><br>Approximately <strong>200 Israeli civilians</strong> are on board.
+<!-- ══ S2 — HUB ══ -->
+<section class="scr" id="s2" role="region" aria-label="בחירת מסלול">
+  <div id="s2-inner">
+    <div class="hub-greeting fadeUp d1" id="s2-greet">ברוכים הבאים</div>
+    <div class="hub-name fadeUp d1" id="s2-loc">הנקודה שלכם נוספה לארכיון</div>
+    <div class="div-gold fadeUp d2" style="margin:0 auto 32px"></div>
+    <div class="hub-cards fadeUp d2">
+      <div class="hub-card" onclick="go('s3')" role="button" tabindex="0" aria-label="הכירו את פרס — ביוגרפיה" onkeydown="if(event.key==='Enter'||event.key===' ')go('s3')">
+        <span class="hc-icon" aria-hidden="true">📖</span>
+        <div class="hc-title">הכירו את פרס</div>
+        <div class="hc-desc">ביוגרפיה קצרה: חייו, החלטותיו, חזונו</div>
       </div>
-      <div class="T-note" style="margin-bottom:24px;animation:glw 2s infinite">The decision cannot wait.</div>
-      <div class="T-question" style="font-size:19px">What do you decide?</div>
-      <div class="cg">
-        <button class="cb" onclick="choose('rescue')"><span class="cl" style="color:#7ab8e8">Send in the forces</span>Authorize a secret military rescue operation. High risk. No guarantee of success.</button>
-        <button class="cb" onclick="choose('negotiate')"><span class="cl" style="color:#c87a9a">Open negotiations</span>Begin talks with the hijackers. Prioritize bringing everyone home alive.</button>
-      </div>
-      <button class="btn-back" onclick="go('s1')">← Back</button>
-    </div>
-  </div>
-
-  <!-- S3 REVEAL -->
-  <div class="scr" id="s3">
-    <div class="fi" style="width:100%;max-width:580px">
-      <div class="T-label">This was not hypothetical</div>
-      <div class="T-note" style="margin-bottom:14px">June 27, 1976</div>
-      <div class="T-title">Entebbe, Uganda.</div>
-      <div class="divider"></div>
-      <div class="T-body" style="margin-bottom:18px">An Air France flight was hijacked and diverted to Entebbe. <strong>106 Jewish and Israeli hostages</strong> were separated and held 4,000 km from Israel, with Idi Amin's full cooperation.<br><br>The hijackers demanded the release of <strong>53 Palestinian prisoners.</strong> Deadline: 72 hours.<br><br>The Minister of Defense was <strong>Shimon Peres.</strong> He was 52 years old.</div>
-      <div class="T-quote">"We do not negotiate with terrorists — not because it is easy, but because the alternative destroys something we cannot rebuild."</div>
-      <div id="s3-result" style="font-size:12px;font-family:sans-serif;letter-spacing:0.14em;margin-bottom:20px"></div>
-      <button class="btn" onclick="go('s4')">WHAT HAPPENED NEXT</button>
-      <button class="btn-back" onclick="go('s2')">← Back</button>
-    </div>
-  </div>
-
-  <!-- S4 OPERATION -->
-  <div class="scr" id="s4">
-    <div class="fi" style="width:100%;max-width:560px">
-      <div class="T-label">Operation Thunderbolt · July 4, 1976</div>
-      <div class="T-body" style="margin-bottom:18px">100 Israeli commandos landed at Entebbe at midnight. In <strong>90 minutes</strong>, 102 of the 106 hostages were freed. Three hostages were killed in the crossfire. Commander <strong>Yonatan Netanyahu</strong> was killed — the only Israeli soldier to die. <strong>Dora Bloch</strong>, hospitalized before the raid, was murdered by Amin's forces afterward.<br><br>It was considered one of the most daring rescue operations in history.</div>
-      <div class="divider"></div>
-      <div class="T-question">If you could ask Shimon Peres one question about how he made this decision — what would you ask him?</div>
-      <textarea id="userQ" rows="3" placeholder="Write your question here..."></textarea>
-      <div class="T-note" style="margin-bottom:22px">Your question joins the living archive — alongside questions from people in over 40 countries.</div>
-      <button class="btn" onclick="submitQ()" style="margin-bottom:10px">ADD TO THE ARCHIVE</button>
-      <div style="display:flex;gap:24px">
-        <button class="btn-back" onclick="go('s3')">← Back</button>
-        <button class="btn-skip" onclick="go('s6')">Skip →</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- S6 ARCHIVE -->
-  <div class="scr" id="s6">
-    <div class="arc-top">
-      <div class="T-label" style="margin-bottom:5px">The Living Archive</div>
-      <div class="T-body" id="arc-title" style="color:#d4c9b8;font-size:14px">Questions people would ask Shimon Peres — from around the world.</div>
-    </div>
-    <div class="arc-body">
-      <canvas id="ac"></canvas>
-      <div class="arc-bot">
-        <div><span class="ali"><span class="ald" style="background:#7ab8e8"></span>Sent in the forces</span><span class="ali"><span class="ald" style="background:#c87a9a"></span>Chose to negotiate</span></div>
-        <div id="arc-cnt" class="T-note" style="margin-top:4px"></div>
-        <div class="T-note" style="margin-top:3px;animation:glw 3s infinite">↑ Click any point to read their question</div>
-      </div>
-      <button class="anav" style="left:18px" onclick="go('s1')">← All decisions</button>
-      <button class="anav" style="right:18px" onclick="restart()">↩ Start over</button>
-      <button onclick="go('s7')" style="position:absolute;top:16px;right:16px;background:transparent;border:0.5px solid #7ab8e8;color:#7ab8e8;padding:10px 18px;cursor:pointer;font-family:sans-serif;font-size:11px;letter-spacing:0.14em;z-index:16;pointer-events:all;transition:all 0.2s">◈ LIVING SCULPTURE →</button>
-      <div class="pop" id="pop">
-        <button class="px" onclick="closePop('pop')">×</button>
-        <div class="pl">From the Archive</div>
-        <div class="pq" id="ppq"></div>
-        <div class="pm"><span><span class="pd" id="ppd"></span><span id="pps"></span></span><span id="ppl"></span></div>
+      <div class="hub-card" onclick="go('s4')" role="button" tabindex="0" aria-label="שאלו את פרס — שאלה ותשובה" onkeydown="if(event.key==='Enter'||event.key===' ')go('s4')" style="border-color:rgba(200,162,74,0.2)">
+        <span class="hc-badge" style="color:var(--gold);border-color:rgba(200,162,74,0.4)">מומלץ</span>
+        <span class="hc-icon">💬</span>
+        <div class="hc-title">שאלו את פרס</div>
+        <div class="hc-desc">שאלה אחת, תשובה בסגנונו ומדבריו האמיתיים</div>
       </div>
     </div>
+    <button class="btn-ghost" onclick="go('s5')">דלגו לפסל הארכיון ←</button>
   </div>
+</section>
 
-  <!-- S7 SCULPTURE -->
-  <div class="scr" id="s7">
-    <div class="arc-top" style="text-align:center;padding:22px 24px 16px;background:#03030a;border-color:#0a0a14;border-bottom:0.5px solid #0a0a14">
-      <div id="peres-quote" style="font-size:20px;font-style:italic;color:rgba(212,201,184,0);font-family:Georgia,serif;line-height:1.65;max-width:580px;margin:0 auto 8px;transition:color 2.5s ease">"The future belongs not to those who wait for it — but to those who dare to imagine it."</div>
-      <div class="T-note" style="color:#4a4540">— Shimon Peres</div>
+<!-- ══ S3 — BIOGRAPHY ══ -->
+<section class="scr" id="s3" role="region" aria-label="ביוגרפיה — שמעון פרס">
+  <button id="bio-skip" onclick="go('s4')" aria-label="דלגו לשאלות, עברו למסך הבא">דלגו לשאלות ←</button>
+  <!-- scroll hint — מחוץ לdiv הגלילה כדי שיופיע תמיד בגובה הנכון -->
+  <div id="bio-scroll-hint" aria-hidden="true">
+    <span>גללו לגלות</span>
+    <div class="sh-arrow"></div>
+  </div>
+  <div id="bio-scroll" role="feed" aria-label="ציר זמן חיי שמעון פרס">
+    <!-- Hero image -->
+    <div class="bio-hero">
+      <img class="bio-hero-img" src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8b/Shimon_Peres_2011_%28cropped%29.jpg/800px-Shimon_Peres_2011_%28cropped%29.jpg"
+        onerror="this.src='https://res.cloudinary.com/dmr8zhfer/image/upload/f_auto,q_auto/peres_room_main_xpo9zv'"
+        alt="שמעון פרס">
+      <div class="bio-hero-overlay"></div>
+      <div class="bio-hero-text">
+        <div class="label" style="margin-bottom:10px">שמעון פרס · 1923 · 2016</div>
+        <div style="font-size:32px;font-weight:200;color:var(--cream);letter-spacing:0.06em">חיים של חזון</div>
+      </div>
     </div>
-    <div class="arc-body" style="background:#03030a">
-      <canvas id="sc"></canvas>
-      <div class="arc-bot" style="background:linear-gradient(to top,rgba(3,3,10,1) 0%,rgba(3,3,10,0.8) 55%,transparent 100%)">
-        <div><span class="ali"><span class="ald" style="background:rgba(80,150,255,0.9)"></span>Chose to act</span><span class="ali"><span class="ald" style="background:rgba(225,95,165,0.9)"></span>Chose dialogue</span></div>
-        <div id="str-cnt" class="T-note" style="margin-top:4px"></div>
-        <div class="T-note" style="margin-top:3px;animation:glw 3s infinite">↑ Click any point to read a question</div>
+
+    <!-- Video button -->
+    <div style="max-width:640px;margin:0 auto;padding:0 40px 8px">
+      <button class="bio-video-btn" onclick="openVideo()">
+        <div class="play-icon">▶</div>
+        <div>
+          <div style="font-size:15px;font-weight:400;margin-bottom:3px">צפו בנאום פרס בקונגרס האמריקאי</div>
+          <div style="font-size:12px;color:var(--dim)">2012 · אנגלית · 20 דקות</div>
+        </div>
+      </button>
+    </div>
+
+    <!-- Timeline -->
+    <div class="bio-timeline">
+      <div class="bio-entry">
+        <div class="bio-year">1923</div>
+        <div class="bio-text">
+          <div class="bio-age">גיל 0</div>
+          <div class="bio-event">נולד בוויז'ניבה, פולין</div>
+          <div class="bio-detail">בעיירה קטנה ברוסיה הלבנה של היום. שמו המקורי: שמעון פרסקי.</div>
+        </div>
       </div>
-      <button class="anav" style="left:18px" onclick="go('s6')">← Archive</button>
-      <button class="anav" style="right:18px" onclick="go('s0')">↩ Start over</button>
-      <div class="pop" id="spop">
-        <button class="px" onclick="closePop('spop')">×</button>
-        <div class="pl">From the Archive</div>
-        <div class="pq" id="spq"></div>
-        <div class="pm"><span><span class="pd" id="spd"></span><span id="sps"></span></span><span id="spl"></span></div>
+      <div class="bio-entry">
+        <div class="bio-year">1934</div>
+        <div class="bio-text">
+          <div class="bio-age">גיל 11</div>
+          <div class="bio-event">עלה לארץ ישראל</div>
+          <div class="bio-detail">הגיע לקיבוץ גבע עם משפחתו. ארץ ישראל של ימי המנדט הבריטי: חלום ומציאות.</div>
+        </div>
       </div>
+      <div class="bio-entry">
+        <div class="bio-year">1947</div>
+        <div class="bio-text">
+          <div class="bio-age">גיל 24</div>
+          <div class="bio-event">נפגש עם דוד בן-גוריון</div>
+          <div class="bio-detail">פגישה שתשנה את חייו. בן גוריון מינה אותו לאחראי גיוס כוח אדם בהגנה, בגיל 24 בלבד.</div>
+        </div>
+      </div>
+      <div class="bio-quote-block">
+        <p>"בן-גוריון לימד אותי שאם אתה בוחר בגדול — אתה חייב לחשוב גדול. אין מקום לחצי-חלומות."</p>
+      </div>
+      <div class="bio-entry">
+        <div class="bio-year">1952</div>
+        <div class="bio-text">
+          <div class="bio-age">גיל 29</div>
+          <div class="bio-event">מנכ"ל משרד הביטחון</div>
+          <div class="bio-detail">המנכ"ל הצעיר ביותר בתולדות המדינה. החל לניהול שיתופי פעולה ביטחוניים שישנו את פני ישראל.</div>
+        </div>
+      </div>
+      <div class="bio-entry">
+        <div class="bio-year">1957</div>
+        <div class="bio-text">
+          <div class="bio-age">גיל 34</div>
+          <div class="bio-event">כור הגרעין בדימונה, בסוד</div>
+          <div class="bio-detail">פרס ניהל את הקמת הכור הגרעיני בשיתוף עם צרפת, בחשאיות מוחלטת. החלטה שנויה במחלוקת שהגדירה עשורים.</div>
+        </div>
+      </div>
+      <div class="bio-entry">
+        <div class="bio-year">1976</div>
+        <div class="bio-text">
+          <div class="bio-age">גיל 52</div>
+          <div class="bio-event">מבצע אנטבה, שר הביטחון</div>
+          <div class="bio-detail">הטלפון צלצל ב-03:17. 106 בני ערובה ישראלים, 4,000 ק"מ מישראל. תוך 90 דקות, 102 שוחררו.</div>
+        </div>
+      </div>
+      <div class="bio-entry">
+        <div class="bio-year">1984</div>
+        <div class="bio-text">
+          <div class="bio-age">גיל 61</div>
+          <div class="bio-event">ראש ממשלה, ממשלת אחדות</div>
+          <div class="bio-detail">הוביל את נסיגת ישראל מלבנון ועצר את האינפלציה הגבוהה ביותר בתולדות המדינה.</div>
+        </div>
+      </div>
+      <div class="bio-entry">
+        <div class="bio-year">1993</div>
+        <div class="bio-text">
+          <div class="bio-age">גיל 70</div>
+          <div class="bio-event">הסכמי אוסלו, שר החוץ</div>
+          <div class="bio-detail">חתם על הסכמי השלום הראשונים בין ישראל לאש"ף. עם רבין ועראפת זכה בפרס נובל לשלום.</div>
+        </div>
+      </div>
+      <div class="bio-quote-block">
+        <p>"אתם לא עושים שלום עם חברים. שלום עושים עם אויבים — גם כשזה קשה, גם כשזה מפחיד."</p>
+      </div>
+      <div class="bio-entry">
+        <div class="bio-year">1994</div>
+        <div class="bio-text">
+          <div class="bio-age">גיל 71</div>
+          <div class="bio-event">פרס נובל לשלום</div>
+          <div class="bio-detail">יחד עם יצחק רבין וסאם עראפת. אחד הרגעים הנדירים שבהם נתינת פרס הרגישה כמו תחילת משהו.</div>
+        </div>
+      </div>
+      <div class="bio-entry">
+        <div class="bio-year">2007</div>
+        <div class="bio-text">
+          <div class="bio-age">גיל 84</div>
+          <div class="bio-event">נשיא מדינת ישראל</div>
+          <div class="bio-detail">הנשיא המבוגר ביותר של ישראל. הפך את הנשיאות לפלטפורמה של חדשנות ושלום.</div>
+        </div>
+      </div>
+      <div class="bio-entry">
+        <div class="bio-year">2012</div>
+        <div class="bio-text">
+          <div class="bio-age">גיל 89</div>
+          <div class="bio-event">ייסד את מרכז פרס</div>
+          <div class="bio-detail">הקים את המרכז לשלום ולחדשנות, כי האמין ששני הדברים אותו דבר.</div>
+        </div>
+      </div>
+      <div class="bio-entry">
+        <div class="bio-year">2016</div>
+        <div class="bio-text">
+          <div class="bio-age">גיל 93</div>
+          <div class="bio-event">נפטר בתל אביב</div>
+          <div class="bio-detail">עד שבועותיו האחרונים דיבר על עתיד, על טכנולוגיה, על שלום. "הפסימיסט והאופטימיסט מתים באותה דרך — הם רק חיים אחרת."</div>
+        </div>
+      </div>
+      <div id="bio-continue">
+        <button class="btn-primary" onclick="go('s4')">שאלו את פרס ←</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ S4 — Q&A ══ -->
+<section class="scr" id="s4" role="region" aria-label="שאלו את שמעון פרס">
+  <div id="s4-inner">
+    <div class="fadeUp d1" style="text-align:center;margin-bottom:32px">
+      <div id="s4-portrait">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8b/Shimon_Peres_2011_%28cropped%29.jpg/400px-Shimon_Peres_2011_%28cropped%29.jpg"
+          style="width:100%;height:100%;object-fit:cover;object-position:50% 8%;filter:sepia(0.15) brightness(0.92)"
+          alt="שמעון פרס" onerror="this.style.display='none';document.getElementById('s4-init').style.display='flex'">
+        <div id="s4-init" style="display:none;position:absolute;inset:0;align-items:center;justify-content:center;font-size:22px;font-weight:200;letter-spacing:0.12em;color:var(--gold)">ש·פ</div>
+      </div>
+      <div class="s4-q-label">שאלו את שמעון פרס</div>
+      <div class="s4-q-meta">התשובות מבוססות על דבריו ומכתביו האמיתיים</div>
+    </div>
+
+    <!-- Suggested questions -->
+    <div class="suggested-qs fadeUp d2" id="sq-list">
+      <button class="sq" onclick="selectQ(this)">איך לא איבדת תקווה?</button>
+      <button class="sq" onclick="selectQ(this)">מה מנע ממך לוותר על השלום?</button>
+      <button class="sq" onclick="selectQ(this)">מה למדת מבן-גוריון?</button>
+      <button class="sq" onclick="selectQ(this)">איך מקבלים החלטות בחושך?</button>
+      <button class="sq" onclick="selectQ(this)">מה פירוש חדשנות עבורך?</button>
+      <button class="sq" onclick="selectQ(this)">מה תאמר לדור הצעיר?</button>
+      <button class="sq" onclick="selectQ(this)">האם הסכמי אוסלו שווים היו?</button>
+      <button class="sq" onclick="selectQ(this)">ישנת לפני ענתבה?</button>
+    </div>
+
+    <div class="fadeUp d2">
+      <div class="input-wrap" id="s4-q-area">
+        <label class="input-label" for="s4-input">שאלתכם</label>
+        <textarea id="s4-input" rows="2" placeholder="כתבו שאלה לשמעון פרס..." oninput="handleQInput(this)" maxlength="200" aria-describedby="s4-char" aria-label="כתבו שאלה לשמעון פרס"></textarea>
+      </div>
+      <div id="s4-char">0 / 200</div>
+      <button class="btn-primary" id="s4-btn" onclick="askPeres()" disabled style="opacity:0.35;width:100%">שלחו את השאלה</button>
+    </div>
+
+    <!-- Loader -->
+    <div id="s4-loader" style="margin-top:24px">
+      <div class="loader-dots"><span></span><span></span><span></span></div>
+      <div style="font-size:12px;color:var(--dim);margin-top:12px;text-align:center;letter-spacing:0.08em">פרס חושב...</div>
+    </div>
+
+    <!-- Response -->
+    <div id="s4-response" class="fadeUp">
+      <div id="s4-res-label">שמעון פרס, מדבריו</div>
+      <div id="s4-res-text"></div>
+      <div id="s4-source"></div>
+      <div style="margin-top:28px;display:flex;gap:12px;justify-content:center">
+        <button class="btn-primary" onclick="go('s5')">ראו את הפסל ←</button>
+        <button class="btn-ghost" onclick="askAnother()">שאלה נוספת</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ S5 — ANADOL SCULPTURE ══ -->
+<section class="scr" id="s5" role="region" aria-label="פסל הארכיון — שאלות מהעולם">
+  <canvas id="s5-canvas"></canvas>
+  <div id="s5-ui">
+    <div id="s5-top">
+      <div id="s5-title">ארכיון חי · שאלות מהעולם</div>
+      <div id="s5-count"></div>
+      <div id="s5-sub">גודל הנקודה = גיל · צבע = מדינה · לחצו לקריאה</div>
+    </div>
+    <div id="s5-bottom">
+      <div id="s5-legend">
+        <div class="leg-item"><div class="leg-dot" style="background:#0038b8"></div>ישראל</div>
+        <div class="leg-item"><div class="leg-dot" style="background:#b22234"></div>ארה"ב</div>
+        <div class="leg-item"><div class="leg-dot" style="background:#d4a300"></div>גרמניה</div>
+        <div class="leg-item"><div class="leg-dot" style="background:var(--gold)"></div>שאלתכם</div>
+      </div>
+      <button id="s5-restart" onclick="restart()">↩ התחל מחדש</button>
+    </div>
+    <div id="s5-pop">
+      <div class="pop-q" id="s5-pq"></div>
+      <div class="pop-meta"><span id="s5-ploc"></span><span id="s5-page"></span></div>
+    </div>
+  </div>
+</section>
+
+</div><!-- /#app -->
+
+<!-- VIDEO MODAL -->
+<div id="video-modal">
+  <div id="video-wrap">
+    <button id="video-close" onclick="closeVideo()">✕ סגרו</button>
+    <div id="video-ratio">
+      <iframe id="video-frame" src="" allowfullscreen allow="autoplay; encrypted-media"></iframe>
+    </div>
+    <div style="margin-top:14px;text-align:center;font-size:12px;color:var(--dim);letter-spacing:0.08em">
+      שמעון פרס · נאום בקונגרס האמריקאי · 2012
     </div>
   </div>
 </div>
 
 <script>
-var PROG={s0:0,s1:12,s2:30,s3:50,s4:70,s6:88,s7:100};
-var userSide=null,userQ_val=null;
-var arcReady=false,strReady=false,bubblesBuilt=false;
-var dots=[],af=0,ahov=null,totalR=68,totalN=32;
-var W=0,H=0,ac,actx;
-var sp=[],sf=0,shov=null,SW=0,SH=0,SC,SCTX;
-var currentLang='en';
+/* ════════════════════════════════════
+   DATA
+════════════════════════════════════ */
+var userData = {country:'', age:0, color:'#c8a24a', question:'', answered:false};
 
-var STRINGS={
-  en:{
-    center:"Peres Center for Peace and Innovation",
-    title:"THE MEMORY<br>OF PERES",
-    sub:"1923 – 2016 · An interactive archive",
-    enter:"ENTER THE ROOM",
-    standing:"You are standing in his study",
-    five:"Five Decisions · One Life",
-    select:"Select a moment to enter",
-    urgent:"URGENT · CLASSIFIED",
-    minister:"You are the Minister of Defense",
-    ringing:"3:17 AM. The red phone is ringing.",
-    secretary:"Your military secretary reports:",
-    scenario:"Terrorists have seized an Israeli passenger ship and are sailing it toward a hostile nation — <strong>4,000 km away.</strong><br><br>Approximately <strong>200 Israeli civilians</strong> are on board.",
-    cannot:"The decision cannot wait.",
-    decide:"What do you decide?",
-    rescue_btn:"Send in the forces",
-    rescue_desc:"Authorize a secret military rescue operation. High risk. No guarantee of success.",
-    neg_btn:"Open negotiations",
-    neg_desc:"Begin talks with the hijackers. Prioritize bringing everyone home alive.",
-    not_hypo:"This was not hypothetical",
-    date:"June 27, 1976",
-    what_next:"WHAT HAPPENED NEXT",
-    op_label:"Operation Thunderbolt · July 4, 1976",
-    op_text:"100 Israeli commandos landed at Entebbe at midnight. In <strong>90 minutes</strong>, 102 of the 106 hostages were freed. Three hostages were killed in the crossfire. Commander <strong>Yonatan Netanyahu</strong> was killed — the only Israeli soldier to die. <strong>Dora Bloch</strong>, hospitalized before the raid, was murdered by Amin's forces afterward.<br><br>It was considered one of the most daring rescue operations in history.",
-    ask_q:"If you could ask Shimon Peres one question about how he made this decision — what would you ask him?",
-    q_placeholder:"Write your question here...",
-    q_note:"Your question joins the living archive — alongside questions from people in over 40 countries.",
-    add_archive:"ADD TO THE ARCHIVE",
-    skip:"Skip →",
-    archive_lbl:"The Living Archive",
-    archive_sub:"Questions people would ask Shimon Peres — from around the world.",
-    sent:"Sent in the forces",
-    negotiated:"Chose to negotiate",
-    click_pt:"↑ Click any point to read their question",
-    all_dec:"← All decisions",
-    start_over:"↩ Start over",
-    sculpture_btn:"◈ LIVING SCULPTURE →",
-    from_archive:"From the Archive",
-    chose_act:"Chose to act",
-    chose_dial:"Chose dialogue",
-    click_q:"↑ Click any point to read a question",
-    archive_nav:"← Archive",
-    chose_rescue:"YOU CHOSE: SEND IN THE FORCES — AS DID PERES",
-    chose_neg:"YOU CHOSE: NEGOTIATE — PERES CHOSE DIFFERENTLY",
-    chose_rescue_tag:"Sent in the forces",
-    chose_neg_tag:"Chose to negotiate",
-    back:"← Back"
+/* Q&A pairs — based on real Peres quotes */
+var QA = [
+  {
+    keys:['תקווה','איבדת','ייאוש','פסימיסט','אופטימיסט'],
+    q:'איך לא איבדת תקווה?',
+    a:'פסימיסטים ואופטימיסטים מתים באותה דרך. ההבדל הוא איך הם חיים. כשאנשים שאלו אותי מאיפה אני שואב כוח — עניתי: מהעתיד. לא מהעבר. העבר כבר קרה. העתיד עוד ניתן לעיצוב. ואת זה לא לוקחים ממני.',
+    src:'מתוך ראיון לידיעות אחרונות, 2014'
   },
-  he:{
-    center:"מרכז פרס לשלום וחדשנות",
-    title:"זיכרון פרס",
-    sub:"1923 – 2016 · ארכיון אינטראקטיבי",
-    enter:"כניסה לחדר",
-    standing:"אתה עומד בחדר העבודה שלו",
-    five:"חמש החלטות · חיים אחים",
-    select:"בחר רגע לכניסה",
-    urgent:"דחוף · סודי ביותר",
-    minister:"אתה שר הביטחון",
-    ringing:"3:17 לפנות בוקר. הטלפון האדום מצלצל.",
-    secretary:"המזכיר הצבאי שלך מדווח:",
-    scenario:"מחבלים השתלטו על ספינת נוסעים ישראלית ומשיטים אותה לעבר מדינת אויב — <strong>4,000 ק&quot;מ משם.</strong><br><br>על הסיפון נמצאים כ-<strong>200 אזרחים ישראלים</strong>.",
-    cannot:"ההחלטה לא יכולה לחכות.",
-    decide:"מה אתה מחליט?",
-    rescue_btn:"שלח את הכוחות",
-    rescue_desc:"אשר מבצע חילוץ צבאי סודי. סיכון גבוה. אין ערובה להצלחה.",
-    neg_btn:"פתח במשא ומתן",
-    neg_desc:"התחל שיחות עם החוטפים. העדף להחזיר את כולם הביתה בחיים.",
-    not_hypo:"זה לא היה תיאורטי",
-    date:"27 ביוני 1976",
-    what_next:"מה קרה אחר כך",
-    op_label:"מבצע יונתן · 4 ביולי 1976",
-    op_text:"100 לוחמים ישראלים נחתו באנטבה בחצות. תוך <strong>90 דקות</strong>, 102 מתוך 106 החטופים שוחררו. שלושה חטופים נהרגו בירי. המפקד <strong>יונתן נתניהו</strong> נהרג — החייל הישראלי היחיד שנפל. <strong>דורה בלוך</strong>, שאושפזה לפני המבצע, נרצחה על ידי כוחות אידי אמין לאחר מכן.<br><br>המבצע נחשב לאחת הפעולות האמיצות ביותר בתולדות ישראל.",
-    ask_q:"אם יכולת לשאול את שמעון פרס שאלה אחת על אופן קבלת ההחלטה — מה היית שואל?",
-    q_placeholder:"כתוב את שאלתך כאן...",
-    q_note:"שאלתך מצטרפת לארכיון החי — לצד שאלות מאנשים ביותר מ-40 מדינות.",
-    add_archive:"הוסף לארכיון",
-    skip:"דלג ←",
-    archive_lbl:"הארכיון החי",
-    archive_sub:"שאלות שאנשים היו שואלים את שמעון פרס — מרחבי העולם.",
-    sent:"שלח את הכוחות",
-    negotiated:"בחר במשא ומתן",
-    click_pt:"↑ לחץ על כל נקודה לקריאת השאלה",
-    all_dec:"← כל ההחלטות",
-    start_over:"↩ התחל מחדש",
-    sculpture_btn:"◈ הפסל החי →",
-    from_archive:"מהארכיון",
-    chose_act:"בחר לפעול",
-    chose_dial:"בחר בדיאלוג",
-    click_q:"↑ לחץ על נקודה לקריאת שאלה",
-    archive_nav:"← ארכיון",
-    chose_rescue:"בחרת: לשלוח את הכוחות — כמו פרס",
-    chose_neg:"בחרת: משא ומתן — פרס בחר אחרת",
-    chose_rescue_tag:"שלח את הכוחות",
-    chose_neg_tag:"בחר במשא ומתן",
-    back:"חזרה ←"
+  {
+    keys:['שלום','ויתרת','מנע','המשכת'],
+    q:'מה מנע ממך לוותר על השלום?',
+    a:'אין לי ברירה. לא מוותרים על חלום רק כי הוא קשה לביצוע. אתם לא עושים שלום עם חברים — חברים לא צריכים שלום. שלום עושים עם אויבים. וזה תמיד קשה, תמיד מפחיד, תמיד נראה בלתי אפשרי — עד שנעשה.',
+    src:'מסגנונו בנאומי נובל, 1994'
+  },
+  {
+    keys:['בן-גוריון','למדת','מנטור'],
+    q:'מה למדת מבן-גוריון?',
+    a:'הוא לימד אותי שאין דבר כזה "בלתי אפשרי" — יש רק "עוד לא". כשהוא הקים את ישראל, כולם אמרו שזה חלום. הוא חשב בגדול כי הוא הבין שמי שחושב בקטן — מצליח בקטן. ואת מדינת ישראל לא בנו אנשים ריאליסטים.',
+    src:'מתוך הספר "אין מקום לחלומות קטנים", 2017'
+  },
+  {
+    keys:['החלטות','חושך','וודאות','מידע','לא יודע'],
+    q:'איך מקבלים החלטות כשאין לך את כל המידע?',
+    a:'אף פעם אין לך את כל המידע. מנהיגים שמחכים לוודאות מלאה — לא מחליטים. אתה צריך לדעת מה הערכים שלך, מה המטרה, ואז לפעול. הספק לא צריך להפריד אותך מההחלטה — הוא צריך ללוות אותה.',
+    src:'מתוך נאום בכנסת, 1997'
+  },
+  {
+    keys:['חדשנות','יצירתיות','טכנולוגיה','עתיד'],
+    q:'מה פירוש חדשנות עבורך?',
+    a:'חדשנות היא לסרב לקבל את העולם כפי שהוא. ישראל הוכיחה שמדינה ללא משאבי טבע יכולה להיות עשירה — כי העשירות האמיתית היא במוח, בדמיון, בנכונות לנסות מה שלא ניסו. כשיש צורך — נולד פתרון. תמיד.',
+    src:'נאום בפורום דבוס, 2013'
+  },
+  {
+    keys:['צעיר','דור','עצה','עתיד שלכם'],
+    q:'מה תאמר לדור הצעיר?',
+    a:'העתיד שייך לא לאלה שממתינים לו — אלא לאלה שמעיזים לדמיין אותו. אל תסתכלו אחורה יותר מדי. ההיסטוריה חשובה, אבל היא לא המצפן שלכם. הדמיון הוא המצפן. השאלה שאני שואל צעירים: מה אתם רוצים שיהיה — לא מה יש.',
+    src:'מסיום מרכז פרס, 2015'
+  },
+  {
+    keys:['אוסלו','שווה','חרטה','כואב','שגיאה'],
+    q:'האם הסכמי אוסלו שווים היו?',
+    a:'שלום הוא תמיד שווה. גם כשהוא קשה. גם כשהוא נכשל באמצע הדרך. השאלה היא לא אם ניסינו — השאלה היא אם הפסקנו לנסות. אני לא מתחרט על הניסיון. אני מצטער שלא הצלחנו לסיים אותו.',
+    src:'ראיון ל-BBC, 2013'
+  },
+  {
+    keys:['ענתבה','ישנת','לילה','קשה','פחד'],
+    q:'ישנת לפני ענתבה?',
+    a:'לא. ישבתי ופחדתי. 106 אנשים, 4,000 קילומטר. ולא ידעתי אם הפעולה תצליח. פחד זה לא חולשה — פחד זה ראייה ברורה של הסיכון. השאלה היא לא אם אתה מפחד. השאלה היא אם אתה מחליט למרות הפחד.',
+    src:'מסגנונו בשיחות פרטיות, על-פי ספרי ביוגרפיה'
   }
+];
+
+/* Archive questions */
+var AQ = [
+  {q:'האם ישנת בלילה שלפני ענתבה?', loc:'תל אביב', age:28, country:'israel', color:'#0038b8'},
+  {q:'מה מנע ממך לאבד תקווה?', loc:'ניו יורק', age:34, country:'usa', color:'#b22234'},
+  {q:'האם חרטת על הסכמי אוסלו?', loc:'ברלין', age:55, country:'germany', color:'#d4a300'},
+  {q:'מה הייתה הדמות שהשפיעה עליך ביותר?', loc:'פריז', age:22, country:'france', color:'#002395'},
+  {q:'איך מנהיג חי עם ההחלטות שלו?', loc:'לונדון', age:41, country:'uk', color:'#c8102e'},
+  {q:'מה פרס נובל שינה בחייך?', loc:'ירושלים', age:67, country:'israel', color:'#0038b8'},
+  {q:'האם האמנת שיהיה שלום בחייך?', loc:'ריו', age:19, country:'brazil', color:'#009c3b'},
+  {q:'מה למדת מיצחק רבין?', loc:'מומבאי', age:33, country:'india', color:'#ff9933'},
+  {q:'איך מחדשים כשכולם אומרים שזה בלתי אפשרי?', loc:'סיאול', age:26, country:'south-korea', color:'#003478'},
+  {q:'מה הייתה ההחלטה הקשה ביותר בחייך?', loc:'בואנוס איירס', age:44, country:'argentina', color:'#74acdf'},
+  {q:'איך שמרת על אופטימיות?', loc:'יוהנסבורג', age:29, country:'south-africa', color:'#007a4d'},
+  {q:'מה עשית עם ספקות?', loc:'וינה', age:51, country:'other', color:'#8a7a62'},
+  {q:'מה פירוש אחריות בשבילך?', loc:'סידני', age:37, country:'australia', color:'#00008b'},
+  {q:'האם פחדת?', loc:'טוקיו', age:18, country:'japan', color:'#bc002d'},
+  {q:'מה תגיד לאדם שאיבד תקווה?', loc:'טורונטו', age:62, country:'canada', color:'#ff0000'},
+  {q:'מה לימדה אותך ישראל?', loc:'מקסיקו סיטי', age:23, country:'mexico', color:'#006847'},
+  {q:'איך הייתה ממלא את ימייך היום?', loc:'אמסטרדם', age:40, country:'other', color:'#8a7a62'},
+  {q:'מה הייתה חלומך הגדול ביותר?', loc:'שיקגו', age:16, country:'usa', color:'#b22234'},
+  {q:'כמה חשוב הדמיון לעומת הריאליזם?', loc:'ת"א', age:30, country:'israel', color:'#0038b8'},
+  {q:'איך ידעת שעתיד הטכנולוגיה כל כך חשוב?', loc:'שנחאי', age:25, country:'china', color:'#de2910'},
+];
+
+/* Country colors */
+var CCOLS = {
+  israel:'#1a5abf',usa:'#c03030',germany:'#c8a000',france:'#2030a0',
+  uk:'#b02030',brazil:'#009050',india:'#e08020',china:'#c02010',
+  russia:'#1030a0','south-korea':'#102868',australia:'#102080',
+  canada:'#d02020',mexico:'#006040',argentina:'#5a90c8',
+  'south-africa':'#006840',egypt:'#c01020',jordan:'#006030',
+  other:'#7a6a52'
 };
 
-function setLang(lang){
-  currentLang=lang;
-  var s=STRINGS[lang];
-  var isHe=lang==='he';
-  document.body.dir=isHe?'rtl':'ltr';
-  document.getElementById('btn-en').style.borderColor=lang==='en'?'#7a7268':'#3a3530';
-  document.getElementById('btn-en').style.color=lang==='en'?'#d4c9b8':'#5a5248';
-  document.getElementById('btn-he').style.borderColor=lang==='he'?'#7a7268':'#3a3530';
-  document.getElementById('btn-he').style.color=lang==='he'?'#d4c9b8':'#5a5248';
-  // S0
-  document.querySelector('#s0 .T-label').textContent=s.center;
-  document.querySelector('#s0 .T-title').innerHTML=s.title;
-  document.querySelector('#s0 .T-sub').textContent=s.sub;
-  document.querySelector('#s0 .btn').textContent=s.enter;
-  document.querySelector('#s0 .T-note').textContent=s.standing;
-  // S1
-  document.querySelector('#hub-footer .T-label').textContent=s.five;
-  document.querySelector('#hub-footer .T-note').textContent=s.select;
-  // S2 — rebuild dynamically on next visit
-  // S6
-  document.querySelector('#s6 .T-label').textContent=s.archive_lbl;
-  if(document.getElementById('arc-title').textContent.indexOf('?')===-1||document.getElementById('arc-title').textContent===STRINGS[lang==='en'?'he':'en'].archive_sub)
-    document.getElementById('arc-title').textContent=s.archive_sub;
-  // S7
-  document.querySelector('#s7 .T-label').textContent='';
-  document.querySelector('#str-cnt').textContent=SQ.length+(isHe?' שאלות · 5 החלטות · חיים אחד':' questions · 5 decisions · one life');
-}
+/* ════════════════════════════════════
+   NAVIGATION
+════════════════════════════════════ */
+var PROG_MAP = {s0:0, s1:0.12, s2:0.28, s3:0.45, s4:0.65, s5:1};
 
-function go(to){
+function go(id) {
   document.querySelectorAll('.scr').forEach(function(s){s.classList.remove('on');});
-  document.getElementById(to).classList.add('on');
-  document.getElementById('prog').style.width=(PROG[to]||0)+'%';
-  var rb=document.getElementById('roombg');
-  rb.style.display=(to==='s0'||to==='s1')?'block':'none';
-  if(to==='s1') buildBubbles();
-  if(to==='s6') setTimeout(initArc,80);
-  if(to==='s7') setTimeout(initStr,80);
+  document.getElementById(id).classList.add('on');
+  // Progress bar
+  var p = PROG_MAP[id] || 0;
+  document.getElementById('prog').style.transform = 'scaleX(' + p + ')';
+  // Logo
+  document.getElementById('logo-bar').classList.toggle('vis', id !== 's0');
+  // Room bg — show on entry (s0) and hub (s2)
+  var rb = document.getElementById('roombg');
+  rb.style.display = (id === 's0' || id === 's2') ? 'block' : 'none';
+  if(id === 's0'){
+    rb.querySelector('img').style.filter = 'brightness(1.1) sepia(0.04)';
+    rb.querySelector('.ov').style.opacity = '0.18';
+  } else {
+    rb.querySelector('img').style.filter = 'brightness(0.55) sepia(0.12) saturate(0.9)';
+    rb.querySelector('.ov').style.opacity = '1';
+  }
+  // Back button
+  var bb = document.getElementById('back-btn');
+  bb.style.display = (id === 's0' || id === 's5') ? 'none' : 'flex';
+  // Special inits
+  if(id === 's0') initEntryCanvas();
+  if(id === 's3') initBioScroll();
+  if(id === 's5') initSculpture();
 }
 
-function choose(side){
-  userSide=side;
-  var el=document.getElementById('s3-result');
-  el.textContent=side==='rescue'?'YOU CHOSE: SEND IN THE FORCES — AS DID PERES':'YOU CHOSE: NEGOTIATE — PERES CHOSE DIFFERENTLY';
-  el.style.color=side==='rescue'?'rgba(122,184,232,0.9)':'rgba(200,122,154,0.9)';
-  go('s3');
-}
-
-function submitQ(){
-  var q=document.getElementById('userQ').value.trim();
-  if(q){userQ_val=q;document.getElementById('arc-title').textContent='"'+q+'" — your question, now part of the archive.';}
-  go('s6');
+var PREV = {s1:'s0', s2:'s1', s3:'s2', s4:'s2'};
+function goBack(){
+  var cur = document.querySelector('.scr.on');
+  if(cur && PREV[cur.id]) go(PREV[cur.id]);
 }
 
 function restart(){
-  userSide=null;userQ_val=null;arcReady=false;strReady=false;
-  dots=[];af=0;ahov=null;totalR=68;totalN=32;
-  sp=[];sf=0;shov=null;
-  document.getElementById('userQ').value='';
-  document.getElementById('arc-title').textContent='Questions people would ask Shimon Peres — from around the world.';
-  document.getElementById('peres-quote').style.color='rgba(212,201,184,0)';
+  userData = {country:'', age:0, color:'#c8a24a', question:'', answered:false};
+  document.getElementById('s1-country').value = '';
+  document.getElementById('s1-age').value = '';
+  document.getElementById('s1-dot-preview').classList.remove('vis');
+  document.getElementById('s4-input').value = '';
+  document.getElementById('s4-response').style.display = 'none';
+  document.getElementById('s4-loader').style.display = 'none';
+  document.getElementById('s4-btn').disabled = true;
+  document.getElementById('s4-btn').style.opacity = '0.35';
+  sculptureReady = false;
   go('s0');
 }
 
-function closePop(id){document.getElementById(id).style.display='none';}
+/* ════════════════════════════════════
+   S0 — ENTRY PARTICLES
+════════════════════════════════════ */
+var entryParts = [], entryAF = null;
 
-function showPop(pid,d,mx,my,maxW,maxH){
-  if(!d||!d.q) return;
-  var ids={pop:{q:'ppq',d:'ppd',s:'pps',l:'ppl'},spop:{q:'spq',d:'spd',s:'sps',l:'spl'}};
-  var m=ids[pid];
-  document.getElementById(m.q).textContent='"'+d.q.q+'"';
-  document.getElementById(m.d).style.background='rgba('+d.col.r+','+d.col.g+','+d.col.b+',1)';
-  document.getElementById(m.s).textContent=d.q.side==='rescue'?'Sent in the forces':'Chose to negotiate';
-  document.getElementById(m.l).textContent=d.q.loc;
-  var p=document.getElementById(pid);
-  var px=mx+14,py=my-70;
-  if(px+272>maxW) px=mx-286;
-  if(py<0) py=8;
-  if(py+130>maxH) py=maxH-138;
-  p.style.left=px+'px';p.style.top=py+'px';p.style.display='block';
-}
-
-var DECISIONS=[
-  {year:"1957",role:"Deputy Director General",title:"Build the nuclear reactor — in secret",col:"rgba(180,160,100,",sz:144,l:"22%",t:"40%",an:"fl0",dur:"6.2s",active:false},
-  {year:"1976",role:"Minister of Defense",title:"Rescue or negotiate?",col:"rgba(122,184,232,",sz:170,l:"50%",t:"35%",an:"fl2",dur:"7s",active:true},
-  {year:"1993",role:"Foreign Minister",title:"Sign the Oslo Accords",col:"rgba(140,200,150,",sz:148,l:"78%",t:"42%",an:"fl1",dur:"6.6s",active:false},
-  {year:"1995",role:"Prime Minister",title:"The week before the assassination",col:"rgba(220,120,110,",sz:136,l:"30%",t:"66%",an:"fl3",dur:"5.8s",active:false},
-  {year:"2012",role:"President",title:"A pardon no one expected",col:"rgba(180,140,220,",sz:140,l:"66%",t:"68%",an:"fl4",dur:"6.4s",active:false}
-];
-
-function buildBubbles(){
-  if(bubblesBuilt) return;
-  bubblesBuilt=true;
-  var wrap=document.getElementById('hub-wrap');
-  DECISIONS.forEach(function(d,i){
-    var btn=document.createElement('button');
-    btn.className='bubble'+(d.active?'':' locked');
-    btn.setAttribute('aria-label',d.year+': '+d.title);
-    btn.style.cssText='left:'+d.l+';top:'+d.t+';width:'+d.sz+'px;height:'+d.sz+'px;transform:translate(-50%,-50%);background:'+d.col+'0.13);box-shadow:0 0 50px '+d.col+'0.07),inset 0 0 25px '+d.col+'0.05);color:'+d.col+'0.9);animation:'+d.an+' '+d.dur+' ease-in-out infinite;animation-delay:'+(i*0.5)+'s;';
-    btn.innerHTML='<span class="b-year">'+d.year+'</span><span class="b-role">'+d.role+'</span><span class="b-title">'+d.title+'</span><span class="b-cta">'+(d.active?'ENTER →':'Coming soon')+'</span>';
-    if(d.active) btn.onclick=function(){go('s2');};
-    wrap.appendChild(btn);
-  });
-}
-
-var CR={r:122,g:184,b:232},CN={r:200,g:122,b:154},CU={r:255,g:220,b:150};
-function cs(c,a){return 'rgba('+c.r+','+c.g+','+c.b+','+a+')';}
-
-var AQ=[
-  {q:"Did you sleep the night before you gave the order?",loc:"New York",side:"rescue"},
-  {q:"How do you carry the weight of those who didn't come home?",loc:"London",side:"negotiate"},
-  {q:"At what point did doubt become certainty?",loc:"Tel Aviv",side:"rescue"},
-  {q:"What would you have said to Yonatan's family?",loc:"Berlin",side:"negotiate"},
-  {q:"Were you afraid — and did that fear help or hurt you?",loc:"Chicago",side:"rescue"},
-  {q:"How do you decide when every option costs something irreplaceable?",loc:"Paris",side:"negotiate"},
-  {q:"Was there a moment you almost changed your mind?",loc:"São Paulo",side:"rescue"},
-  {q:"What do you say to those who believe you gambled with lives?",loc:"Melbourne",side:"negotiate"},
-  {q:"Did you know — in that moment — that you were right?",loc:"Toronto",side:"rescue"},
-  {q:"What if it had failed?",loc:"Amsterdam",side:"negotiate"},
-  {q:"How do you live with a decision made on incomplete information?",loc:"Mumbai",side:"rescue"},
-  {q:"Is there a difference between courage and desperation?",loc:"Warsaw",side:"negotiate"},
-  {q:"Who did you speak to in those final hours?",loc:"Buenos Aires",side:"rescue"},
-  {q:"What did you learn about yourself in those 72 hours?",loc:"Stockholm",side:"negotiate"},
-  {q:"Does the outcome change the morality of the decision?",loc:"Nairobi",side:"rescue"},
-  {q:"What would you tell a young leader facing an impossible choice?",loc:"Seoul",side:"negotiate"},
-  {q:"Were you certain — or did you decide despite uncertainty?",loc:"San Francisco",side:"rescue"},
-  {q:"How do you separate what is right from what is necessary?",loc:"Vienna",side:"negotiate"},
-  {q:"Did Ben-Gurion teach you something that helped you in that room?",loc:"Jerusalem",side:"rescue"},
-  {q:"What is the cost of a precedent — and who pays it?",loc:"Cape Town",side:"negotiate"}
-];
-
-function initArc(){
-  if(arcReady) return;
-  arcReady=true;
-  ac=document.getElementById('ac');
-  actx=ac.getContext('2d');
-  var body=ac.parentElement;
-  W=ac.width=body.offsetWidth||800;
-  H=ac.height=body.offsetHeight||480;
-  for(var i=0;i<totalR;i++){(function(ii){setTimeout(function(){dots.push(mkDot('rescue'));},ii*20);})(i);}
-  for(var j=0;j<totalN;j++){(function(jj){setTimeout(function(){dots.push(mkDot('negotiate'));},jj*28+200);})(j);}
-  setTimeout(function(){
-    if(userSide==='rescue') totalR++; else if(userSide) totalN++;
-    var ud=mkDot(userSide||'rescue',true);
-    if(userQ_val) ud.q={q:userQ_val,loc:"You",side:userSide||'rescue'};
-    dots.push(ud);
-    updateCnt();
-  },totalR*20+900);
-  updateCnt();
-  ac.addEventListener('mousemove',function(e){
-    var r=ac.getBoundingClientRect(),mx=e.clientX-r.left,my=e.clientY-r.top;
-    var found=null,mn=28;
-    dots.forEach(function(d){if(!d.q)return;var dd=Math.hypot(d.x-mx,d.y-my);if(dd<mn){mn=dd;found=d;}});
-    ahov=found; ac.style.cursor=found?'pointer':'default';
-  });
-  ac.addEventListener('click',function(e){
-    if(!ahov) return;
-    var r=ac.getBoundingClientRect();
-    showPop('pop',ahov,e.clientX-r.left,e.clientY-r.top,W,H);
-  });
-  drawArc();
-}
-
-function mkDot(side,isUser){
-  var col=isUser?CU:(side==='rescue'?CR:CN);
-  var pool=AQ.filter(function(q){return q.side===side;});
-  var q=isUser?null:pool[Math.floor(Math.random()*pool.length)];
-  return{x:W*(0.06+Math.random()*0.88),y:H*(0.06+Math.random()*0.86),ox:0,oy:0,col:col,side:side,q:q,isUser:!!isUser,size:isUser?7:(3+Math.random()*3),alpha:0,ph:Math.random()*Math.PI*2,orb:14+Math.random()*26,spd:0.0018+Math.random()*0.002,id:Math.random()};
-}
-
-function updateCnt(){
-  var t=totalR+totalN;
-  document.getElementById('arc-cnt').textContent=Math.round(totalR/t*100)+'% sent in the forces · '+Math.round(totalN/t*100)+'% chose to negotiate · '+t+' voices';
-}
-
-function drawArc(){
-  af++;
-  actx.clearRect(0,0,W,H);actx.fillStyle='#07070b';actx.fillRect(0,0,W,H);
-  var t=af*0.006;
-  [[W*0.32,H*0.42,CR],[W*0.68,H*0.58,CN]].forEach(function(arr){
-    var g=actx.createRadialGradient(arr[0],arr[1],0,arr[0],arr[1],W*0.38);
-    g.addColorStop(0,cs(arr[2],0.05));g.addColorStop(1,'rgba(0,0,0,0)');
-    actx.fillStyle=g;actx.fillRect(0,0,W,H);
-  });
-  dots.forEach(function(d){
-    d.alpha=Math.min(1,d.alpha+0.02);
-    if(!d.ox){d.ox=d.x;d.oy=d.y;}
-    d.ph+=d.spd;
-    d.x=d.ox+Math.cos(d.ph+t)*d.orb*0.7+Math.sin(d.ph*0.7)*d.orb*0.3;
-    d.y=d.oy+Math.sin(d.ph*1.2+t*0.9)*d.orb*0.65+Math.cos(d.ph*0.5)*d.orb*0.28;
-    var a=d.alpha,isH=ahov&&ahov.id===d.id,s=d.size*(isH?2.1:1)*(d.isUser?(1+Math.sin(af*0.07)*0.18):1);
-    [[s*6,0.025],[s*3,0.08],[s*1.5,0.18]].forEach(function(arr){
-      actx.beginPath();actx.arc(d.x,d.y,arr[0],0,Math.PI*2);
-      actx.fillStyle=cs(d.col,a*arr[1]*(isH?2.5:1));actx.fill();
+function initEntryCanvas(){
+  var c = document.getElementById('s0-canvas');
+  c.width = window.innerWidth;
+  c.height = window.innerHeight;
+  var ctx = c.getContext('2d');
+  entryParts = [];
+  for(var i = 0; i < 60; i++){
+    entryParts.push({
+      x: Math.random() * c.width,
+      y: c.height * 0.1 + Math.random() * c.height * 0.9,
+      size: 0.4 + Math.random() * 2,
+      vy: 0.12 + Math.random() * 0.35,
+      vx: (Math.random() - 0.5) * 0.15,
+      op: 0.1 + Math.random() * 0.45,
+      ph: Math.random() * Math.PI * 2,
+      r: 195 + Math.floor(Math.random() * 35),
+      g: 140 + Math.floor(Math.random() * 35),
+      b: 50 + Math.floor(Math.random() * 25)
     });
-    actx.beginPath();actx.arc(d.x,d.y,s,0,Math.PI*2);
-    actx.fillStyle=cs(d.col,a*(d.isUser?0.95:0.6+(isH?0.3:0)));actx.fill();
-    if(isH||d.isUser){actx.beginPath();actx.arc(d.x,d.y,s+5,0,Math.PI*2);actx.strokeStyle=cs(d.col,0.3);actx.lineWidth=0.5;actx.stroke();}
-    dots.forEach(function(b){
-      if(b.id===d.id||b.side!==d.side) return;
-      var dd=Math.hypot(d.x-b.x,d.y-b.y);
-      if(dd<60){actx.beginPath();actx.moveTo(d.x,d.y);actx.lineTo(b.x,b.y);actx.strokeStyle=cs(d.col,(1-dd/60)*0.05);actx.lineWidth=0.4;actx.stroke();}
-    });
-  });
-  if(af%90===0) updateCnt();
-  requestAnimationFrame(drawArc);
-}
-
-var SQ=[
-  {q:"Was a secret that big ever truly safe?",loc:"Jerusalem",side:"rescue"},
-  {q:"Did you sleep the night before you gave the order?",loc:"New York",side:"rescue"},
-  {q:"How do you carry the weight of those who didn't come home?",loc:"London",side:"negotiate"},
-  {q:"Did you believe Oslo would hold?",loc:"Oslo",side:"negotiate"},
-  {q:"Could the assassination have been prevented?",loc:"Tel Aviv",side:"negotiate"},
-  {q:"Who deserves a second chance — and who decides?",loc:"Haifa",side:"negotiate"},
-  {q:"At what point did doubt become certainty?",loc:"Berlin",side:"rescue"},
-  {q:"What if it had failed?",loc:"Amsterdam",side:"negotiate"},
-  {q:"What would you tell a young leader?",loc:"Seoul",side:"negotiate"},
-  {q:"Were you certain — or did you decide despite uncertainty?",loc:"San Francisco",side:"rescue"},
-  {q:"What is the cost of a precedent?",loc:"Cape Town",side:"negotiate"},
-  {q:"Does the outcome change the morality of the decision?",loc:"Nairobi",side:"rescue"},
-  {q:"What did you feel the moment you signed?",loc:"Washington",side:"negotiate"},
-  {q:"Did Ben-Gurion ever doubt it was right?",loc:"Sde Boker",side:"rescue"}
-];
-var SCOL_BLUE={r:80,g:150,b:255},SCOL_PINK={r:225,g:95,b:165};
-
-function initStr(){
-  if(strReady) return;
-  strReady=true;
-  SC=document.getElementById('sc');
-  SCTX=SC.getContext('2d');
-  var body=SC.parentElement;
-  SW=SC.width=body.offsetWidth||800;
-  SH=SC.height=body.offsetHeight||480;
-  var total=64,CX=SW/2,CY=SH*0.47;
-  for(var i=0;i<total;i++){
-    (function(ii){
-      setTimeout(function(){
-        var era=Math.floor(ii/total*5);
-        var col=(era<=1)?SCOL_BLUE:SCOL_PINK;
-        var angle=(ii/total)*Math.PI*2+Math.random()*0.4;
-        var rad=60+Math.random()*160;
-        var q=SQ[ii%SQ.length];
-        sp.push({x:CX+Math.cos(angle)*rad,y:CY+Math.sin(angle)*rad*0.7,ox:0,oy:0,col:col,q:q,alpha:0,ph:Math.random()*Math.PI*2,orb:6+Math.random()*18,spd:0.0008+Math.random()*0.0012,id:Math.random()});
-      },ii*28);
-    })(i);
   }
-  document.getElementById('str-cnt').textContent=SQ.length+' questions · 5 decisions · one life';
-  SC.addEventListener('mousemove',function(e){
-    var r=SC.getBoundingClientRect(),mx=e.clientX-r.left,my=e.clientY-r.top;
-    var found=null,mn=30;
-    sp.forEach(function(p){var dd=Math.hypot(p.x-mx,p.y-my);if(dd<mn){mn=dd;found=p;}});
-    shov=found; SC.style.cursor=found?'pointer':'default';
-  });
-  SC.addEventListener('click',function(e){
-    if(!shov||!shov.q) return;
-    var r=SC.getBoundingClientRect();
-    showPop('spop',{col:shov.col,q:shov.q},e.clientX-r.left,e.clientY-r.top,SW,SH);
-  });
-  setTimeout(function(){
-    document.getElementById('peres-quote').style.color='rgba(212,201,184,0.85)';
-  },800);
-  drawStr();
+  if(entryAF) cancelAnimationFrame(entryAF);
+  function draw(){
+    ctx.clearRect(0, 0, c.width, c.height);
+    entryParts.forEach(function(p){
+      p.y -= p.vy; p.x += p.vx;
+      p.ph += 0.022;
+      if(p.y < -6){ p.y = c.height + 4; p.x = Math.random() * c.width; }
+      var op = p.op * (0.5 + Math.sin(p.ph) * 0.5);
+      var g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.size * 5);
+      g.addColorStop(0, 'rgba(' + p.r + ',' + p.g + ',' + p.b + ',' + (op * 0.25) + ')');
+      g.addColorStop(1, 'rgba(0,0,0,0)');
+      ctx.fillStyle = g;
+      ctx.fillRect(p.x - p.size * 5, p.y - p.size * 5, p.size * 10, p.size * 10);
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(' + p.r + ',' + p.g + ',' + p.b + ',' + op + ')';
+      ctx.fill();
+    });
+    entryAF = requestAnimationFrame(draw);
+  }
+  draw();
 }
 
-function drawStr(){
-  sf++;
-  SCTX.clearRect(0,0,SW,SH);
-  SCTX.fillStyle='#03030a';
-  SCTX.fillRect(0,0,SW,SH);
-  var t=sf*0.003;
-  var n=sp.length;
-  var gSize=Math.max(4,22-(n*0.26));
-  sp.forEach(function(p){
-    p.alpha=Math.min(1,p.alpha+0.012);
-    if(!p.ox){p.ox=p.x;p.oy=p.y;}
-    p.ph+=p.spd;
-    p.x=p.ox+Math.cos(p.ph+t*0.6)*p.orb*0.85+Math.sin(p.ph*1.2+t*0.35)*p.orb*0.28;
-    p.y=p.oy+Math.sin(p.ph*0.85+t*0.5)*p.orb*0.78+Math.cos(p.ph*1.0+t*0.3)*p.orb*0.22;
+/* ════════════════════════════════════
+   S1 — ONBOARDING
+════════════════════════════════════ */
+function updateDot(){
+  var sel = document.getElementById('s1-country');
+  var age = parseInt(document.getElementById('s1-age').value) || 0;
+  var opt = sel.options[sel.selectedIndex];
+  var color = (opt && opt.dataset.color) ? opt.dataset.color : '#c8a24a';
+  var dp = document.getElementById('s1-dot-preview');
+  var btn = document.getElementById('s1-btn');
+  var msg = document.getElementById('s1-dot-msg');
+
+  if(sel.value && age >= 10 && age <= 99){
+    var size = Math.max(8, Math.min(22, age / 5));
+    dp.style.width = size + 'px';
+    dp.style.height = size + 'px';
+    dp.style.background = color;
+    dp.style.boxShadow = '0 0 ' + (size * 2) + 'px ' + color + '66';
+    dp.classList.add('vis');
+    msg.textContent = 'הנקודה שלכם מוכנה';
+    msg.style.opacity = '1';
+    btn.disabled = false;
+    btn.style.opacity = '1';
+    userData.color = color;
+    userData.country = sel.value;
+    userData.age = age;
+  } else {
+    dp.classList.remove('vis');
+    btn.disabled = true;
+    btn.style.opacity = '0.35';
+  }
+}
+
+function submitOnboard(){
+  var sel = document.getElementById('s1-country');
+  var cname = sel.options[sel.selectedIndex].text;
+  document.getElementById('s2-greet').textContent = 'ברוכים הבאים';
+  document.getElementById('s2-loc').textContent = 'הנקודה מ' + cname + ' (גיל ' + userData.age + ') נוספה לארכיון';
+  go('s2');
+}
+
+/* ════════════════════════════════════
+   S3 — BIO SCROLL REVEAL
+════════════════════════════════════ */
+function initBioScroll(){
+  var scroll = document.getElementById('bio-scroll');
+  scroll.scrollTop = 0;
+  var entries = document.querySelectorAll('.bio-entry');
+  // Reset
+  entries.forEach(function(e){ e.classList.remove('visible'); });
+  // Stagger cascade — 130ms between each entry
+  entries.forEach(function(e, i){
+    setTimeout(function(){ e.classList.add('visible'); }, 180 + i * 130);
   });
-  for(var i=0;i<sp.length;i++){
-    var p=sp[i];
-    if(p.alpha<0.2) continue;
-    for(var j=i+1;j<sp.length;j++){
-      var b=sp[j];
-      if(b.alpha<0.2) continue;
-      var d1=Math.hypot(p.x-b.x,p.y-b.y);
-      if(d1>120) continue;
-      for(var k=j+1;k<sp.length;k++){
-        var c=sp[k];
-        if(c.alpha<0.2) continue;
-        var d2=Math.hypot(p.x-c.x,p.y-c.y);
-        var d3=Math.hypot(b.x-c.x,b.y-c.y);
-        if(d2>120||d3>120) continue;
-        var mr=Math.round((p.col.r*2+b.col.r+c.col.r)/4);
-        var mg=Math.round((p.col.g*2+b.col.g+c.col.g)/4);
-        var mb=Math.round((p.col.b*2+b.col.b+c.col.b)/4);
-        var avgA=Math.min(p.alpha,b.alpha,c.alpha);
-        var prox=1-Math.max(d1,d2,d3)/120;
-        SCTX.beginPath();
-        SCTX.moveTo(p.x,p.y);SCTX.lineTo(b.x,b.y);SCTX.lineTo(c.x,c.y);
-        SCTX.closePath();
-        SCTX.fillStyle='rgba('+mr+','+mg+','+mb+','+(avgA*prox*0.12)+')';
-        SCTX.fill();
-      }
+  // Hide scroll hint when user scrolls
+  var hint = document.getElementById('bio-scroll-hint');
+  scroll.addEventListener('scroll', function onScroll(){
+    if(scroll.scrollTop > 40){
+      if(hint) hint.style.opacity = '0';
+      scroll.removeEventListener('scroll', onScroll);
     }
-  }
-  var CX=SW/2,CY=SH*0.47;
-  var gB=SCTX.createRadialGradient(CX-40,CY,0,CX-40,CY,220);
-  gB.addColorStop(0,'rgba(80,150,255,0.07)');gB.addColorStop(1,'rgba(0,0,0,0)');
-  SCTX.fillStyle=gB;SCTX.fillRect(0,0,SW,SH);
-  var gP=SCTX.createRadialGradient(CX+40,CY,0,CX+40,CY,200);
-  gP.addColorStop(0,'rgba(225,95,165,0.06)');gP.addColorStop(1,'rgba(0,0,0,0)');
-  SCTX.fillStyle=gP;SCTX.fillRect(0,0,SW,SH);
-  sp.forEach(function(p){
-    var a=p.alpha,isH=shov&&shov.id===p.id,s=gSize*(isH?2.2:1);
-    SCTX.beginPath();SCTX.arc(p.x,p.y,s*5,0,Math.PI*2);
-    SCTX.fillStyle='rgba('+p.col.r+','+p.col.g+','+p.col.b+','+(a*0.05*(isH?3:1))+')';SCTX.fill();
-    SCTX.beginPath();SCTX.arc(p.x,p.y,s*2,0,Math.PI*2);
-    SCTX.fillStyle='rgba('+p.col.r+','+p.col.g+','+p.col.b+','+(a*0.15*(isH?2:1))+')';SCTX.fill();
-    SCTX.beginPath();SCTX.arc(p.x,p.y,s,0,Math.PI*2);
-    SCTX.fillStyle='rgba('+p.col.r+','+p.col.g+','+p.col.b+','+(a*0.9)+')';SCTX.fill();
-    if(isH){SCTX.beginPath();SCTX.arc(p.x,p.y,s+7,0,Math.PI*2);SCTX.strokeStyle='rgba('+p.col.r+','+p.col.g+','+p.col.b+',0.5)';SCTX.lineWidth=0.5;SCTX.stroke();}
   });
-  requestAnimationFrame(drawStr);
 }
+
+/* ════════════════════════════════════
+   VIDEO MODAL
+════════════════════════════════════ */
+function openVideo(){
+  window.open('https://www.youtube.com/watch?v=Rr0fTJD7WJI', '_blank');
+}
+
+/* ════════════════════════════════════
+   S4 — Q&A
+════════════════════════════════════ */
+function selectQ(el){
+  document.getElementById('s4-input').value = el.textContent;
+  handleQInput(document.getElementById('s4-input'));
+}
+
+function handleQInput(el){
+  var val = el.value.trim();
+  var btn = document.getElementById('s4-btn');
+  var ch = document.getElementById('s4-char');
+  ch.textContent = el.value.length + ' / 200';
+  btn.disabled = val.length < 4;
+  btn.style.opacity = val.length < 4 ? '0.35' : '1';
+}
+
+function askPeres(){
+  var q = document.getElementById('s4-input').value.trim();
+  if(!q) return;
+  userData.question = q;
+
+  // Find best match
+  var best = null, bestScore = 0;
+  var qLow = q.toLowerCase();
+  QA.forEach(function(pair){
+    var score = 0;
+    pair.keys.forEach(function(k){
+      if(qLow.includes(k.toLowerCase())) score++;
+    });
+    if(score > bestScore){ bestScore = score; best = pair; }
+  });
+  if(!best) best = QA[Math.floor(Math.random() * QA.length)];
+
+  // Show loader
+  document.getElementById('s4-loader').style.display = 'block';
+  document.getElementById('s4-btn').style.display = 'none';
+  document.querySelector('#sq-list').style.display = 'none';
+
+  setTimeout(function(){
+    document.getElementById('s4-loader').style.display = 'none';
+    var resp = document.getElementById('s4-response');
+    resp.style.display = 'block';
+    document.getElementById('s4-res-text').textContent = best.a;
+    document.getElementById('s4-source').textContent = '📎 ' + best.src;
+    userData.answered = true;
+
+    // Add to archive
+    AQ.push({
+      q: q,
+      loc: userData.country === 'israel' ? 'ישראל' : userData.country,
+      age: userData.age,
+      country: userData.country,
+      color: userData.color,
+      isUser: true
+    });
+  }, 2200);
+}
+
+function askAnother(){
+  document.getElementById('s4-input').value = '';
+  document.getElementById('s4-response').style.display = 'none';
+  document.getElementById('s4-btn').style.display = 'block';
+  document.getElementById('s4-btn').disabled = true;
+  document.getElementById('s4-btn').style.opacity = '0.35';
+  document.querySelector('#sq-list').style.display = 'flex';
+  document.getElementById('s4-char').textContent = '0 / 200';
+}
+
+/* ════════════════════════════════════
+   S5 — ANADOL SCULPTURE
+════════════════════════════════════ */
+var sculptureReady = false;
+var sparticles = [], sAF = null;
+var hovered = null;
+
+function initSculpture(){
+  if(sculptureReady) return;
+  sculptureReady = true;
+
+  var canvas = document.getElementById('s5-canvas');
+  var W = canvas.width = window.innerWidth;
+  var H = canvas.height = window.innerHeight;
+  var ctx = canvas.getContext('2d');
+  var CX = W / 2, CY = H * 0.48;
+
+  // Build particles from AQ
+  sparticles = [];
+  AQ.forEach(function(item, i){
+    var angle = (i / AQ.length) * Math.PI * 2 + Math.random() * 1.0;
+    var radius = 30 + Math.random() * Math.min(W, H) * 0.24;
+    var age = item.age || 30;
+    var sz = Math.max(3, Math.min(13, age / 7));
+    var col = item.color || CCOLS[item.country] || '#8a7a62';
+    var r = parseInt(col.slice(1,3), 16);
+    var g = parseInt(col.slice(3,5), 16);
+    var b = parseInt(col.slice(5,7), 16);
+    var baseOrb = 18 + Math.random() * 42;
+
+    sparticles.push({
+      ox: CX + Math.cos(angle) * radius,
+      oy: CY + Math.sin(angle) * radius * 0.58,
+      x: 0, y: 0,
+      r: r, g: g, b: b,
+      sz: sz,
+      ph: Math.random() * Math.PI * 2,
+      ph2: Math.random() * Math.PI * 2,
+      ph3: Math.random() * Math.PI * 2,
+      spd: 0.0003 + Math.random() * 0.0007,
+      spd2: 0.0005 + Math.random() * 0.001,
+      orb: baseOrb,
+      orb2: baseOrb * 0.55,
+      alpha: 0,
+      data: item,
+      isUser: !!item.isUser,
+      id: i
+    });
+
+    // Atmosphere companions — dense glow cloud (Anadol signature)
+    for(var k = 0; k < 7; k++){
+      var jAngle = angle + (Math.random()-0.5) * 1.2;
+      var jRad = radius * (0.6 + Math.random() * 0.8);
+      sparticles.push({
+        ox: CX + Math.cos(jAngle) * jRad,
+        oy: CY + Math.sin(jAngle) * jRad * 0.58,
+        x: 0, y: 0,
+        r: r, g: g, b: b,
+        sz: (0.5 + Math.random() * 0.9) * sz,
+        ph: Math.random() * Math.PI * 2,
+        ph2: Math.random() * Math.PI * 2,
+        ph3: Math.random() * Math.PI * 2,
+        spd: 0.0002 + Math.random() * 0.0006,
+        spd2: 0.0003 + Math.random() * 0.0008,
+        orb: baseOrb * (0.7 + Math.random() * 0.9),
+        orb2: baseOrb * (0.3 + Math.random() * 0.5),
+        alpha: 0,
+        data: item,
+        isUser: false,
+        id: -1  // atmosphere — no hover
+      });
+    }
+  });
+
+  var dataCount = AQ.length; // count only real questions (not atmosphere)
+
+  // Animate
+  var frame = 0;
+  var pop = document.getElementById('s5-pop');
+
+  function draw(){
+    frame++;
+    // Anadol key: very low alpha = very long trails = painted look
+    ctx.fillStyle = 'rgba(6, 13, 31, 0.04)';
+    ctx.fillRect(0, 0, W, H);
+
+    var t = frame * 0.003;
+
+    sparticles.forEach(function(p, i){
+      p.alpha = Math.min(1, p.alpha + 0.015);
+      p.ph += p.spd;
+      p.ph2 += p.spd2;
+      p.ph3 += p.spd * 0.7;
+
+      // Multi-frequency oscillation = organic fluid motion (Anadol technique)
+      p.x = p.ox
+        + Math.cos(p.ph + t) * p.orb * 0.9
+        + Math.sin(p.ph2 * 1.3 + t * 0.6) * p.orb2 * 0.7
+        + Math.cos(p.ph3 * 0.8 + t * 0.4) * p.orb * 0.35;
+      p.y = p.oy
+        + Math.sin(p.ph * 1.1 + t * 0.8) * p.orb * 0.85
+        + Math.cos(p.ph2 + t * 0.5) * p.orb2 * 0.65
+        + Math.sin(p.ph3 * 1.2 + t * 0.3) * p.orb * 0.3;
+
+      var isH = p.id >= 0 && hovered && hovered.id === p.id;
+      var sz = p.sz * (isH ? 2.4 : 1) * (p.isUser ? (1 + Math.sin(frame * 0.08) * 0.2) : 1);
+      var a = p.alpha;
+
+      // Glow layers — Anadol: wide soft halo + tight bright core
+      [sz * 18, sz * 9, sz * 3.5].forEach(function(rad, li){
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, rad, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(' + p.r + ',' + p.g + ',' + p.b + ',' + (a * [0.012, 0.04, 0.13][li] * (isH ? 2.5 : 1)) + ')';
+        ctx.fill();
+      });
+
+      // Core dot
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, sz, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(' + p.r + ',' + p.g + ',' + p.b + ',' + (a * (p.isUser ? 1 : 0.75)) + ')';
+      ctx.fill();
+
+      // Neural connections (Anadol mesh)
+      sparticles.forEach(function(q, j){
+        if(j <= i) return;
+        var dist = Math.hypot(p.x - q.x, p.y - q.y);
+        if(dist > 90) return;
+        var mr = Math.round((p.r + q.r) / 2);
+        var mg = Math.round((p.g + q.g) / 2);
+        var mb = Math.round((p.b + q.b) / 2);
+        var opacity = (1 - dist / 90) * 0.06 * Math.min(p.alpha, q.alpha);
+        ctx.beginPath();
+        ctx.moveTo(p.x, p.y);
+        ctx.lineTo(q.x, q.y);
+        ctx.strokeStyle = 'rgba(' + mr + ',' + mg + ',' + mb + ',' + opacity + ')';
+        ctx.lineWidth = 0.4;
+        ctx.stroke();
+      });
+    });
+
+    // Count — only real questions
+    if(frame % 60 === 0){
+      document.getElementById('s5-count').textContent = dataCount + ' שאלות';
+    }
+
+    sAF = requestAnimationFrame(draw);
+  }
+  document.getElementById('s5-count').textContent = dataCount + ' שאלות';
+  draw();
+
+  // Interaction
+  canvas.addEventListener('mousemove', function(e){
+    var found = null, mn = 32;
+    sparticles.forEach(function(p){
+      if(p.id < 0) return; // skip atmosphere
+      var d = Math.hypot(p.x - e.clientX, p.y - e.clientY);
+      if(d < mn){ mn = d; found = p; }
+    });
+    hovered = found;
+    canvas.style.cursor = found ? 'pointer' : 'default';
+    if(found){
+      pop.style.display = 'block';
+      pop.style.right = (W - e.clientX + 14) + 'px';
+      pop.style.top = (e.clientY - 40) + 'px';
+      document.getElementById('s5-pq').textContent = '"' + found.data.q + '"';
+      document.getElementById('s5-ploc').textContent = found.data.loc || '';
+      document.getElementById('s5-page').textContent = found.data.age ? 'גיל ' + found.data.age : '';
+    } else {
+      pop.style.display = 'none';
+    }
+  });
+  canvas.addEventListener('mouseleave', function(){
+    hovered = null;
+    pop.style.display = 'none';
+  });
+}
+
+/* ════════════════════════════════════
+   BOOT
+════════════════════════════════════ */
+window.addEventListener('load', function(){
+  initEntryCanvas();
+});
+
+// Keyboard accessibility
+document.addEventListener('keydown', function(e){
+  if(e.key === 'Escape'){
+    // Close video if open (handled by openVideo opening new tab — no modal)
+    // Announce current screen to screen readers
+  }
+});
 </script>
 </body>
 </html>
